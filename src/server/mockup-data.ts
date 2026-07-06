@@ -94,23 +94,31 @@ export function composePreviewSvg(
   const xPos = anchor === 'middle' ? width / 2 : anchor === 'end' ? width - padding * scale : padding * scale;
   const fontSize = layout.fontSize * scale;
   const lineStep = fontSize * layout.preset.lineHeightRatio;
-  const startY = (height - lineStep * layout.lines.length) / 2 + fontSize;
+
+  // Center of chest is positioned around 42% height
+  const blockHeight = lineStep * layout.lines.length;
+  const startY = height * 0.42 - blockHeight / 2 + fontSize * 0.75;
+
+  const isWhiteShirt = options.color.toLowerCase().includes('white');
+  const bgImage = isWhiteShirt
+    ? 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600&auto=format&fit=crop'
+    : 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=600&auto=format&fit=crop';
+  const textColor = isWhiteShirt ? '#1a1a1a' : '#ffffff';
 
   const tspans = layout.lines
     .map((line, i) => {
       const y = startY + i * lineStep;
       return `<text x="${xPos.toFixed(1)}" y="${y.toFixed(1)}" font-family='${escapeXml(
         layout.preset.fontFamily,
-      )}' font-size="${fontSize.toFixed(1)}" fill="#ffffff" text-anchor="${anchor}">${escapeXml(
+      )}' font-size="${fontSize.toFixed(1)}" fill="${textColor}" text-anchor="${anchor}">${escapeXml(
         line,
       )}</text>`;
     })
     .join('');
 
-  const bg = escapeXml(options.color.trim().length > 0 ? options.color : '#111111');
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-    `<rect width="100%" height="100%" fill="${bg}"/>`,
+    `<image href="${bgImage}" x="0" y="0" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" />`,
     `<desc>${escapeXml(options.garment)} preview</desc>`,
     tspans,
     `</svg>`,

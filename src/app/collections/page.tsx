@@ -46,7 +46,18 @@ export default async function CollectionsPage() {
                 href={`/collections/${collection.slug}`}
                 className="flex flex-col gap-2 p-4"
               >
-                <div className="aspect-video w-full bg-ink/5" aria-hidden="true" />
+                <div className="aspect-video w-full bg-ink/5 relative overflow-hidden" aria-hidden="true">
+                  {collection.heroImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={collection.heroImage}
+                      alt={collection.title}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-ink/5" />
+                  )}
+                </div>
                 <span className="text-lg font-bold">{collection.title}</span>
               </Link>
             </li>
