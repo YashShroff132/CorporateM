@@ -1,0 +1,849 @@
+INSTRUCTIONS.md: Corporate-Life T‑Shirt E‑Commerce (Production Build Spec)
+Purpose of this file: This is a self-contained, hand-off-ready build specification for an AI coding agent (Claude Code or similar) to design and build the entire product end-to-end. It is written to be granular and unambiguous. Where a decision is required, this doc makes a recommendation and marks it [DECISION]. Where the human owner must supply a value, it is marked [OWNER-INPUT]. Do not invent secrets, API keys, or legal text — flag them.
+
+Locked decisions (from owner):
+
+Stack: Custom Next.js (not Shopify).
+Primary market: India — Razorpay + UPI, INR, GST.
+Auto-generation: AI slogans + auto-mockup, with a mandatory admin approval step.
+Fulfillment: Print-on-demand (POD) specced now, wired later. Launch = manual/self-fulfill.
+
+Golden rules for the building agent:
+
+Do not hallucinate APIs, prices, or library behavior — verify against current docs before use.
+Ship the MVP (Phase 1) first; everything else is behind feature flags.
+Every edgy slogan passes through a moderation gate before it can go live.
+Mobile-first. Gen Z buys on phones. The "crazy graphics" must degrade gracefully.
+No secret is ever committed. All secrets via .env + a deployment secret manager.
+
+
+0. Table of Contents
+Vision & Positioning
+Brand Identity (name, logo, colors, type, voice)
+Product Strategy & The Three Tiers
+Slogan Bank (real examples, per tier)
+The Signature "University → Corporate" Scroll Experience
+Full Site Map & Page-by-Page Spec
+Technical Architecture
+Data Model / Database Schema
+AI Design Auto-Generation Engine (the "one-click" admin feature)
+Admin Panel Spec
+Payments, Checkout, Tax (India)
+Print-on-Demand Integration (spec now, wire later)
+Cart, Wishlist, Accounts, Auth
+Graphics & Animation Stack
+SEO, Analytics, Growth
+Legal, Compliance & Content Moderation
+Security & Performance
+DevOps, Environments & Deployment
+Build Roadmap (Phases, MVP, Milestones)
+Cost Estimate
+Environment Variables Reference
+Definition of Done / Acceptance Criteria
+
+
+1. Vision & Positioning
+One-liner: A Gen-Z streetwear brand that turns corporate suffering into wearable protest — quirky, brutally honest T-shirts about work-from-home wars, toxic managers, appraisal season, notice periods, and every other soul-crushing cubicle ritual.
+
+The insight: Gen Z is flooding into corporate jobs and hating the theatre of it — the standups, the "circle back", the "let's take this offline", the appraisal that gives you 8%. They cope with humor. Wearing a shirt that mocks the manager is a low-risk act of rebellion and an in-group signal. This is the "corporate life" niche — NOT an AI niche.
+
+Positioning statement: For the fresher-to-mid-career professional who thinks corporate culture is a joke, [BRAND] makes the T-shirt that says it out loud — so you don't have to.
+
+Why it can work commercially: "Corporate humor" / "office humor" apparel is a proven, active trend (relatable-slogan tees consistently sell on Instagram, Amazon, Etsy, and D2C stores). The differentiator here is (a) a tiered "how brave are you" system, (b) a genuinely wild storytelling website, and (c) an AI engine that lets the brand ship new, on-trend slogans faster than any competitor.
+
+[OWNER-INPUT] Confirm target buyer age band (recommended 20–30) and whether we also target college students (final-year, about to enter corporate) as a secondary segment — the website's "university → corporate" narrative deliberately courts both.
+
+
+2. Brand Identity
+2.1 Name — recommendation + alternatives
+[DECISION] Recommended primary name: Corporate Cult — edgy, memes the "drink the Kool-Aid" culture, matches the protest/making-fun-of-the-manager tone, and is broad enough to cover every corporate theme. Working domain target: corporatecult.in / corporatecult.shop.
+
+Shortlist of strong alternatives (all fit the niche; check domain + trademark availability before committing — [OWNER-INPUT]):
+
+Name
+Vibe
+Notes
+Corporate Cult ⭐
+Edgy, protest, meme-y
+Recommended
+OOO (Out of Office)
+Clean, iconic, aspirational
+Great logo potential, slightly abstract
+Notice Period
+Relatable, dark-funny
+Everyone in corporate knows the feeling
+Bare Minimum
+Quiet-quitting energy
+Very Gen-Z
+Payslip
+Deadpan, universal
+Simple, brandable
+Cubicle
+Retro-corporate
+Nostalgic
+
+
+Do not finalize the name in code until the owner confirms domain + trademark search. Use an env-driven brand config (config/brand.ts) so the name/logo/colors are swappable.
+2.2 Tagline options
+"Corporate is a joke. Wear the punchline."
+"Protest in cotton."
+"For everyone who hates standups."
+"Say it on the shirt so you don't say it in the meeting."
+2.3 Logo direction
+Wordmark-first (Gen-Z streetwear favors bold type over pictorial marks).
+A hidden mark: a coffee-ring stain, a lanyard, an ID card, or a "9:00 AM" clock as a secondary motif used across packaging and the site.
+Deliverables the agent should scaffold placeholders for: logo-full.svg, logo-mark.svg, logo-mono-white.svg, favicon set, og-image template.
+2.4 Color system [DECISION]
+Corporate-office irony → take drab corporate palettes and make them loud.
+
+--ink:        #0A0A0A   /* near-black, primary text */
+
+--paper:      #F5F5F0   /* off-white "office paper" background */
+
+--corporate:  #1E3A5F   /* the boring corporate navy we subvert */
+
+--highlighter:#D9FF00   /* acid highlighter yellow — the rebellion accent */
+
+--stamp-red:  #E5322D   /* "REJECTED" stamp red for accents/CTAs */
+
+--muted:      #6B6B6B   /* secondary text */
+
+--success:    #1DB954
+
+--error:      #E5322D
+
+Light theme = "office paper". Dark theme = "after-hours office". Support both.
+The highlighter yellow is the signature — used sparingly for CTAs, hovers, the tier badge.
+2.5 Typography [DECISION]
+Display / headlines: a heavy grotesque (e.g., Archivo Black, Anton, or Space Grotesk Bold) — loud, poster-like.
+Body / UI: a clean neutral sans (Inter or Geist).
+A monospace accent (JetBrains Mono / Geist Mono) for "corporate document" flourishes (invoice numbers, "CONFIDENTIAL", memo styling on product pages).
+Self-host fonts via next/font for performance + no layout shift.
+2.6 Brand voice
+Deadpan, dry, a little unhinged. Punches up at corporate systems and sideways at shared experiences — never punches down at protected groups. This is codified in the moderation policy (§16).
+Microcopy example: empty cart → "Your cart is emptier than your calendar on a Friday." 404 → "This page is out of office."
+
+
+3. Product Strategy & The Three Tiers
+The core product hook: every slogan has a "bravery tier." The customer self-selects how much they're willing to broadcast. This is a filter, a badge on each product card, and a browse axis.
+3.1 The three tiers [DECISION]
+Tier
+Name (customer-facing)
+Description
+Example
+Tier 1 — Safe
+"Safe for Standup"
+Mild, HR-proof, wearable to the actual office. Relatable, no target.
+"Powered by caffeine & spite."
+Tier 2 — Direct
+"Reply All"
+Clearly opinionated, slightly spicy, still deniable as a joke.
+"WFH > WFO. This is not up for discussion."
+Tier 3 — Very Direct
+"Notice Period Energy"
+Bold, blunt, the "I might get called into HR" tier.
+"Work from home is shit? No — the office is shit."
+
+
+Each product is tagged with exactly one tier. Tier drives a visible badge + a browse filter ("How brave are you?").
+Tier 3 items get a subtle "⚠ spicy" indicator and are excluded from any content that could auto-post publicly without human review.
+The owner's original example ("Work from home is shit / WFH < WFO / WFH > WFO") maps naturally: a play on comparison operators → a whole "Operator" collection (see §4).
+3.2 Product taxonomy
+Collections (themes): WFH vs WFO, Meetings & Standups, Appraisal Season, The Manager, Notice Period / Quitting, Monday, Payslip/EMI/Salary, Corporate Jargon, Fresher Life, Deadlines & Burnout, Quiet Quitting.
+Types: T-shirt (oversized, regular), hoodie (Phase 2), mug/sticker/tote (Phase 2 add-ons).
+Attributes: tier, collection, color, size, fit, gender-neutral by default.
+3.3 SKU / variant model
+Base blank tees (the "23 blanks" the owner mentioned) × color × size = variants.
+Recommended launch sizes: XS, S, M, L, XL, XXL.
+Recommended launch colors: Black, White, Off-white, Navy, Highlighter-accent-on-black.
+Fit: Oversized (primary, Gen-Z preferred) + Regular.
+3.4 Pricing (India) [OWNER-INPUT — confirm margins]
+Indicative only; owner sets final prices.
+
+Regular tee: ₹599–₹799
+Oversized tee: ₹799–₹999
+Premium/heavyweight: ₹999–₹1,299
+Free shipping over ₹999; flat ₹49–₹79 below that. COD available (see §11).
+Bundle offers: "Buy 2 get 15% off", "Team pack of 5" (great for actual office teams — a real wedge: sell to office friend-groups).
+
+
+4. Slogan Bank (real, ready-to-use examples per tier)
+Use these as seed data for the catalog AND as few-shot examples for the AI engine (§9). The AI must be told to generate original variations, not copy trademarked lines.
+Tier 1 — Safe for Standup
+"Powered by caffeine & spite."
+"I'm not arguing, I'm just explaining why I'm right."
+"Let's circle back to never."
+"Surviving on coffee and unrealistic deadlines."
+"My out-of-office is a lifestyle."
+"Professional overthinker. HR-approved."
+"I put the 'pro' in procrastinate."
+"Running on 3 hours of sleep and passive aggression."
+Tier 2 — Reply All
+"WFH > WFO. This is not up for discussion."
+"This meeting could have been an email."
+"I peaked at 'you're on mute'."
+"Quiet quitting, loud opinions."
+"Doing the bare minimum, brilliantly."
+"My salary and my effort have reached a mutual agreement."
+"I don't have burnout, I have a personality now."
+"Appraisal season: where they thank you with 8%."
+Tier 3 — Notice Period Energy
+"Work from home is shit? No — the office is shit." (the owner's example, cleaned)
+"WFH > WFO. WFO < WFH. if(office) return home;" (the Operator collection hero)
+"I'm one meeting away from my notice period."
+"My manager's calendar is fiction."
+"Great job, team — said no one about this."
+"I clock in for the salary, not the mission."
+"Synergy is just a word for 'do more for the same pay'."
+"The only thing agile here is my resignation."
+The "Operator" collection (owner's original idea, expanded)
+Built on comparison/programming operators — clever, techie, deniable:
+
+WFH > WFO
+WFO < WFH
+while(alive){ work(); }
+salary != effort
+sudo respect me
+git commit --no-verify (like my manager)
+try { work-life balance } catch { burnout }
+
+[OWNER-INPUT] Approve or edit this seed bank. The building agent will store these in a slogans seed file and load them at DB seed time.
+
+
+5. The Signature "University → Corporate" Scroll Experience
+This is the wow page — the homepage as a scroll-driven narrative that takes the visitor from carefree university life down into corporate reality, with products woven into the story. This is the brand's moat and the "crazy graphics" the owner wants.
+5.1 Narrative arc (top → bottom)
+Act 0 — The Hook (hero): Full-viewport. Big wordmark, tagline, one CTA ("Shop the protest"). A subtle animated background (see §14). Scroll cue.
+Act 1 — University: Bright, chaotic, hopeful. Confetti/graduation, "You did it!" energy. Copy: "They said the real world would be great." Featured: Tier 1 "Fresher Life" tees.
+Act 2 — The Descent (onboarding): Colors drain toward corporate navy/grey as you scroll. ID card lanyard drops in. "Day 1", the org chart, the standup. Featured: Meetings collection.
+Act 3 — Corporate Reality: Grey cubicles, the manager, appraisal, EMI, Monday. Peak irony. Featured: Tier 2 + Tier 3 hero products. The Operator collection gets a spotlight.
+Act 4 — The Rebellion (turn): Highlighter yellow floods back in. "So we made the shirt." Product grid CTA, tier selector ("How brave are you?").
+Act 5 — Footer / CTA: Newsletter ("Join the cult"), Instagram feed, team-pack upsell.
+5.2 Interaction design
+Scroll-driven, but performance-budgeted. Use GSAP + ScrollTrigger (or Framer Motion scroll) with IntersectionObserver fallbacks. Pin sections, tie color transitions and parallax to scroll progress.
+Optional 3D moment: one Three.js / React-Three-Fiber scene — a slowly rotating T-shirt or a cubicle that assembles as you scroll. Lazy-loaded, only on capable devices (prefers-reduced- motion and device-tier checks disable it).
+Reduced motion: if prefers-reduced-motion: reduce, replace scroll animation with clean static sections. This is mandatory, not optional.
+Mobile: the narrative collapses into snappy, swipe-friendly panels — no janky heavy 3D on low-end phones. Ship a lightweight variant.
+Performance budget: homepage LCP < 2.5s on 4G, total JS for the hero < ~200KB gzipped before hydration; heavy libs (Three.js/GSAP) code-split and loaded after first paint.
+5.3 Accessibility
+All narrative content must be readable and shoppable without JS animations.
+Every product reachable via the normal /shop catalog too — the story is a layer, not a gate.
+
+
+6. Full Site Map & Page-by-Page Spec
+/                         Homepage — the scroll narrative (§5)
+
+/shop                     Full catalog, filters (tier, collection, color, size, price, sort)
+
+/shop/[collection]        Collection landing (e.g. /shop/wfh-vs-wfo)
+
+/product/[slug]           Product detail page (PDP)
+
+/tiers                    "How brave are you?" — explains the 3 tiers, links to filtered shop
+
+/cart                     Cart
+
+/checkout                 Checkout (address → shipping → Razorpay)
+
+/order/[id]/confirmation  Order success
+
+/account                  Dashboard (orders, addresses, wishlist)
+
+/account/orders           Order history + tracking
+
+/wishlist                 Saved items
+
+/auth/login, /auth/*      Auth (OTP/email — see §13)
+
+/about                    Brand story
+
+/contact                  Contact + support
+
+/faq                      Shipping, returns, sizing
+
+/policies/*               privacy, terms, returns, shipping, refund (§16)
+
+/blog (Phase 2)           SEO content ("corporate humor", office memes)
+
+/admin/*                  Admin panel (§10) — protected
+
+/api/*                    Backend routes (see §7)
+6.1 Product Detail Page (PDP) — detailed
+Image gallery: front mockup, back, lifestyle/model shot, zoom.
+Tier badge + collection tag + "spicy" indicator for Tier 3.
+The slogan rendered as the hero, styled like the actual print.
+Variant pickers: color swatches, size selector with a size guide modal (chest/length in cm
+"fits like" note). Out-of-stock variants greyed, not hidden.
+Add to cart / Buy now / Add to wishlist.
+Trust row: COD available, easy returns window, secure Razorpay checkout, ships in X days.
+"Complete the fit" / "Others in this collection" cross-sell.
+Social proof: reviews & ratings (Phase 2), UGC gallery.
+Structured data (Product + Offer + AggregateRating JSON-LD) for SEO.
+Share to Instagram Story (pre-rendered story asset per product — ties into growth §15).
+6.2 Catalog / Shop
+Faceted filtering (tier, collection, color, size, price range), sort (new, price, best-selling).
+URL-driven filter state (shareable, SSR-friendly for SEO).
+Infinite scroll OR pagination (pagination is better for SEO — use paginated with rel links).
+Fast: server-render first page, hydrate filters client-side.
+
+
+7. Technical Architecture
+7.1 Stack [DECISION]
+Framework: Next.js (App Router) + React + TypeScript.
+Styling: Tailwind CSS + a small design-token layer (config/brand.ts). Optionally shadcn/ui for admin components.
+Animation: GSAP + ScrollTrigger, Framer Motion, Lottie (lottie-react), Three.js via @react-three/fiber + drei (lazy).
+Database: PostgreSQL. ORM: Prisma. (Managed PG: Supabase or Neon.)
+Auth: Auth.js (NextAuth) with credentials/email + optionally phone OTP via MSG91/Twilio (India phone-first). Admin role gated.
+File/image storage: S3-compatible (AWS S3, Cloudflare R2, or Supabase Storage) + Cloudinary/next/image for delivery & transforms.
+Payments: Razorpay (India). Stripe left as an interface-compatible future adapter.
+Email/notifications: Resend or AWS SES (transactional); WhatsApp/SMS via MSG91 for order updates (India-relevant).
+AI: Anthropic Claude API for slogan generation (§9). Verify current model IDs and pricing against Anthropic docs at build time — do not hardcode from memory.
+Search: Postgres full-text for launch; upgrade to Meilisearch/Typesense if needed.
+Hosting: Vercel (frontend + API routes) + managed Postgres (Neon/Supabase). Alt: a single VPS with Docker if cost-optimizing later.
+Analytics: GA4 + a privacy-friendly option (Plausible/PostHog). PostHog also for funnels.
+7.2 Rendering strategy
+Homepage: mostly static/ISR shell + client animation layer.
+Catalog & PDP: ISR (revalidate on product change via webhook/tag revalidation) for speed + SEO.
+Cart/checkout/account/admin: client + server actions, no caching of personal data.
+7.3 Suggested repo structure
+/app
+
+  /(marketing)         home, about, tiers, faq, policies
+
+  /shop                catalog + collection + product routes
+
+  /(shop)/cart, /checkout, /order
+
+  /account             user dashboard
+
+  /admin               admin panel (role-gated layout)
+
+  /api                 route handlers (webhooks, ai, payments)
+
+/components            ui + narrative (scroll acts) + product
+
+/lib                   db (prisma client), auth, payments, ai, mockup, email
+
+/config               brand.ts, tiers.ts, site.ts
+
+/prisma               schema.prisma, seed.ts, migrations
+
+/public               static assets, blank-tee templates, lottie json
+
+/styles               globals, tailwind
+
+/scripts              seed, generate-mockups, backfill
+
+/tests                unit + e2e (Playwright)
+7.4 Coding standards
+TypeScript strict. ESLint + Prettier. Conventional commits. Zod for all input validation (API bodies, forms, webhooks). No any in domain code.
+All money handled in integer paise (never floats). Currency = INR at launch.
+
+
+8. Data Model / Database Schema
+Prisma-style outline (the agent should translate to full schema.prisma with indexes, enums, timestamps, soft-deletes where useful):
+
+enum Tier { SAFE DIRECT VERY_DIRECT }        // Tier1/2/3
+
+enum ProductStatus { DRAFT PENDING_REVIEW PUBLISHED ARCHIVED }
+
+enum OrderStatus { CREATED PAID FULFILLING SHIPPED DELIVERED CANCELLED REFUNDED }
+
+enum FulfillmentMode { SELF POD }            // POD wired later
+
+enum Role { CUSTOMER ADMIN }
+
+model User {
+
+  id, email (unique, nullable if phone-only), phone (unique, nullable),
+
+  name, role Role @default(CUSTOMER), passwordHash?, emailVerified?, createdAt
+
+  addresses Address[]  orders Order[]  wishlist WishlistItem[]  reviews Review[]
+
+}
+
+model Address { id, userId, name, phone, line1, line2, city, state, pincode, country="IN", isDefault }
+
+model Collection { id, slug (unique), title, description, heroImage, sortOrder, isActive }
+
+model Product {
+
+  id, slug (unique), title, slogan, description,
+
+  tier Tier, collectionId, status ProductStatus @default(DRAFT),
+
+  basePricePaise Int, compareAtPaise Int?,
+
+  fulfillmentMode FulfillmentMode @default(SELF),
+
+  aiGenerated Boolean @default(false), moderationStatus, moderationNotes?,
+
+  seoTitle, seoDescription, tags String[],
+
+  images ProductImage[]  variants Variant[]  designId? (→ Design)
+
+  createdAt updatedAt publishedAt?
+
+}
+
+model ProductImage { id, productId, url, alt, kind (FRONT|BACK|LIFESTYLE|FLAT), sortOrder }
+
+model Variant {
+
+  id, productId, sku (unique), color, size, fit,
+
+  priceOverridePaise Int?, stock Int @default(0),
+
+  podVariantId String?,   // maps to Printful/Printify variant, wired later
+
+  weightGrams Int?
+
+}
+
+model Design {                 // output of the AI engine (§9)
+
+  id, slogan, tier Tier, styleParams Json, blankTemplateId,
+
+  previewUrl, printFileUrl?, status ProductStatus, createdBy, createdAt
+
+}
+
+model BlankTemplate {          // the "23 blank tees" — reusable mockup bases
+
+  id, name, color, garment (TEE|OVERSIZED|HOODIE),
+
+  mockupImageUrl, printAreaJson Json,   // x,y,w,h + perspective for overlay
+
+  isActive
+
+}
+
+model Cart { id, userId?, sessionId?, items CartItem[], updatedAt }
+
+model CartItem { id, cartId, variantId, quantity }
+
+model Order {
+
+  id, userId?, email, phone, status OrderStatus,
+
+  subtotalPaise, discountPaise, shippingPaise, taxPaise, totalPaise,
+
+  currency="INR", couponCode?, addressSnapshot Json,
+
+  razorpayOrderId?, razorpayPaymentId?, razorpaySignature?, paymentMethod (UPI|CARD|COD|...),
+
+  fulfillmentMode FulfillmentMode, podOrderId?,
+
+  items OrderItem[]  createdAt paidAt? shippedAt? trackingUrl?
+
+}
+
+model OrderItem { id, orderId, variantId, titleSnapshot, sloganSnapshot, unitPricePaise, quantity }
+
+model Coupon { id, code (unique), type (PERCENT|FLAT), value, minSubtotalPaise?, maxUses?, usedCount, expiresAt?, isActive }
+
+model WishlistItem { id, userId, productId, createdAt }
+
+model Review { id, productId, userId, rating Int, body, isApproved, createdAt }
+
+model NewsletterSubscriber { id, email, source, createdAt }
+
+model AuditLog { id, actorId, action, entity, entityId, meta Json, createdAt }   // admin actions
+
+Notes:
+
+Store price snapshots on order items (never trust live product price for historical orders).
+podVariantId / podOrderId are present now but unused until POD is wired (§12).
+Index: Product(status, tier, collectionId), Variant(sku), Order(status, createdAt).
+
+
+9. AI Design Auto-Generation Engine (the "one-click" admin feature)
+This is the owner's key feature: admin clicks a button, the system generates T-shirt designs (slogan + mockup) as drafts, then a human approves before publish. [DECISION: approval required.]
+9.1 Pipeline (end to end)
+[Admin clicks "Generate"] with params: {tier, collection, count, tone, garment/color}
+
+        │
+
+        ▼
+
+1. SLOGAN GENERATION (Claude API)
+
+   - System prompt encodes brand voice + tier definitions + moderation policy + few-shot from
+
+     the slogan bank (§4).
+
+   - Ask for N candidate slogans as strict JSON (use tool/JSON mode). Include for each:
+
+     {slogan, tier, rationale, riskFlags[]}.
+
+   - De-duplicate against existing DB slogans (normalized text + embedding similarity).
+
+        │
+
+        ▼
+
+2. MODERATION GATE (automated, pre-human)
+
+   - Run each slogan through a policy check (rules + a Claude moderation pass §16).
+
+   - Reject anything hateful/targeting protected classes/defamatory/naming real companies or
+
+     individuals. Flag borderline for human.
+
+        │
+
+        ▼
+
+3. MOCKUP RENDERING (the "overlay text on blank tees")
+
+   - Pick a BlankTemplate (one of the ~23 blanks) matching requested garment/color.
+
+   - Composite the slogan text onto the template's printArea using its printAreaJson
+
+     (position, size, perspective/warp) — server-side image generation:
+
+       * Recommended: `sharp` + SVG text layer, or `node-canvas`, composited over the blank PNG.
+
+       * Auto-fit: font size, line breaks, and layout chosen to fit the print area; support the
+
+         monospace "Operator" style and the heavy display style.
+
+       * Output: web preview (PNG/WebP) + a high-res print-ready file placeholder (for POD later).
+
+        │
+
+        ▼
+
+4. DRAFT PRODUCT CREATION
+
+   - Create Design + Product(status = PENDING_REVIEW, aiGenerated = true) + default Variants
+
+     (colors/sizes from template) + generated preview images.
+
+        │
+
+        ▼
+
+5. ADMIN REVIEW QUEUE (§10)
+
+   - Admin sees a grid of generated drafts: slogan, tier, mockup, risk flags.
+
+   - Actions per item: Approve & Publish | Edit | Regenerate mockup | Reject.
+
+   - Bulk approve for clearly-safe Tier 1 items.
+9.2 Slogan generation prompt (spec for the agent to implement)
+System prompt must include: brand identity + voice (§2.6), the exact tier definitions and examples (§3.1), the full moderation policy (§16), and an instruction to produce original lines (no copying known trademarked slogans, no real company/person names).
+Output contract: strict JSON array; validate with Zod; reject malformed responses and retry with a repair instruction.
+Controls exposed to admin: tier, collection/theme, count (e.g., 10–30), tone slider (dry ↔ chaotic), and an optional keyword/seed ("appraisal", "WFH", "manager").
+Trend input (optional Phase 2): allow pasting a trending phrase/topic; the model riffs on it originally. Do NOT auto-scrape or copy others' designs.
+Verify the current Claude model ID and pricing from Anthropic docs at implementation time. Do not hardcode a model name from memory; put it in env/config.
+9.3 Mockup engine details
+BlankTemplate.printAreaJson defines the printable rectangle + optional 4-point warp so text sits realistically on the garment.
+Provide 2–3 layout presets per tier (centered big, top-line/bottom-line, monospace terminal block for Operator collection).
+Cache rendered previews in object storage; store URLs on the Design/Product.
+Keep a clean separation: preview render (fast, web) vs print render (300 DPI, CMYK-safe, used only when POD is wired §12).
+9.4 Cost & rate control
+Batch slogan generation in one API call where possible; cap N per run.
+Log token usage per generation run to AuditLog/a GenerationRun record for cost tracking.
+
+
+10. Admin Panel Spec (/admin, role = ADMIN only)
+Single admin login at launch (owner). Role-gated via Auth.js middleware; all admin actions written to AuditLog.
+
+Dashboard: today's revenue, orders, top products, low-stock alerts, pending AI drafts count.
+
+Products: list/search/filter; create/edit; manage variants, stock, price, images, tier, collection, SEO; publish/unpublish/archive.
+
+AI Studio (the "button"):
+
+"Generate designs" form (§9 params) → runs pipeline → drafts land in Review Queue.
+Review Queue: grid of PENDING_REVIEW items with mockups + risk flags; Approve/Edit/Regenerate/ Reject; bulk actions.
+
+Orders: list/filter by status; view order; mark fulfilled/shipped (add tracking); refund via Razorpay; export CSV. (POD auto-routing appears here once wired.)
+
+Blanks/Templates: manage the ~23 BlankTemplates (upload mockup, define print area).
+
+Collections: CRUD + hero images + ordering.
+
+Coupons: CRUD, usage stats.
+
+Customers: list, order history, basic support view (no raw card data ever — Razorpay holds it).
+
+Content: homepage narrative copy/images, FAQ, policies, banners.
+
+Settings: shipping rules, tax/GST config, brand config, feature flags (POD on/off, reviews on/off, 3D-on-homepage on/off).
+
+
+11. Payments, Checkout, Tax (India)
+11.1 Gateway [DECISION: Razorpay]
+Server creates a Razorpay Order (amount in paise) → client opens Razorpay Checkout (UPI, cards, netbanking, wallets) → on success, verify the signature server-side before marking paid → handle the Razorpay webhook as the source of truth (idempotent).
+Never trust the client success callback alone; always verify signature + webhook.
+Store razorpayOrderId/paymentId/signature, method, and status transitions.
+11.2 UPI-first UX
+India is UPI-dominant — ensure UPI is the top payment option, with cards/netbanking/wallets below. Consider UPI intent on mobile.
+11.3 COD (Cash on Delivery)
+Offer COD (huge in India) but gate it: min/max order value, pincode serviceability, optional partial prepaid for high-value/COD-abuse control. Flag COD orders separately in admin.
+11.4 Checkout flow
+Guest checkout allowed (capture email/phone) + optional account creation post-purchase.
+Steps: cart → address (pincode autofill city/state) → shipping method → review → pay.
+Apply coupon; show tax + shipping breakdown clearly.
+Abandoned-cart capture (email/WhatsApp) — Phase 2.
+11.5 Tax / GST [OWNER-INPUT — CA/accountant to confirm]
+Apparel GST in India is slab-based by price point; the exact rate must be confirmed with a chartered accountant — do NOT hardcode a rate from memory. Make GST rate(s) configurable in admin settings, computed per line item, and shown on invoice.
+Generate GST-compliant invoices (seller GSTIN, HSN code for garments, tax breakup). GSTIN, legal entity name, and address are [OWNER-INPUT].
+11.6 Shipping
+Integrate an aggregator (Shiprocket/Delhivery) for rates, label, pickup, tracking — Phase 1 can start manual (flat/free-over-threshold) and add aggregator API in Phase 2.
+Serviceability check by pincode at checkout.
+
+
+12. Print-on-Demand Integration (spec now, wire later)
+Launch = self-fulfillment. Build the seams now so POD is a config flip later.
+12.1 Provider [DECISION deferred — recommend evaluating both]
+Printful (quality, global, pricier) or Printify (cheaper, wider India-friendly network), or an India-based POD (e.g., Qikink/Blinkstore) for faster domestic shipping + lower cost. Recommend an India POD for domestic margins; confirm at wire-up time. [OWNER-INPUT]
+12.2 What to build now (dormant)
+FulfillmentMode on Product/Order (SELF | POD) — default SELF.
+Variant.podVariantId, Order.podOrderId fields (already in schema §8).
+A fulfillment adapter interface (lib/fulfillment/) with a SelfFulfillment impl active and a PodFulfillment impl stubbed:
+
+interface FulfillmentProvider {
+
+  createProduct(design, variants): Promise<PodProductRef>
+
+  createOrder(order): Promise<PodOrderRef>
+
+  getShippingRates(address, items): Promise<Rate[]>
+
+  getTracking(podOrderId): Promise<Tracking>
+
+  handleWebhook(payload): Promise<void>
+
+}
+
+The AI engine's print-render output (300 DPI) feeds POD product creation later.
+12.3 What to do at wire-up (Phase 3)
+Implement PodFulfillment against the chosen provider's API, map variants, sync stock=∞, auto-create POD order on payment, ingest tracking webhooks, switch mode per product.
+
+
+13. Cart, Wishlist, Accounts, Auth
+Auth (Auth.js): email magic-link or password + phone OTP (MSG91/Twilio) since India is phone-first. Admin = role on User. Sessions via secure httpOnly cookies.
+Cart: works for guests (session/cookie) and merges into user cart on login. Server-validated prices/stock at checkout.
+Wishlist: for logged-in users; prompt guest to sign in to save.
+Account dashboard: orders + live tracking, addresses, wishlist, profile, saved payment is handled by Razorpay (never store card data).
+
+
+14. Graphics & Animation Stack
+Scroll narrative: GSAP + ScrollTrigger (pinning, timeline scrubbing) or Framer Motion useScroll. Color/parallax tied to scroll progress.
+Micro-interactions: Framer Motion (hover, add-to-cart, page transitions).
+Lottie: for delightful moments (confetti at "graduation", the cart success, empty states) — lottie-react, JSON in /public. (A Lottie library is available for suggestions.)
+3D (optional, gated): @react-three/fiber + drei — one rotating tee or assembling cubicle on the homepage, lazy-loaded, disabled on low-end/prefers-reduced-motion.
+Images: next/image + Cloudinary transforms; AVIF/WebP; blur placeholders; strict sizing to protect CLS.
+Rules: respect prefers-reduced-motion; keep the site fully usable with animations off; hard performance budgets (§5.2). Graphics must degrade gracefully, never block shopping.
+
+
+15. SEO, Analytics, Growth
+SEO: SSR/ISR for catalog & PDP; per-page metadata; Product/Offer/Review JSON-LD; XML sitemap; canonical URLs; fast Core Web Vitals. Collection pages target keywords like "corporate humor t-shirts", "office slogan t shirt India", "funny work from home tshirt".
+Content (Phase 2): blog/memes for organic traffic ("corporate jargon decoded", "signs your standup is useless") linking to collections.
+Analytics: GA4 + PostHog (funnels: view→cart→checkout→paid, drop-off, product performance).
+Growth loops:
+Instagram-native: each product auto-generates a shareable Story asset; "post your fit" UGC.
+Team packs — sell to office friend-groups (built-in virality: coworkers see the shirt).
+Email/WhatsApp: welcome, abandoned cart, new-drop, back-in-stock.
+Referral / first-order discount code.
+"New drop every Friday" cadence — the AI engine makes this sustainable.
+
+
+16. Legal, Compliance & Content Moderation
+[OWNER-INPUT] All legal text must be reviewed by a lawyer/CA. The agent scaffolds templates and TODO markers; it does not fabricate binding legal language.
+16.1 Policies to publish
+Privacy Policy (comply with India's DPDP Act — data collection, consent, rights, retention).
+Terms of Service, Returns/Refunds, Shipping Policy, Cookie notice.
+Contact + grievance officer details (India IT Rules requirement for intermediaries/e-commerce).
+16.2 Business/tax
+GSTIN, HSN codes for apparel, GST-compliant invoicing (§11.5) — confirm with a CA.
+Razorpay KYC, business entity registration — [OWNER-INPUT].
+16.3 Content moderation policy (critical — this brand is edgy)
+Because slogans are the product (and AI-generated), a strict, enforced policy is required. Allowed: mocking corporate systems, generic managers, meetings, WFH/WFO debates, burnout, appraisals, jargon — punching up at institutions and sideways at shared experience. Prohibited (auto-reject in the moderation gate §9.2):
+
+Hate, slurs, or targeting any protected class (race, religion, caste, gender, sexuality, disability, nationality).
+Naming/defaming real companies, brands, or identifiable individuals.
+Sexual content, harassment, threats, self-harm, illegal activity.
+Copying trademarked slogans or others' designs. Borderline items are flagged for human review, never auto-published. Tier 3 items always get human eyes. Keep an audit trail of moderation decisions.
+
+
+17. Security & Performance
+Payments: verify Razorpay signatures + webhooks server-side; idempotent order handling; never store card/UPI credentials.
+Input: Zod-validate every API/route/form/webhook; parameterized queries via Prisma.
+Auth: httpOnly secure cookies, CSRF protection on mutations, rate-limit auth + OTP + AI-generation endpoints, brute-force lockout.
+Headers: strict CSP (allowlist for GSAP/Three/Razorpay/analytics), HSTS, X-Frame-Options, Referrer-Policy.
+Secrets: env only + platform secret manager; never in repo; rotate keys.
+Admin: role-gated, audit-logged, separate rate limits, optional 2FA.
+Data: DPDP-aligned retention; PII encrypted at rest where feasible; least-privilege DB user.
+Perf: ISR/edge caching for catalog; image optimization; code-split heavy libs; DB indexes; Core Web Vitals budgets (LCP<2.5s, CLS<0.1, INP<200ms).
+Reliability: error monitoring (Sentry), uptime checks, DB backups + tested restore.
+
+
+18. DevOps, Environments & Deployment
+Environments: local → staging → production, each with its own DB + keys.
+Hosting: Vercel (app) + Neon/Supabase (Postgres) + R2/S3 (assets). All secrets in the platform's env manager.
+CI/CD: GitHub Actions — lint, typecheck, unit tests, Playwright e2e, Prisma migrate check, preview deploys per PR, protected main.
+DB migrations: Prisma Migrate; never edit prod schema by hand; seed script for demo data + slogan bank + blank templates.
+Testing: unit (domain/pricing/tax), integration (payments with Razorpay test mode, webhooks), e2e (browse→cart→checkout→order), moderation-gate tests (must block prohibited slogans). Use Razorpay test keys for all non-prod.
+Observability: Sentry (errors), PostHog/GA4 (product), structured logs, alerting on failed payments/webhooks.
+
+
+19. Build Roadmap (Phases, MVP, Milestones)
+Phase 0 — Foundations (Week 1)
+Repo, TypeScript, Tailwind, brand config, Prisma schema + first migration, seed slogan bank + blank templates, Auth.js skeleton, admin role gate, CI.
+Phase 1 — MVP / Launchable store (Weeks 2–4)  ← ship this first
+Catalog (/shop, filters), PDP, cart, guest + user checkout, Razorpay live, GST-configurable invoicing, orders, order confirmation + email, basic account dashboard.
+Admin: product/variant/collection CRUD, order management, coupons, blanks.
+Homepage v1: the "university → corporate" scroll narrative (performance-budgeted, reduced-motion fallback).
+Policies + FAQ + about. Analytics. Self-fulfillment only.
+Milestone = a real customer can buy a real T-shirt and you can fulfill it.
+Phase 2 — Growth + AI Studio (Weeks 5–8)
+AI Design Engine (§9): slogan generation + moderation gate + mockup overlay + review queue.
+Reviews/ratings, wishlist polish, abandoned cart, email/WhatsApp flows, Instagram Story asset generator, shipping aggregator (Shiprocket) + pincode serviceability, blog/SEO content.
+Homepage v2: optional 3D moment, richer Lottie, story asset polish.
+Phase 3 — Scale / POD (Weeks 9+)
+Wire Print-on-Demand (§12), auto-route orders, ∞ stock for POD products.
+Search upgrade (Meilisearch), recommendations, A/B testing, more garments (hoodies, mugs), team-pack/B2B flow, referral program, 2FA for admin.
+
+
+20. Cost Estimate (indicative, INR/month — confirm live pricing)
+Item
+Launch (low)
+Growth
+Hosting (Vercel)
+Free–₹1.7k
+₹1.7k+
+Postgres (Neon/Supabase)
+Free–₹2k
+₹2k–₹8k
+Object storage/CDN (R2/Cloudinary)
+Free–₹1k
+₹1k–₹4k
+Email/SMS/WhatsApp (Resend + MSG91)
+₹0–₹1k
+₹1k–₹5k
+Razorpay fees
+~2% per txn
+~2% per txn
+Claude API (AI slogans)
+₹500–₹2k
+₹2k–₹8k
+Domain
+₹800–₹1.5k/yr
+—
+Fixed monthly (excl. txn fees & inventory)
+~₹1k–₹6k
+~₹8k–₹30k
+
+
+Inventory/print costs are separate (self-fulfill blanks + printing, or POD per-unit later). All figures indicative — verify current pricing at build time. [OWNER-INPUT: budget cap.]
+
+
+21. Environment Variables Reference (names only — never commit values)
+# App
+
+NEXT_PUBLIC_SITE_URL=
+
+NODE_ENV=
+
+# Database
+
+DATABASE_URL=
+
+DIRECT_URL=
+
+# Auth
+
+AUTH_SECRET=
+
+AUTH_URL=
+
+# OTP/SMS
+
+MSG91_AUTH_KEY= / TWILIO_*=
+
+# Payments (Razorpay) — use TEST keys in non-prod
+
+RAZORPAY_KEY_ID=
+
+RAZORPAY_KEY_SECRET=
+
+RAZORPAY_WEBHOOK_SECRET=
+
+# Storage / CDN
+
+S3_ENDPOINT= / R2_* / CLOUDINARY_URL=
+
+S3_BUCKET=
+
+S3_ACCESS_KEY_ID=
+
+S3_SECRET_ACCESS_KEY=
+
+# AI (Anthropic Claude) — model id & pricing verified at build time, kept in config
+
+ANTHROPIC_API_KEY=
+
+AI_SLOGAN_MODEL=
+
+# Email
+
+RESEND_API_KEY= / SES_*
+
+# Analytics / Monitoring
+
+NEXT_PUBLIC_GA_ID=
+
+NEXT_PUBLIC_POSTHOG_KEY=
+
+SENTRY_DSN=
+
+# Shipping (Phase 2)
+
+SHIPROCKET_EMAIL= / SHIPROCKET_PASSWORD=
+
+# POD (Phase 3, dormant now)
+
+POD_PROVIDER=
+
+POD_API_KEY=
+
+POD_WEBHOOK_SECRET=
+
+
+22. Definition of Done / Acceptance Criteria
+MVP is "done" when all are true:
+
+A guest and a logged-in user can browse, filter by tier/collection, open a PDP, add to cart, and complete a real Razorpay payment (UPI + card + COD), with server-side signature + webhook verification.
+Order is recorded with price snapshots, GST breakup, and a confirmation email is sent.
+Admin can log in (role-gated), CRUD products/variants/collections/coupons, and manage/mark orders shipped with tracking.
+Homepage scroll narrative works, respects prefers-reduced-motion, and hits performance budgets (LCP<2.5s on 4G); the site is fully shoppable with animations disabled.
+All policy pages present (templated, marked for legal review); DPDP-aligned consent.
+Mobile-first responsive; Lighthouse (mobile) perf/SEO/a11y ≥ 90.
+Secrets only in env; Razorpay test mode in non-prod; CI green (lint, types, unit, e2e).
+
+AI Studio (Phase 2) is "done" when:
+
+Admin clicks "Generate", gets N slogans in the chosen tier, each auto-checked by the moderation gate; prohibited content is blocked automatically (covered by tests).
+Slogans render onto blank-tee mockups within the defined print area; drafts appear in the review queue; admin can approve/edit/regenerate/reject; only approved items publish.
+Every generation + moderation decision is audit-logged with token/cost tracking.
+
+POD (Phase 3) is "done" when:
+
+Flipping a product to POD mode auto-creates the POD product/order on payment, ingests tracking, and shows it in admin — with self-fulfillment still available per product.
+
+
+Open items requiring owner input (collect before/early in build)
+Final brand name + domain + trademark check (recommendation: Corporate Cult).
+Approve/edit the slogan bank (§4) and moderation policy (§16.3).
+Final pricing, margins, and monthly budget cap.
+GST/GSTIN/legal entity + HSN codes (with a CA).
+Launch color/size range and the actual blank-tee sources (the "~23 blanks").
+Preferred POD provider for Phase 3 (recommend an India POD for domestic speed/cost).
+
+End of INSTRUCTIONS.md
+

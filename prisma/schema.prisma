@@ -1,0 +1,355 @@
+// Corporate Cult E-Commerce — Prisma schema
+// Task 2.1: data layer for the locked stack (PostgreSQL + Prisma).
+//
+// Design invariants encoded here:
+// - All monetary columns are `Int` paise (INR subunit); no floating point money. (Req 26.1, 1.9)
+// - Uniqueness constraints back slug, SKU, invoice number, newsletter email,
+//   (userId, productId) wishlist, (productId, color, size, fit) variant, and seed keys. (Req 1.4, 1.5, 5.6, 9.5, 16.4)
+// - POD identifier fields default unset. (Req 16.5)
+// - AuditLog rows are append-only (the service layer exposes no update/delete). (Req 11.2)
+//
+// Database: standard PostgreSQL (Neon primary, Supabase fallback — both standard Postgres).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Tier {
+  SAFE
+  DIRECT
+  VERY_DIRECT
+}
+
+enum ProductStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum FulfillmentMode {
+  SELF
+  POD
+}
+
+enum OrderStatus {
+  CREATED
+  PAID
+  FULFILLING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum ModerationOutcome {
+  AUTO_REJECT
+  NEEDS_REVIEW
+  ADMIT
+}
+
+// ---------------------------------------------------------------------------
+// Catalog: Collection, Product, Variant, Review
+// ---------------------------------------------------------------------------
+
+model Collection {
+  id        String    @id @default(cuid())
+  slug      String    @unique // 1..200
+  title     String
+  heroImage String?
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id              String          @id @default(cuid())
+  slug            String          @unique // 1..200, unique across all products (Req 1.4, 1.11)
+  slogan          String
+  tier            Tier // exactly one tier (Req 1.1)
+  collectionId    String
+  collection      Collection      @relation(fields: [collectionId], references: [id]) // exactly one collection (Req 1.2)
+  status          ProductStatus   @default(DRAFT) // (Req 1.7)
+  basePrice       Int // paise 0..99,999,999 (Req 1.9)
+  aiGenerated     Boolean         @default(false)
+  fulfillmentMode FulfillmentMode @default(SELF)
+  seoTitle        String? // 1..60
+  seoDescription  String? // 1..160
+  mockupUrl       String?
+  variants        Variant[]
+  reviews         Review[]
+  designs         Design[]
+  wishlistItems   WishlistItem[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([status])
+  @@index([collectionId])
+  @@index([tier])
+}
+
+model Variant {
+  id            String  @id @default(cuid())
+  productId     String
+  product       Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku           String  @unique // 1..64, unique across all variants (Req 1.5, 1.12)
+  color         String // (Req 1.6)
+  size          String // (Req 1.6)
+  fit           String // (Req 1.6)
+  priceOverride Int? // paise 0..99,999,999 (Req 1.9)
+  stock         Int     @default(0) // 0..1,000,000 (Req 1.10)
+  podVariantId  String? // default unset (Req 16.5)
+
+  @@unique([productId, color, size, fit]) // one variant per color/size/fit tuple (Req 16.4)
+  @@index([productId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  rating    Int // 1..5
+  body      String?
+  approved  Boolean  @default(false) // only approved reviews feed AggregateRating (Req 3.13)
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+}
+
+// ---------------------------------------------------------------------------
+// Users, addresses, wishlist
+// ---------------------------------------------------------------------------
+
+model User {
+  id        String         @id @default(cuid())
+  email     String?        @unique
+  phone     String?        @unique
+  name      String?
+  role      Role           @default(CUSTOMER) // (Req 6.9)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  addresses Address[]
+  orders    Order[]
+  wishlist  WishlistItem[]
+  carts     Cart[]
+  reviews   Review[]
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  line1     String
+  line2     String?
+  city      String
+  state     String
+  pincode   String // 6-digit Indian pincode
+  country   String   @default("IN")
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId]) // at most one entry per product per user (Req 5.6)
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Cart
+// ---------------------------------------------------------------------------
+
+model Cart {
+  id        String     @id @default(cuid())
+  sessionId String?    @unique // guest cart identified by session id
+  userId    String?
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lines     CartLine[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt // guest cart retained >= 30 days from last update (Req 5.9)
+
+  @@index([userId])
+}
+
+model CartLine {
+  id        String @id @default(cuid())
+  cartId    String
+  cart      Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variantId String
+  qty       Int // integer 1..99 (Req 5.1, 5.2)
+
+  @@unique([cartId, variantId]) // one line per variant per cart (supports merge summing)
+  @@index([cartId])
+}
+
+// ---------------------------------------------------------------------------
+// Auth: OTP
+// ---------------------------------------------------------------------------
+
+model Otp {
+  id        String   @id @default(cuid())
+  phone     String
+  codeHash  String // never store the raw 6-digit code
+  issuedAt  DateTime @default(now())
+  expiresAt DateTime // issuedAt + 5 minutes (Req 6.3)
+  attempts  Int      @default(0) // invalidate after 5 wrong (Req 6.6)
+  consumed  Boolean  @default(false)
+
+  @@index([phone])
+}
+
+// ---------------------------------------------------------------------------
+// Orders and invoicing
+// ---------------------------------------------------------------------------
+
+model Order {
+  id                String          @id @default(cuid())
+  userId            String?
+  user              User?           @relation(fields: [userId], references: [id])
+  status            OrderStatus     @default(CREATED) // (Req 10.1)
+  currency          String          @default("INR")
+  // Monetary totals in integer paise (Req 26.1, 7.6)
+  subtotal          Int
+  discount          Int
+  shipping          Int
+  tax               Int
+  total             Int
+  addressSnapshot   Json // address snapshot on each order (Req 10.4)
+  lineSnapshots     Json // per-item price snapshots (Req 10.4, 7.7)
+  fulfillmentMode   FulfillmentMode @default(SELF) // default SELF (Req 10.8)
+  podOrderId        String? // default unset (Req 16.5)
+  // Razorpay payment references — never store card/UPI credentials (Req 8.7, 8.9)
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  razorpaySignature String?
+  paymentMethod     String?
+  trackingId        String?
+  trackingUrl       String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  invoice           Invoice?
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Invoice {
+  id            String   @id @default(cuid())
+  orderId       String   @unique
+  order         Order    @relation(fields: [orderId], references: [id])
+  invoiceNumber String   @unique // unique invoice number (Req 9.5)
+  sellerGstin   String // 15-character value (Req 9.6)
+  hsn           String
+  taxBreakup    Json // CGST/SGST or IGST (Req 9.4)
+  createdAt     DateTime @default(now())
+}
+
+model Coupon {
+  id            String    @id @default(cuid())
+  code          String    @unique
+  discountType  String // e.g. FLAT | PERCENT
+  discountValue Int // paise for FLAT, or percent points for PERCENT
+  minSubtotal   Int       @default(0) // paise
+  active        Boolean   @default(true)
+  expiresAt     DateTime?
+  singleUse     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// AI design pipeline
+// ---------------------------------------------------------------------------
+
+model Design {
+  id                String            @id @default(cuid())
+  slogan            String
+  tier              Tier
+  moderationOutcome ModerationOutcome
+  riskFlags         Json
+  mockupUrl         String?
+  productId         String?
+  product           Product?          @relation(fields: [productId], references: [id])
+  createdAt         DateTime          @default(now())
+
+  @@index([productId])
+}
+
+model BlankTemplate {
+  id        String   @id @default(cuid())
+  garment   String
+  color     String
+  printArea Json
+  preset    String
+  createdAt DateTime @default(now())
+
+  @@unique([garment, color, preset]) // idempotent seed key (Req 16.4, 25.8)
+}
+
+model SloganBankEntry {
+  id        String   @id @default(cuid())
+  text      String   @unique // idempotent seed key (Req 25.8)
+  tier      Tier
+  createdAt DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Audit and compliance
+// ---------------------------------------------------------------------------
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String
+  actionType String
+  entityType String
+  entityId   String
+  detail     Json
+  createdAt  DateTime @default(now()) // append-only (Req 11.2)
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+}
+
+model ConsentEvent {
+  id        String   @id @default(cuid())
+  userId    String?
+  purpose   String
+  granted   Boolean
+  createdAt DateTime @default(now()) // DPDP consent record (Req 21.3, 21.4)
+
+  @@index([userId])
+}
+
+model NewsletterSub {
+  id        String   @id @default(cuid())
+  email     String   @unique // no duplicate subscriptions (Req 20.6)
+  source    String
+  createdAt DateTime @default(now())
+}
