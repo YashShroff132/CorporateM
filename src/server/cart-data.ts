@@ -170,7 +170,8 @@ export async function addLineToGuestCart(
       data: { updatedAt: new Date() },
     });
     return true;
-  } catch {
+  } catch (error) {
+    console.error('[addLineToGuestCart] Database error:', error);
     return false;
   }
 }
