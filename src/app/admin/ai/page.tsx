@@ -133,8 +133,8 @@ export default async function AiStudioPage({
             <Notice kind="info">No pending drafts. Generate some slogans above.</Notice>
           ) : (
             <>
-              {/* Bulk-approve SAFE drafts (Req 15.6). */}
-              <form action={bulkApproveAction} className="space-y-4">
+              {/* Bulk-approve SAFE drafts (Req 15.6) - decoupled using form="bulk-approve-form". */}
+              <div className="space-y-4">
                 <div className="space-y-4">
                   {drafts.map((d) => (
                     <div
@@ -149,6 +149,7 @@ export default async function AiStudioPage({
                                 type="checkbox"
                                 name="productIds"
                                 value={d.productId}
+                                form="bulk-approve-form"
                                 aria-label={`Select ${d.slogan} for bulk approve`}
                               />
                             )}
@@ -215,10 +216,12 @@ export default async function AiStudioPage({
                   ))}
                 </div>
 
-                <button type="submit" className={secondaryButtonClass}>
-                  Bulk-approve selected SAFE drafts (≤100)
-                </button>
-              </form>
+                <form id="bulk-approve-form" action={bulkApproveAction} className="pt-2">
+                  <button type="submit" className={secondaryButtonClass}>
+                    Bulk-approve selected SAFE drafts (≤100)
+                  </button>
+                </form>
+              </div>
             </>
           )}
         </section>
