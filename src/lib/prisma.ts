@@ -14,6 +14,8 @@
  * DATABASE_URL is absent.
  */
 import { PrismaClient } from '@prisma/client';
+import { neon } from '@neondatabase/serverless';
+import { PrismaNeon } from '@prisma/adapter-neon';
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -26,16 +28,12 @@ export function getPrisma(): PrismaClient {
 
   const databaseUrl = process.env.DATABASE_URL ?? '';
 
-  // Use the Neon serverless HTTP adapter when a DATABASE_URL is configured and
-  // we are running in a serverless / edge environment (indicated by the Neon
-  // pooler host in the URL). Falls back to the standard PrismaClient locally.
+  // Use the Neon serverless HTTP adapter when connected to Neon so queries
+  // go over HTTP — no TCP, no PgBouncer prepared-statement issues (Vercel).
+  // Falls back to the standard PrismaClient for local dev.
   if (databaseUrl.includes('neon.tech')) {
-    // Dynamic import keeps the Neon adapter out of the local dev bundle.
-    // We use a synchronous-style initialisation via a module-level promise
-    // so the singleton is ready by the time the first query runs.
-    const { neon } = require('@neondatabase/serverless');
-    const { PrismaNeon } = require('@prisma/adapter-neon');
-    const adapter = new PrismaNeon(neon(databaseUrl));
+    const sql = neon(databaseUrl);
+    const adapter = new PrismaNeon(sql);
     globalForPrisma.prisma = new PrismaClient({ adapter } as ConstructorParameters<typeof PrismaClient>[0]);
   } else {
     globalForPrisma.prisma = new PrismaClient();
