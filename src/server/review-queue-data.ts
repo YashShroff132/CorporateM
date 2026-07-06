@@ -531,18 +531,20 @@ async function transitionPending(
 ): Promise<ReviewResult> {
   try {
     const prisma = await client();
-    // Conditional update enforces the precondition atomically: only a
-    // PENDING_REVIEW product is transitioned (Req 15.7/15.10).
-    const res = await prisma.product.updateMany({
-      where: { id: productId, status: 'PENDING_REVIEW' },
-      data: { status: next },
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      select: { status: true },
     });
-    if (res.count === 0) {
+    if (product === null || product.status !== 'PENDING_REVIEW') {
       return {
         ok: false,
         message: 'Draft is not in PENDING_REVIEW — no change made.',
       };
     }
+    await prisma.product.update({
+      where: { id: productId },
+      data: { status: next },
+    });
     await writeAudit(prisma, action, 'Product', productId, { status: next });
     return { ok: true };
   } catch (error) {
@@ -565,13 +567,17 @@ export async function editDraftSlogan(
   }
   try {
     const prisma = await client();
-    const res = await prisma.product.updateMany({
-      where: { id: productId, status: 'PENDING_REVIEW' },
-      data: { slogan: trimmed },
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      select: { status: true },
     });
-    if (res.count === 0) {
+    if (product === null || product.status !== 'PENDING_REVIEW') {
       return { ok: false, message: 'Draft is not in PENDING_REVIEW — no change made.' };
     }
+    await prisma.product.update({
+      where: { id: productId },
+      data: { slogan: trimmed },
+    });
     await writeAudit(prisma, 'AI_DRAFT_EDITED', 'Product', productId, { slogan: trimmed });
     return { ok: true };
   } catch (error) {
@@ -658,17 +664,22 @@ export async function bulkApproveSafeDrafts(
   }
   try {
     const prisma = await client();
-    // Only SAFE + PENDING_REVIEW are eligible (Req 15.6). Precondition enforced
-    // in the WHERE clause so ineligible drafts are left unchanged.
-    const res = await prisma.product.updateMany({
+    // Only SAFE + PENDING_REVIEW are eligible (Req 15.6).
+    const products = await prisma.product.findMany({
       where: { id: { in: ids }, status: 'PENDING_REVIEW', tier: 'SAFE' },
-      data: { status: 'PUBLISHED' },
+      select: { id: true },
     });
+    for (const p of products) {
+      await prisma.product.update({
+        where: { id: p.id },
+        data: { status: 'PUBLISHED' },
+      });
+    }
     await writeAudit(prisma, 'AI_DRAFT_BULK_APPROVED', 'Product', 'bulk', {
       requested: ids.length,
-      approved: res.count,
+      approved: products.length,
     });
-    return { ok: true, approved: res.count };
+    return { ok: true, approved: products.length };
   } catch (error) {
     console.error('[bulkApproveSafeDrafts] Database error:', error);
     return { ok: false, message: 'Database not connected — could not bulk-approve drafts.' };

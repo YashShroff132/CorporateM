@@ -145,18 +145,18 @@ export async function addLineToGuestCart(
     const variant = await prisma.variant.findUnique({ where: { id: variantId } });
     if (variant === null) return false;
 
-    let cart = await prisma.cart.findUnique({
+    let cart: any = await prisma.cart.findUnique({
       where: { sessionId },
       include: { lines: true },
     });
     if (cart === null) {
-      cart = await prisma.cart.create({
+      const createdCart = await prisma.cart.create({
         data: { sessionId },
-        include: { lines: true },
       });
+      cart = { ...createdCart, lines: [] };
     }
 
-    const existing = cart.lines.find((l) => l.variantId === variantId);
+    const existing = cart.lines.find((l: any) => l.variantId === variantId);
     if (existing === undefined) {
       await prisma.cartLine.create({
         data: { cartId: cart.id, variantId, qty: requested },
