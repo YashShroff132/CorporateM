@@ -15,6 +15,7 @@
  */
 
 import { CART_QTY_MIN, CART_QTY_MAX } from '@/services/cart';
+import type { Cart, CartLine } from '@prisma/client';
 
 /** A cart line enriched with the display + pricing data the cart page needs. */
 export interface EnrichedCartLine {
@@ -145,7 +146,7 @@ export async function addLineToGuestCart(
     const variant = await prisma.variant.findUnique({ where: { id: variantId } });
     if (variant === null) return false;
 
-    let cart: any = await prisma.cart.findUnique({
+    let cart: (Cart & { lines: CartLine[] }) | null = await prisma.cart.findUnique({
       where: { sessionId },
       include: { lines: true },
     });
@@ -156,7 +157,7 @@ export async function addLineToGuestCart(
       cart = { ...createdCart, lines: [] };
     }
 
-    const existing = cart.lines.find((l: any) => l.variantId === variantId);
+    const existing = cart.lines.find((l) => l.variantId === variantId);
     if (existing === undefined) {
       await prisma.cartLine.create({
         data: { cartId: cart.id, variantId, qty: requested },
