@@ -23,6 +23,7 @@ import { addToCartAction } from '@/app/cart/actions';
 import { ProductImage } from '@/components/ProductImage';
 import { AddToCartButton } from '@/components/AddToCartButton';
 import { TrackOnMount } from '@/components/TrackOnMount';
+import { VariantSelector } from '@/components/VariantSelector';
 import {
   VARIANT_DIMENSIONS,
   buildPdpViewModel,
@@ -208,40 +209,14 @@ export default async function ProductPage({
             <p className="text-2xl font-bold">₹{vm.priceInr}</p>
           )}
 
-          {/* Variant selectors — no-JS GET form re-renders with the selection. */}
+          {/* Variant selectors — automatically re-renders on selection change. */}
           <form method="get" className="flex flex-col gap-4" aria-label="Choose options">
-            {VARIANT_DIMENSIONS.filter((dim) => vm.options[dim].length > 0).map(
-              (dim) => (
-                <fieldset key={dim} className="flex flex-col gap-2">
-                  <label
-                    htmlFor={`select-${dim}`}
-                    className="text-sm font-bold uppercase tracking-wide"
-                  >
-                    {DIMENSION_LABELS[dim]}
-                  </label>
-                  <select
-                    id={`select-${dim}`}
-                    name={dim}
-                    defaultValue={selection[dim] ?? ''}
-                    className="border border-ink/20 px-2 py-2 text-sm"
-                  >
-                    <option value="">Select {DIMENSION_LABELS[dim].toLowerCase()}</option>
-                    {vm.options[dim].map((value) => (
-                      <option key={value} value={value}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
-                </fieldset>
-              ),
-            )}
-
-            <button
-              type="submit"
-              className="border border-ink px-4 py-2 text-sm font-bold uppercase tracking-wide"
-            >
-              Update selection
-            </button>
+            <VariantSelector
+              options={vm.options}
+              selection={selection}
+              dimensionLabels={DIMENSION_LABELS}
+              variantDimensions={VARIANT_DIMENSIONS}
+            />
           </form>
 
           {/* Add to cart — gated on a complete, in-stock selection. */}
