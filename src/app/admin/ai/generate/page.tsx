@@ -53,7 +53,7 @@ export default async function GenerateDraftsPage({ searchParams }: PageProps) {
       {!anthropicReady && (
         <div className="mb-4">
           <Notice kind="error">
-            AI generation is not configured. Set ANTHROPIC_API_KEY and CLAUDE_MODEL_ID
+            AI generation is not configured. Set ANTHROPIC_API_KEY or GEMINI_API_KEY
             to enable slogan generation.
           </Notice>
         </div>

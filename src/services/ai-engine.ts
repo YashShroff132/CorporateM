@@ -560,9 +560,10 @@ function toSlogans(response: SloganResponse, p: GenParams): Slogan[] {
 
 /**
  * Production {@link ClaudeClient} performing an authenticated POST to the
- * Anthropic Messages API. The API key is read from the environment and used only
- * for the outbound request — never persisted. Non-2xx responses throw so the
- * service fails the run and persists nothing (Req 12.6).
+ * Anthropic Messages API or the Gemini Developer API (Google AI Studio).
+ * The API key is read from the environment and used only for the outbound
+ * request — never persisted. Non-2xx responses throw so the service fails the
+ * run and persists nothing (Req 12.6).
  */
 export function createClaudeClient(
   env: Record<string, string | undefined> = process.env,
@@ -571,9 +572,72 @@ export function createClaudeClient(
   const API_VERSION = '2023-06-01';
   return {
     async complete(req: ClaudeRequest): Promise<ClaudeResponse> {
-      const apiKey = env.ANTHROPIC_API_KEY?.trim();
+      const geminiKey = env.GEMINI_API_KEY?.trim();
+      const claudeKey = env.ANTHROPIC_API_KEY?.trim();
+
+      // If Gemini Key is present and Claude Key is NOT present (or explicitly using gemini in model id)
+      if (
+        geminiKey !== undefined &&
+        geminiKey.length > 0 &&
+        (claudeKey === undefined ||
+          claudeKey.length === 0 ||
+          req.model.toLowerCase().includes('gemini'))
+      ) {
+        const geminiModel = req.model.toLowerCase().includes('gemini')
+          ? req.model
+          : 'gemini-1.5-flash';
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiKey}`;
+
+        // Map roles: Claude has 'user' | 'assistant'. Gemini requires 'user' | 'model'.
+        const contents = req.messages.map((m) => ({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content }],
+        }));
+
+        const body = {
+          contents,
+          systemInstruction: {
+            parts: [{ text: req.system }],
+          },
+          generationConfig: {
+            maxOutputTokens: req.maxTokens,
+            responseMimeType: 'application/json',
+          },
+        };
+
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(
+            `Gemini API responded with status ${response.status}: ${errText}`,
+          );
+        }
+
+        const data = (await response.json()) as {
+          candidates?: Array<{
+            content?: {
+              parts?: Array<{ text?: string }>;
+            };
+          }>;
+        };
+
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        return { text };
+      }
+
+      // Fallback/Default to Claude Client
+      const apiKey = claudeKey;
       if (apiKey === undefined || apiKey.length === 0) {
-        throw new Error('Anthropic API key is not configured');
+        throw new Error(
+          'No API key configured (set ANTHROPIC_API_KEY or GEMINI_API_KEY)',
+        );
       }
       const response = await fetch(MESSAGES_ENDPOINT, {
         method: 'POST',

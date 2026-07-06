@@ -69,9 +69,12 @@ async function client(): Promise<PrismaClient> {
   return getPrisma();
 }
 
-/** True when the Claude API key is present so generation can call the model. */
+/** True when either Claude or Gemini API key is present so generation can run. */
 export function isClaudeConfigured(env: NodeJS.ProcessEnv = process.env): boolean {
-  return (env.ANTHROPIC_API_KEY ?? '').trim().length > 0;
+  return (
+    (env.ANTHROPIC_API_KEY ?? '').trim().length > 0 ||
+    (env.GEMINI_API_KEY ?? '').trim().length > 0
+  );
 }
 
 /** Alias for {@link isClaudeConfigured} (Anthropic-branded name for the UI). */
@@ -202,12 +205,12 @@ export async function runGeneration(
     });
   }
 
-  // Require the Claude API key; degrade with a clear error rather than crashing.
+  // Require an API key; degrade with a clear error rather than crashing.
   if (!isClaudeConfigured(env)) {
     return err({
       kind: 'MISSING_CONFIG',
       message:
-        'ANTHROPIC_API_KEY is not configured — set it to generate slogans.',
+        'AI Generation API key is not configured — set ANTHROPIC_API_KEY or GEMINI_API_KEY to generate slogans.',
     });
   }
 
