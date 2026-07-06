@@ -23,7 +23,7 @@ const CART_COOKIE_MAX_AGE_SECONDS = 30 * 24 * 60 * 60;
 function cookieOptions() {
   return {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax' as const,
     path: '/',
     maxAge: CART_COOKIE_MAX_AGE_SECONDS,

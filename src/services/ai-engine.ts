@@ -585,7 +585,7 @@ export function createClaudeClient(
       ) {
         const geminiModel = req.model.toLowerCase().includes('gemini')
           ? req.model
-          : 'gemini-1.5-flash';
+          : 'gemini-2.5-flash';
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiKey}`;
 
         // Map roles: Claude has 'user' | 'assistant'. Gemini requires 'user' | 'model'.
