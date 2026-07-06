@@ -21,8 +21,8 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.1.0",
-    "@prisma/adapter-neon": "^7.8.0",
+    "@neondatabase/serverless": "^0.10.4",
+    "@prisma/adapter-neon": "^6.2.1",
     "next": "^15.5.20",
     "react": "19.0.0",
     "react-dom": "19.0.0",
