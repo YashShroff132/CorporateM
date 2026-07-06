@@ -83,11 +83,6 @@ export function RazorpayCheckoutButton({
   >('idle');
   const [message, setMessage] = useState<string>('');
 
-  // Warm the script as soon as the component mounts so the first click is fast.
-  useEffect(() => {
-    void loadRazorpayScript();
-  }, []);
-
   const verify = useCallback(async (payload: RazorpaySuccess) => {
     setStatus('verifying');
     try {
@@ -138,6 +133,26 @@ export function RazorpayCheckoutButton({
     });
     rzp.open();
   }, [options, verify]);
+
+  // Load the script and open checkout automatically on mount.
+  useEffect(() => {
+    let active = true;
+    async function init() {
+      const ready = await loadRazorpayScript();
+      if (ready && active) {
+        // Yield execution to allow window.Razorpay to initialize completely
+        setTimeout(() => {
+          if (active) {
+            void openCheckout();
+          }
+        }, 100);
+      }
+    }
+    void init();
+    return () => {
+      active = false;
+    };
+  }, [openCheckout]);
 
   return (
     <div className="flex flex-col gap-3">
