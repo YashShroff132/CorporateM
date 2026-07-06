@@ -100,9 +100,10 @@ export function composePreviewSvg(
   const startY = height * 0.42 - blockHeight / 2 + fontSize * 0.75;
 
   const isWhiteShirt = options.color.toLowerCase().includes('white');
-  const bgImage = isWhiteShirt
+  const bgImageRaw = isWhiteShirt
     ? 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600&auto=format&fit=crop'
     : 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=600&auto=format&fit=crop';
+  const bgImage = escapeXml(bgImageRaw);
   const textColor = isWhiteShirt ? '#1a1a1a' : '#ffffff';
 
   const tspans = layout.lines
