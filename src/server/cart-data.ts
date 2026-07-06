@@ -145,12 +145,16 @@ export async function addLineToGuestCart(
     const variant = await prisma.variant.findUnique({ where: { id: variantId } });
     if (variant === null) return false;
 
-    const cart = await prisma.cart.upsert({
+    let cart = await prisma.cart.findUnique({
       where: { sessionId },
-      create: { sessionId },
-      update: {},
       include: { lines: true },
     });
+    if (cart === null) {
+      cart = await prisma.cart.create({
+        data: { sessionId },
+        include: { lines: true },
+      });
+    }
 
     const existing = cart.lines.find((l) => l.variantId === variantId);
     if (existing === undefined) {

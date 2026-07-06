@@ -389,18 +389,24 @@ async function createDraftForSlogan(
         basePrice: aiBasePricePaise(env),
         aiGenerated: true,
         mockupUrl: preview.url,
-        variants: {
-          create: defaultVariantSpecs(env).map((v, i) => ({
-            sku: `${slugifySlogan(slogan.text).slice(0, 40)}-${i}`,
-            color: v.color,
-            size: v.size,
-            fit: v.fit,
-            stock: 0,
-          })),
-        },
       },
       select: { id: true },
     });
+
+    const specs = defaultVariantSpecs(env);
+    const prodSlug = slugifySlogan(slogan.text);
+    for (const [i, v] of specs.entries()) {
+      await prisma.variant.create({
+        data: {
+          productId: product.id,
+          sku: `${prodSlug.slice(0, 40)}-${i}`,
+          color: v.color,
+          size: v.size,
+          fit: v.fit,
+          stock: 0,
+        },
+      });
+    }
 
     await prisma.design.create({
       data: {

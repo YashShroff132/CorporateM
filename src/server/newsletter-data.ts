@@ -55,13 +55,27 @@ export async function subscribeToNewsletter(
       };
     }
 
-    // Idempotent create: upsert guards against a race where the row appears
-    // between the check above and the write (unique email column, Req 20.6).
-    await prisma.newsletterSub.upsert({
-      where: { email: normalizedEmail },
-      update: {},
-      create: { email: normalizedEmail, source },
-    });
+    // Idempotent create: create query with try-catch guards against a race where
+    // the row appears between the check above and the write (unique email column, Req 20.6).
+    try {
+      await prisma.newsletterSub.create({
+        data: { email: normalizedEmail, source },
+      });
+    } catch (err) {
+      const isUnique =
+        typeof err === 'object' &&
+        err !== null &&
+        'code' in err &&
+        (err as { code?: string }).code === 'P2002';
+      if (!isUnique) {
+        throw err;
+      }
+      // If it's already in the DB, treat it as already subscribed.
+      return {
+        ok: true,
+        outcome: { status: 'ALREADY_SUBSCRIBED', email: normalizedEmail },
+      };
+    }
 
     return {
       ok: true,

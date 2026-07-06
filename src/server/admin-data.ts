@@ -410,9 +410,17 @@ export async function createProduct(data: ProductData): Promise<AdminResult> {
     if (isUniqueConstraintError(error)) {
       return { ok: false, field: 'slug', message: 'Slug is already in use.' };
     }
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      (error as { code?: string }).code === 'P2003'
+    ) {
+      return { ok: false, field: 'collectionId', message: 'Selected collection does not exist.' };
+    }
     return {
       ok: false,
-      message: 'Database not connected — could not save the product.',
+      message: error instanceof Error ? `Failed to save product: ${error.message}` : 'Database not connected — could not save the product.',
     };
   }
 }
@@ -434,9 +442,17 @@ export async function updateProduct(
     if (isUniqueConstraintError(error)) {
       return { ok: false, field: 'slug', message: 'Slug is already in use.' };
     }
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      (error as { code?: string }).code === 'P2003'
+    ) {
+      return { ok: false, field: 'collectionId', message: 'Selected collection does not exist.' };
+    }
     return {
       ok: false,
-      message: 'Database not connected — could not save the product.',
+      message: error instanceof Error ? `Failed to save product: ${error.message}` : 'Database not connected — could not save the product.',
     };
   }
 }
