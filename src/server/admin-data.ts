@@ -202,6 +202,7 @@ export async function createCollection(
     });
     return { ok: true };
   } catch (error) {
+    console.error('[createCollection] Database error:', error);
     if (isUniqueConstraintError(error)) {
       return { ok: false, field: 'slug', message: 'Slug is already in use.' };
     }
@@ -225,6 +226,7 @@ export async function updateCollection(
     });
     return { ok: true };
   } catch (error) {
+    console.error('[updateCollection] Database error:', error);
     if (isUniqueConstraintError(error)) {
       return { ok: false, field: 'slug', message: 'Slug is already in use.' };
     }
@@ -248,7 +250,8 @@ export async function deleteCollection(id: string): Promise<AdminResult> {
     await prisma.collection.delete({ where: { id } });
     await writeAudit(prisma, 'DELETE', 'Collection', id, {});
     return { ok: true };
-  } catch {
+  } catch (error) {
+    console.error('[deleteCollection] Database error:', error);
     return {
       ok: false,
       message: 'Database not connected — could not delete the collection.',
@@ -403,6 +406,7 @@ export async function createProduct(data: ProductData): Promise<AdminResult> {
     });
     return { ok: true };
   } catch (error) {
+    console.error('[createProduct] Database error:', error);
     if (isUniqueConstraintError(error)) {
       return { ok: false, field: 'slug', message: 'Slug is already in use.' };
     }
@@ -426,6 +430,7 @@ export async function updateProduct(
     });
     return { ok: true };
   } catch (error) {
+    console.error('[updateProduct] Database error:', error);
     if (isUniqueConstraintError(error)) {
       return { ok: false, field: 'slug', message: 'Slug is already in use.' };
     }
@@ -442,7 +447,8 @@ export async function deleteProduct(id: string): Promise<AdminResult> {
     await prisma.product.delete({ where: { id } });
     await writeAudit(prisma, 'DELETE', 'Product', id, {});
     return { ok: true };
-  } catch {
+  } catch (error) {
+    console.error('[deleteProduct] Database error:', error);
     return {
       ok: false,
       message: 'Database not connected — could not delete the product.',
