@@ -249,7 +249,7 @@ Property tests use **fast-check** (min 100 iterations) and are tagged:
     - Validate count 1..20, known tier, existing collection; build brand/tier/policy/few-shot system prompt; read model id from config; require structured JSON validated against schema with exactly one repair retry; 60s timeout; persist nothing on failure
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.8_
 
-  - [~] 17.2 Implement slogan de-duplication and run auditing
+  - [x] 17.2 Implement slogan de-duplication and run auditing
     - Dedupe by case-insensitive whitespace-normalized text OR embedding cosine â‰¥ 0.9; record token usage and cost to audit log; enforce â‰¤10 runs/admin/60min
     - _Requirements: 12.7, 12.9, 12.10_
 
@@ -275,7 +275,7 @@ Property tests use **fast-check** (min 100 iterations) and are tagged:
     - Select Blank_Template by garment+color or error; auto-fit font 12..144 pt with line breaks strictly within print area; error when unfittable at 12pt; â‰¥2 layout presets per tier incl. monospace for Operator
     - _Requirements: 14.1, 14.2, 14.3, 14.6, 14.7, 14.8_
 
-  - [~] 19.2 Implement preview rendering and storage
+  - [x] 19.2 Implement preview rendering and storage
     - Produce â‰¥1000px preview + hi-res placeholder reference; store to object storage and record URL on Design and Product; record no URL and return error on storage failure
     - _Requirements: 14.4, 14.5, 14.9_
 
@@ -286,7 +286,7 @@ Property tests use **fast-check** (min 100 iterations) and are tagged:
     - **Property 54: Preview storage records URL only on success** â€” Validates: Requirements 14.4, 14.5, 14.9
 
 - [ ] 20. AI draft creation and review queue
-  - [~] 20.1 Implement draft creation and review queue actions
+  - [x] 20.1 Implement draft creation and review queue actions
     - Create Design + Product (PENDING_REVIEW, aiGenerated true, default variants) on gate-approved rendered slogan; per-item approveâ†’PUBLISHED, edit, regenerate (keeps PENDING_REVIEW), rejectâ†’ARCHIVED; bulk-approve â‰¤100 SAFE PENDING_REVIEW; block publish without approval; guard status precondition
     - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5, 15.6, 15.7, 15.8, 15.9, 15.10_
 
@@ -304,11 +304,11 @@ Property tests use **fast-check** (min 100 iterations) and are tagged:
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 22. Print-on-Demand seams
-  - [~] 22.1 Implement Fulfillment_Provider interface, self impl, and POD stub
+  - [x] 22.1 Implement Fulfillment_Provider interface, self impl, and POD stub
     - Define adapter interface; active self-fulfillment implementation; POD stub returning "not configured" with no network call; store POD variant/order id fields defaulting unset
     - _Requirements: 16.1, 16.2, 16.3, 16.5_
 
-  - [~] 22.2 Implement Order_Service fulfillment routing
+  - [x] 22.2 Implement Order_Service fulfillment routing
     - Route SELF when POD flag disabled or product mode SELF; when flag enabled + mode POD + paid + no POD order id, create POD order and record returned id; on POD failure leave id unset, order paid, record error
     - _Requirements: 16.6, 16.7, 16.8, 16.9_
 
@@ -340,11 +340,11 @@ Property tests use **fast-check** (min 100 iterations) and are tagged:
     - _Requirements: 18.1, 18.2_
 
 - [ ] 25. SEO and analytics
-  - [~] 25.1 Implement SEO metadata, sitemap, and Open Graph/JSON-LD
+  - [x] 25.1 Implement SEO metadata, sitemap, and Open Graph/JSON-LD
     - Emit title 1..60, description 1..160, absolute canonical; generate sitemap of PUBLISHED products + active collections only, regenerated within 300s of publish-state change; Open Graph metadata
     - _Requirements: 19.1, 19.2, 19.3, 19.6, 19.7_
 
-  - [~] 25.2 Implement GA4 + PostHog event dispatch (non-blocking)
+  - [x] 25.2 Implement GA4 + PostHog event dispatch (non-blocking)
     - Emit view/add-to-cart/begin-checkout/payment events to both providers within 2s; never block page/action on analytics failure
     - _Requirements: 19.4, 19.5, 19.8_
 
@@ -374,7 +374,7 @@ Property tests use **fast-check** (min 100 iterations) and are tagged:
     - **Property 74: Consent precedes personal-data collection** â€” Validates: Requirements 21.3
 
 - [ ] 28. Security middleware and feature-flag gating
-  - [~] 28.1 Implement middleware: Zod validation, CSRF, security headers, flag gating
+  - [x] 28.1 Implement middleware: Zod validation, CSRF, security headers, flag gating
     - Zod-validate every body/form/webhook before processing/persistence with field-level errors; CSRF protection on state-changing requests; CSP/HSTS/X-Frame-Options/Referrer-Policy headers; omit and reject disabled-flag capabilities disclosing no content
     - _Requirements: 22.3, 22.4, 23.1, 23.2, 23.4, 23.5, 23.6, 23.8, 23.9_
 
@@ -388,7 +388,7 @@ Property tests use **fast-check** (min 100 iterations) and are tagged:
     - _Requirements: 23.3, 23.4, 23.5_
 
 - [ ] 29. Performance and monitoring
-  - [~] 29.1 Implement responsive image pipeline and Sentry reporting
+  - [x] 29.1 Implement responsive image pipeline and Sentry reporting
     - Serve AVIF/WebP with explicit width/height and format fallback; report runtime errors to Sentry within 10s with type/stack/context; retry Sentry delivery â‰¤3 times without blocking the request
     - _Requirements: 24.4, 24.5, 24.6, 24.7_
 
@@ -404,7 +404,7 @@ Property tests use **fast-check** (min 100 iterations) and are tagged:
   - [ ]* 30.2 Write property test for seed idempotence
     - **Property 81: Seed script idempotence** â€” Validates: Requirements 25.8
 
-  - [~] 30.3 Configure CI pipeline and environment separation
+  - [x] 30.3 Configure CI pipeline and environment separation
     - CI runs lint, type check, unit tests (incl. property tests), e2e tests, Prisma migration drift check; use Razorpay test keys only; block merge on any failing check; distinct local/staging/production databases and secrets
     - _Requirements: 25.1, 25.2, 25.4, 25.5, 25.7_
 
