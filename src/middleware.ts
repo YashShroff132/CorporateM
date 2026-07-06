@@ -15,6 +15,11 @@
  *     with no browser origin, authenticated by an HMAC signature over the raw
  *     body (Req 8.5). It is exempt from the same-origin CSRF check; its
  *     signature verification stays in the route handler and is untouched.
+ *   - Next.js Server Actions (identified by the `Next-Action` header) are
+ *     exempt because Next.js 15 already performs its own strict same-origin
+ *     validation on Server Actions internally. Our additional check was
+ *     incorrectly blocking legitimate add-to-cart and admin form submissions
+ *     when Vercel's proxy forwarded the origin differently.
  *
  * Scope: the matcher below excludes static assets (`_next/static`,
  * `_next/image`) and `favicon.ico` so legitimate GET/asset traffic is never
@@ -32,9 +37,18 @@ const CSRF_EXEMPT_PATHS = new Set<string>(['/api/payment/webhook']);
 export function middleware(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl;
 
+  // Next.js Server Actions are identified by the `Next-Action` header.
+  // Next.js 15 already enforces same-origin for these internally, so we skip
+  // our own check to avoid double-rejecting legitimate form submissions.
+  const isServerAction = request.headers.has('next-action');
+
   // CSRF: verify same-origin for state-changing requests, except HMAC-verified
-  // webhooks (Req 23.6, 23.9).
-  if (isStateChangingMethod(request.method) && !CSRF_EXEMPT_PATHS.has(pathname)) {
+  // webhooks and Next.js Server Actions (Req 23.6, 23.9).
+  if (
+    isStateChangingMethod(request.method) &&
+    !CSRF_EXEMPT_PATHS.has(pathname) &&
+    !isServerAction
+  ) {
     const csrf = verifySameOrigin(request);
     if (!csrf.ok) {
       const response = NextResponse.json(

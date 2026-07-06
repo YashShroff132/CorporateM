@@ -25,7 +25,7 @@ function cookieOptions() {
   return {
     httpOnly: true,
     secure: isProd,
-    sameSite: isProd ? ('none' as const) : ('lax' as const),
+    sameSite: 'lax' as const,
     path: '/',
     maxAge: CART_COOKIE_MAX_AGE_SECONDS,
   };

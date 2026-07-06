@@ -428,6 +428,7 @@ async function createDraftForSlogan(
       note: preview.note,
     };
   } catch (cause) {
+    console.error('[createDraftForSlogan] Draft creation failed:', cause);
     return {
       slogan: slogan.text,
       outcome,
@@ -538,7 +539,8 @@ async function transitionPending(
     }
     await writeAudit(prisma, action, 'Product', productId, { status: next });
     return { ok: true };
-  } catch {
+  } catch (error) {
+    console.error('[transitionPending] Database error:', error);
     return { ok: false, message: 'Database not connected — could not update the draft.' };
   }
 }
@@ -566,7 +568,8 @@ export async function editDraftSlogan(
     }
     await writeAudit(prisma, 'AI_DRAFT_EDITED', 'Product', productId, { slogan: trimmed });
     return { ok: true };
-  } catch {
+  } catch (error) {
+    console.error('[editDraftSlogan] Database error:', error);
     return { ok: false, message: 'Database not connected — could not edit the draft.' };
   }
 }
@@ -629,7 +632,8 @@ export async function regenerateDraftMockup(
       mockupStored: true,
     });
     return { ok: true };
-  } catch {
+  } catch (error) {
+    console.error('[regenerateDraftMockup] Database error:', error);
     return { ok: false, message: 'Database not connected — could not regenerate the mockup.' };
   }
 }
@@ -659,7 +663,8 @@ export async function bulkApproveSafeDrafts(
       approved: res.count,
     });
     return { ok: true, approved: res.count };
-  } catch {
+  } catch (error) {
+    console.error('[bulkApproveSafeDrafts] Database error:', error);
     return { ok: false, message: 'Database not connected — could not bulk-approve drafts.' };
   }
 }
