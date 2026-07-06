@@ -193,6 +193,29 @@ const TIER_DEFINITIONS: Record<Tier, string> = {
  * policy, and slogan-bank few-shot examples (Req 12.3). Kept pure and exported so
  * it can be unit-tested directly.
  */
+const DEFAULT_FEW_SHOTS: Record<Tier, string[]> = {
+  SAFE: [
+    "Per my last email.",
+    "This could have been an email.",
+    "Circle back later.",
+    "Reply all survivor.",
+    "Powered by coffee and bad posture."
+  ],
+  DIRECT: [
+    "work from home",
+    "Master of operations. Mostly just operating the coffee machine.",
+    "My only KPI is staying awake until 5 PM.",
+    "Still operating under the assumption I know what I'm doing."
+  ],
+  VERY_DIRECT: [
+    "Ladki nahi work from home chahiye",
+    "Serving notice period energy.",
+    "I am the attrition problem.",
+    "Currently operating at 110%... illusion.",
+    "Burn the org chart."
+  ]
+};
+
 export function buildSystemPrompt(
   params: GenParams,
   brandName: string,
@@ -200,10 +223,11 @@ export function buildSystemPrompt(
 ): string {
   const brand = brandName.trim().length > 0 ? brandName.trim() : 'Corporate Cult';
 
-  const fewShotBlock =
-    fewShot.length > 0
-      ? fewShot.map((e) => `- [${e.tier}] ${e.text}`).join('\n')
-      : '(no examples available)';
+  const finalFewShot = fewShot.length > 0
+    ? fewShot
+    : (DEFAULT_FEW_SHOTS[params.tier] || []).map(text => ({ text, tier: params.tier }));
+
+  const fewShotBlock = finalFewShot.map((e) => `- [${e.tier}] ${e.text}`).join('\n');
 
   return [
     `You are the slogan copywriter for ${brand}, a Gen-Z streetwear brand that turns`,
@@ -583,9 +607,12 @@ export function createClaudeClient(
           claudeKey.length === 0 ||
           req.model.toLowerCase().includes('gemini'))
       ) {
-        const geminiModel = req.model.toLowerCase().includes('gemini')
+        let geminiModel = req.model.toLowerCase().includes('gemini')
           ? req.model
           : 'gemini-2.5-flash';
+        if (geminiModel.includes('gemini-1.5-flash')) {
+          geminiModel = 'gemini-2.5-flash';
+        }
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiKey}`;
 
         // Map roles: Claude has 'user' | 'assistant'. Gemini requires 'user' | 'model'.
@@ -603,6 +630,24 @@ export function createClaudeClient(
             maxOutputTokens: req.maxTokens,
             responseMimeType: 'application/json',
           },
+          safetySettings: [
+            {
+              category: 'HARM_CATEGORY_HARASSMENT',
+              threshold: 'BLOCK_NONE',
+            },
+            {
+              category: 'HARM_CATEGORY_HATE_SPEECH',
+              threshold: 'BLOCK_NONE',
+            },
+            {
+              category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+              threshold: 'BLOCK_NONE',
+            },
+            {
+              category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+              threshold: 'BLOCK_NONE',
+            },
+          ],
         };
 
         const response = await fetch(url, {
