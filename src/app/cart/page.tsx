@@ -21,7 +21,7 @@ import { updateCartLineAction, removeCartLineAction } from './actions';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Your cart — Corporate Cult',
+  title: 'Your Cart',
 };
 
 /** Format an integer-paise amount as ₹ INR, falling back to ₹0.00 on bad data. */

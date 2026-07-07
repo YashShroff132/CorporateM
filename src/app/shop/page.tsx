@@ -44,7 +44,7 @@ export async function generateMetadata({
     path: SHOP_PATH,
     query,
     page,
-    title: 'Shop — Corporate Cult',
+    title: 'Shop',
     description:
       'Browse the full Corporate Cult catalog. Filter by tier, collection, color, size, and price.',
   });

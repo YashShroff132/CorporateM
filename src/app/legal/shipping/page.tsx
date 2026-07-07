@@ -19,7 +19,7 @@ function inr(paise: number): string {
 }
 
 export const metadata: Metadata = {
-  title: 'Shipping Policy — Corporate Cult',
+  title: 'Shipping Policy',
   description: 'Dispatch times, coverage, and shipping charges for Corporate Cult orders.',
   alternates: { canonical: absoluteUrl('/legal/shipping') },
 };

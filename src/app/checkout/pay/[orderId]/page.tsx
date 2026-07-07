@@ -24,7 +24,7 @@ import { RazorpayCheckoutButton } from './RazorpayCheckoutButton';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Payment — Corporate Cult',
+  title: 'Payment',
 };
 
 interface PayPageProps {

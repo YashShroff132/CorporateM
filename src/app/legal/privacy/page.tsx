@@ -13,7 +13,7 @@ import { absoluteUrl } from '@/lib/site';
 import { config } from '@/services/config';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — Corporate Cult',
+  title: 'Privacy Policy',
   description: 'How Corporate Cult collects, uses, and protects your personal data.',
   alternates: { canonical: absoluteUrl('/legal/privacy') },
 };

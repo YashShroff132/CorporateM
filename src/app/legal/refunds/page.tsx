@@ -12,7 +12,7 @@ import { absoluteUrl } from '@/lib/site';
 import { config } from '@/services/config';
 
 export const metadata: Metadata = {
-  title: 'Returns & Refund Policy — Corporate Cult',
+  title: 'Returns & Refund Policy',
   description: 'How returns, exchanges, and refunds work at Corporate Cult.',
   alternates: { canonical: absoluteUrl('/legal/refunds') },
 };

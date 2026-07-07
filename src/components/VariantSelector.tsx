@@ -32,18 +32,13 @@ export function VariantSelector({
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4">
       {variantDimensions
         .filter((dim) => options[dim].length > 0)
         .map((dim) => (
-          <fieldset key={dim} className="flex flex-col gap-2">
-            <legend className="text-sm font-bold uppercase tracking-wide text-ink/70">
+          <fieldset key={dim} className="flex flex-col gap-1.5">
+            <legend className="text-xs font-bold uppercase tracking-widest text-ink/50 mb-1">
               {dimensionLabels[dim]}
-              {selection[dim] && (
-                <span className="ml-2 font-normal normal-case tracking-normal text-ink">
-                  — {selection[dim]}
-                </span>
-              )}
             </legend>
             <div className="flex flex-wrap gap-2">
               {options[dim].map((value) => {
@@ -54,10 +49,10 @@ export function VariantSelector({
                     type="button"
                     onClick={() => handleChipClick(dim, value)}
                     className={[
-                      'rounded-full border px-4 py-2 text-sm font-medium transition-all duration-150',
+                      'min-w-[3rem] rounded border px-3.5 py-1.5 text-sm font-medium transition-colors duration-100',
                       isSelected
-                        ? 'border-ink bg-ink text-paper shadow-sm'
-                        : 'border-ink/20 bg-paper text-ink hover:border-ink/60 hover:shadow-sm',
+                        ? 'border-ink bg-ink text-paper'
+                        : 'border-ink/20 bg-paper text-ink hover:border-ink',
                     ].join(' ')}
                     aria-pressed={isSelected}
                   >

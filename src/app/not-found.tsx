@@ -7,7 +7,7 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Page not found — Corporate Cult',
+  title: 'Page Not Found',
 };
 
 export default function NotFound() {

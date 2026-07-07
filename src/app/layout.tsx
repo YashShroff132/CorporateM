@@ -20,7 +20,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(getSiteOrigin()),
   // Plain default title (no template): child pages already emit fully-formed
   // titles that include the brand suffix, so a template would double it.
-  title: SITE_NAME,
+  title: {
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
+  },
   description: SITE_DESCRIPTION,
   openGraph: {
     type: 'website',

@@ -71,8 +71,9 @@ function escapeXml(text: string): string {
  * deterministic. The canvas is scaled so its longest edge is at least
  * {@link PREVIEW_MIN_LONGEST_EDGE_PX} (Req 14.4).
  *
- * Renders a self-contained SVG t-shirt silhouette with the slogan overlaid.
- * No external resources are loaded so the SVG works as a data: URL.
+ * Renders a self-contained, premium-looking oversized t-shirt mockup with the
+ * slogan overlaid on the chest area. Uses SVG gradients and shadows for a
+ * studio-quality appearance. No external resources — works as a data: URL.
  */
 export function composePreviewSvg(
   layout: TextLayout,
@@ -81,37 +82,83 @@ export function composePreviewSvg(
   const width = 1000;
   const height = 1200;
 
+  const colorLower = options.color.toLowerCase();
   const isWhiteShirt =
-    options.color.toLowerCase().includes('white') ||
-    options.color.toLowerCase().includes('#fff');
-  const shirtColor = isWhiteShirt ? '#f5f5f5' : '#1a1a1a';
-  const textColor = isWhiteShirt ? '#1a1a1a' : '#ffffff';
-  const bgColor = isWhiteShirt ? '#e0e0e0' : '#0a0a0a';
+    colorLower.includes('white') ||
+    colorLower.includes('#fff') ||
+    colorLower.includes('#f5f5f5') ||
+    colorLower.includes('#fafafa');
 
-  // T-shirt silhouette path (centered on 1000x1200 canvas)
+  // Color palette
+  const shirtFill = isWhiteShirt ? '#f0f0f0' : '#1c1c1c';
+  const shirtHighlight = isWhiteShirt ? '#fafafa' : '#2a2a2a';
+  const shirtShadow = isWhiteShirt ? '#d5d5d5' : '#0f0f0f';
+  const textColor = isWhiteShirt ? '#111111' : '#f5f5f5';
+  const bgOuter = isWhiteShirt ? '#b0b0b0' : '#080808';
+  const bgInner = isWhiteShirt ? '#d8d8d8' : '#1a1a1a';
+  const strokeColor = isWhiteShirt ? '#c8c8c8' : '#2f2f2f';
+
+  // Realistic oversized t-shirt silhouette (dropped shoulders, wide body)
   const tshirtPath = [
-    'M 350 180',     // left shoulder
-    'L 200 250',     // left sleeve top
-    'L 120 420',     // left sleeve bottom-outer
-    'L 220 460',     // left sleeve bottom-inner
-    'L 280 320',     // left armpit
-    'L 280 950',     // left hem
-    'Q 280 1000 330 1000', // bottom-left curve
-    'L 670 1000',    // bottom hem
-    'Q 720 1000 720 950',  // bottom-right curve
-    'L 720 320',     // right side
-    'L 780 460',     // right sleeve bottom-inner
-    'L 880 420',     // right sleeve bottom-outer
-    'L 800 250',     // right sleeve top
-    'L 650 180',     // right shoulder
-    'Q 500 130 350 180',   // neckline curve
+    // Start at left shoulder
+    'M 340 220',
+    // Left shoulder slope (dropped/oversized)
+    'L 170 290',
+    // Left sleeve outer curve
+    'Q 100 320 80 430',
+    // Left sleeve bottom
+    'Q 90 470 160 480',
+    // Left armpit curve
+    'Q 230 490 260 370',
+    // Left body side (slight curve for fabric drape)
+    'Q 250 650 260 980',
+    // Bottom hem left curve
+    'Q 265 1020 320 1020',
+    // Bottom hem
+    'L 680 1020',
+    // Bottom hem right curve
+    'Q 735 1020 740 980',
+    // Right body side
+    'Q 750 650 740 370',
+    // Right armpit curve
+    'Q 770 490 840 480',
+    // Right sleeve bottom
+    'Q 910 470 920 430',
+    // Right sleeve outer curve
+    'Q 900 320 830 290',
+    // Right shoulder
+    'L 660 220',
+    // Neckline (crew neck curve)
+    'Q 580 175 500 170',
+    'Q 420 175 340 220',
     'Z',
   ].join(' ');
 
+  // Neckline ribbing detail
+  const neckPath = [
+    'M 370 225',
+    'Q 420 190 500 185',
+    'Q 580 190 630 225',
+    'Q 580 205 500 200',
+    'Q 420 205 370 225',
+    'Z',
+  ].join(' ');
+
+  // Fabric fold lines for realism
+  const foldLines = [
+    // Center chest fold
+    `<line x1="500" y1="280" x2="498" y2="850" stroke="${strokeColor}" stroke-width="0.8" opacity="0.3"/>`,
+    // Left body fold
+    `<line x1="360" y1="400" x2="350" y2="900" stroke="${strokeColor}" stroke-width="0.6" opacity="0.2"/>`,
+    // Right body fold
+    `<line x1="640" y1="400" x2="650" y2="900" stroke="${strokeColor}" stroke-width="0.6" opacity="0.2"/>`,
+  ].join('');
+
   // Print area for text: centered chest region
   const printCenterX = width / 2;
-  const printTop = 380;
-  const printWidth = 360;
+  const printTop = 350;
+  const printAreaHeight = 350;
+  const printWidth = 380;
 
   const anchor =
     layout.preset.align === 'center'
@@ -124,7 +171,7 @@ export function composePreviewSvg(
   const maxLineChars = Math.max(...layout.lines.map((l) => l.length), 1);
   const naturalWidth = maxLineChars * layout.preset.charWidthRatio * layout.fontSize;
   const scaleFactor = naturalWidth > printWidth ? printWidth / naturalWidth : 1;
-  const fontSize = Math.min(layout.fontSize * scaleFactor, 60);
+  const fontSize = Math.min(layout.fontSize * scaleFactor, 56);
   const lineStep = fontSize * layout.preset.lineHeightRatio;
 
   const xPos =
@@ -135,14 +182,14 @@ export function composePreviewSvg(
         : printCenterX - printWidth / 2;
 
   const blockHeight = lineStep * layout.lines.length;
-  const startY = printTop + (300 - blockHeight) / 2 + fontSize * 0.75;
+  const startY = printTop + (printAreaHeight - blockHeight) / 2 + fontSize * 0.75;
 
   const textElements = layout.lines
     .map((line, i) => {
       const y = startY + i * lineStep;
       return `<text x="${xPos.toFixed(1)}" y="${y.toFixed(1)}" font-family='${escapeXml(
         layout.preset.fontFamily,
-      )}' font-size="${fontSize.toFixed(1)}" font-weight="bold" fill="${textColor}" text-anchor="${anchor}">${escapeXml(
+      )}' font-size="${fontSize.toFixed(1)}" font-weight="bold" fill="${textColor}" text-anchor="${anchor}" letter-spacing="1">${escapeXml(
         line,
       )}</text>`;
     })
@@ -150,12 +197,40 @@ export function composePreviewSvg(
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-    `<rect width="100%" height="100%" fill="${bgColor}" />`,
-    `<path d="${tshirtPath}" fill="${shirtColor}" />`,
-    `<path d="${tshirtPath}" fill="none" stroke="${isWhiteShirt ? '#ccc' : '#333'}" stroke-width="2" />`,
+    // Definitions: gradients and filters
+    '<defs>',
+    // Background radial gradient (studio lighting)
+    `<radialGradient id="bg" cx="50%" cy="40%" r="60%">`,
+    `<stop offset="0%" stop-color="${bgInner}"/>`,
+    `<stop offset="100%" stop-color="${bgOuter}"/>`,
+    '</radialGradient>',
+    // Shirt body gradient (subtle 3D feel)
+    `<linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1">`,
+    `<stop offset="0%" stop-color="${shirtHighlight}"/>`,
+    `<stop offset="50%" stop-color="${shirtFill}"/>`,
+    `<stop offset="100%" stop-color="${shirtShadow}"/>`,
+    '</linearGradient>',
+    // Drop shadow filter
+    '<filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">',
+    '<feDropShadow dx="0" dy="8" stdDeviation="20" flood-opacity="0.4"/>',
+    '</filter>',
+    '</defs>',
+    // Background
+    `<rect width="100%" height="100%" fill="url(#bg)"/>`,
+    // T-shirt with shadow
+    `<g filter="url(#shadow)">`,
+    `<path d="${tshirtPath}" fill="url(#shirt)"/>`,
+    `</g>`,
+    // Neckline ribbing
+    `<path d="${neckPath}" fill="${shirtShadow}" opacity="0.5"/>`,
+    // Fabric fold details
+    foldLines,
+    // Shirt outline (very subtle)
+    `<path d="${tshirtPath}" fill="none" stroke="${strokeColor}" stroke-width="1" opacity="0.3"/>`,
     `<desc>${escapeXml(options.garment)} preview</desc>`,
+    // Slogan text
     textElements,
-    `</svg>`,
+    '</svg>',
   ].join('');
 }
 

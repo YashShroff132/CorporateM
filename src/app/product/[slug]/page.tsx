@@ -64,12 +64,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const detail = await getProductBySlug(slug);
   if (detail === null) {
-    return { title: 'Product not found — Corporate Cult' };
+    return { title: 'Product Not Found' };
   }
   const { product } = detail;
   const canonical = absoluteUrl(`/product/${product.slug}`);
   const title = clamp(
-    product.seoTitle ?? `${product.slogan} — Corporate Cult`,
+    product.seoTitle ?? product.slogan,
     60,
   );
   const description = clamp(

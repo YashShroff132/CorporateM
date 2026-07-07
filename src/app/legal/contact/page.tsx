@@ -13,7 +13,7 @@ import { absoluteUrl } from '@/lib/site';
 import { config } from '@/services/config';
 
 export const metadata: Metadata = {
-  title: 'Contact Us — Corporate Cult',
+  title: 'Contact Us',
   description: 'Reach the Corporate Cult support and grievance team.',
   alternates: { canonical: absoluteUrl('/legal/contact') },
 };

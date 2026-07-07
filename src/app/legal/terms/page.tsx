@@ -13,7 +13,7 @@ import { absoluteUrl } from '@/lib/site';
 import { config } from '@/services/config';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions — Corporate Cult',
+  title: 'Terms & Conditions',
   description: 'The terms that govern your use of the Corporate Cult store.',
   alternates: { canonical: absoluteUrl('/legal/terms') },
 };

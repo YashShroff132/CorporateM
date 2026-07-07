@@ -26,7 +26,7 @@ import { submitCheckoutAction } from './actions';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Checkout — Corporate Cult',
+  title: 'Checkout',
 };
 
 interface CheckoutPageProps {

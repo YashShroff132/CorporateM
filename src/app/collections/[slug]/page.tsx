@@ -52,7 +52,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const collection = await getCollectionBySlug(slug);
   if (collection === null) {
-    return { title: 'Collection not found — Corporate Cult' };
+    return { title: 'Collection Not Found' };
   }
 
   const raw = await searchParams;
@@ -64,7 +64,7 @@ export async function generateMetadata({
     path: `/collections/${slug}`,
     query,
     page,
-    title: `${collection.title} — Corporate Cult`,
+    title: collection.title,
     description: `Shop the ${collection.title} collection from Corporate Cult.`,
   });
 }
