@@ -20,42 +20,52 @@ export function VariantSelector({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const handleSelectChange = (dim: VariantDimension, value: string) => {
+  const handleChipClick = (dim: VariantDimension, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (value) {
-      params.set(dim, value);
-    } else {
+    // Toggle: if already selected, deselect; otherwise select.
+    if (selection[dim] === value) {
       params.delete(dim);
+    } else {
+      params.set(dim, value);
     }
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       {variantDimensions
         .filter((dim) => options[dim].length > 0)
         .map((dim) => (
           <fieldset key={dim} className="flex flex-col gap-2">
-            <label
-              htmlFor={`select-${dim}`}
-              className="text-sm font-bold uppercase tracking-wide"
-            >
+            <legend className="text-sm font-bold uppercase tracking-wide text-ink/70">
               {dimensionLabels[dim]}
-            </label>
-            <select
-              id={`select-${dim}`}
-              name={dim}
-              value={selection[dim] ?? ''}
-              onChange={(e) => handleSelectChange(dim, e.target.value)}
-              className="border border-ink/20 px-2 py-2 text-sm bg-white"
-            >
-              <option value="">Select {dimensionLabels[dim].toLowerCase()}</option>
-              {options[dim].map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
+              {selection[dim] && (
+                <span className="ml-2 font-normal normal-case tracking-normal text-ink">
+                  — {selection[dim]}
+                </span>
+              )}
+            </legend>
+            <div className="flex flex-wrap gap-2">
+              {options[dim].map((value) => {
+                const isSelected = selection[dim] === value;
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => handleChipClick(dim, value)}
+                    className={[
+                      'rounded-full border px-4 py-2 text-sm font-medium transition-all duration-150',
+                      isSelected
+                        ? 'border-ink bg-ink text-paper shadow-sm'
+                        : 'border-ink/20 bg-paper text-ink hover:border-ink/60 hover:shadow-sm',
+                    ].join(' ')}
+                    aria-pressed={isSelected}
+                  >
+                    {value}
+                  </button>
+                );
+              })}
+            </div>
           </fieldset>
         ))}
 

@@ -70,20 +70,48 @@ function escapeXml(text: string): string {
  * Compose an SVG preview string from a rendered {@link TextLayout}. Pure and
  * deterministic. The canvas is scaled so its longest edge is at least
  * {@link PREVIEW_MIN_LONGEST_EDGE_PX} (Req 14.4).
+ *
+ * Renders a self-contained SVG t-shirt silhouette with the slogan overlaid.
+ * No external resources are loaded so the SVG works as a data: URL.
  */
 export function composePreviewSvg(
   layout: TextLayout,
   options: { garment: string; color: string } = { garment: 'tee', color: '#111111' },
 ): string {
-  // Base the canvas on the layout bounds with generous padding, then scale up
-  // so the longest edge clears the 1000px minimum.
-  const padding = Math.max(layout.fontSize * 2, 80);
-  const baseWidth = Math.max(layout.width + padding * 2, 400);
-  const baseHeight = Math.max(layout.height + padding * 2, 400);
-  const longest = Math.max(baseWidth, baseHeight);
-  const scale = longest < PREVIEW_MIN_LONGEST_EDGE_PX ? PREVIEW_MIN_LONGEST_EDGE_PX / longest : 1;
-  const width = Math.ceil(baseWidth * scale);
-  const height = Math.ceil(baseHeight * scale);
+  const width = 1000;
+  const height = 1200;
+
+  const isWhiteShirt =
+    options.color.toLowerCase().includes('white') ||
+    options.color.toLowerCase().includes('#fff');
+  const shirtColor = isWhiteShirt ? '#f5f5f5' : '#1a1a1a';
+  const textColor = isWhiteShirt ? '#1a1a1a' : '#ffffff';
+  const bgColor = isWhiteShirt ? '#e0e0e0' : '#0a0a0a';
+
+  // T-shirt silhouette path (centered on 1000x1200 canvas)
+  const tshirtPath = [
+    'M 350 180',     // left shoulder
+    'L 200 250',     // left sleeve top
+    'L 120 420',     // left sleeve bottom-outer
+    'L 220 460',     // left sleeve bottom-inner
+    'L 280 320',     // left armpit
+    'L 280 950',     // left hem
+    'Q 280 1000 330 1000', // bottom-left curve
+    'L 670 1000',    // bottom hem
+    'Q 720 1000 720 950',  // bottom-right curve
+    'L 720 320',     // right side
+    'L 780 460',     // right sleeve bottom-inner
+    'L 880 420',     // right sleeve bottom-outer
+    'L 800 250',     // right sleeve top
+    'L 650 180',     // right shoulder
+    'Q 500 130 350 180',   // neckline curve
+    'Z',
+  ].join(' ');
+
+  // Print area for text: centered chest region
+  const printCenterX = width / 2;
+  const printTop = 380;
+  const printWidth = 360;
 
   const anchor =
     layout.preset.align === 'center'
@@ -91,27 +119,30 @@ export function composePreviewSvg(
       : layout.preset.align === 'right'
         ? 'end'
         : 'start';
-  const xPos = anchor === 'middle' ? width / 2 : anchor === 'end' ? width - padding * scale : padding * scale;
-  const fontSize = layout.fontSize * scale;
+
+  // Scale font so text block fits within the print area width
+  const maxLineChars = Math.max(...layout.lines.map((l) => l.length), 1);
+  const naturalWidth = maxLineChars * layout.preset.charWidthRatio * layout.fontSize;
+  const scaleFactor = naturalWidth > printWidth ? printWidth / naturalWidth : 1;
+  const fontSize = Math.min(layout.fontSize * scaleFactor, 60);
   const lineStep = fontSize * layout.preset.lineHeightRatio;
 
-  // Center of chest is positioned around 42% height
+  const xPos =
+    anchor === 'middle'
+      ? printCenterX
+      : anchor === 'end'
+        ? printCenterX + printWidth / 2
+        : printCenterX - printWidth / 2;
+
   const blockHeight = lineStep * layout.lines.length;
-  const startY = height * 0.42 - blockHeight / 2 + fontSize * 0.75;
+  const startY = printTop + (300 - blockHeight) / 2 + fontSize * 0.75;
 
-  const isWhiteShirt = options.color.toLowerCase().includes('white');
-  const bgImageRaw = isWhiteShirt
-    ? 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600&auto=format&fit=crop'
-    : 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=600&auto=format&fit=crop';
-  const bgImage = escapeXml(bgImageRaw);
-  const textColor = isWhiteShirt ? '#1a1a1a' : '#ffffff';
-
-  const tspans = layout.lines
+  const textElements = layout.lines
     .map((line, i) => {
       const y = startY + i * lineStep;
       return `<text x="${xPos.toFixed(1)}" y="${y.toFixed(1)}" font-family='${escapeXml(
         layout.preset.fontFamily,
-      )}' font-size="${fontSize.toFixed(1)}" fill="${textColor}" text-anchor="${anchor}">${escapeXml(
+      )}' font-size="${fontSize.toFixed(1)}" font-weight="bold" fill="${textColor}" text-anchor="${anchor}">${escapeXml(
         line,
       )}</text>`;
     })
@@ -119,9 +150,11 @@ export function composePreviewSvg(
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-    `<image href="${bgImage}" x="0" y="0" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" />`,
+    `<rect width="100%" height="100%" fill="${bgColor}" />`,
+    `<path d="${tshirtPath}" fill="${shirtColor}" />`,
+    `<path d="${tshirtPath}" fill="none" stroke="${isWhiteShirt ? '#ccc' : '#333'}" stroke-width="2" />`,
     `<desc>${escapeXml(options.garment)} preview</desc>`,
-    tspans,
+    textElements,
     `</svg>`,
   ].join('');
 }
