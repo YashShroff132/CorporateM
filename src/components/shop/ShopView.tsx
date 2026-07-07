@@ -10,6 +10,7 @@
 import { ShopFilters } from './ShopFilters';
 import { ProductGrid } from './ProductGrid';
 import { Pagination } from './Pagination';
+import { CollapsibleFilters } from './CollapsibleFilters';
 import type { Page, ShopProductView, ShopQuery } from '@/services/shop';
 
 export interface ShopViewProps {
@@ -49,13 +50,15 @@ export function ShopView({
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[220px_1fr]">
         <aside className="md:sticky md:top-6 md:self-start">
-          <ShopFilters
-            action={basePath}
-            query={query}
-            colors={colors}
-            sizes={sizes}
-            hideTier={hideTier}
-          />
+          <CollapsibleFilters>
+            <ShopFilters
+              action={basePath}
+              query={query}
+              colors={colors}
+              sizes={sizes}
+              hideTier={hideTier}
+            />
+          </CollapsibleFilters>
         </aside>
 
         <section className="flex flex-col gap-6">
