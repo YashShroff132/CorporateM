@@ -494,7 +494,7 @@ export function createAIEngine(
     model: string,
     system: string,
     messages: ClaudeMessage[],
-  ): Promise<Result<SloganResponse, AIError>> {
+  ): Promise<{ rawText: string; result: Result<SloganResponse, AIError> }> {
     let response: ClaudeResponse;
     try {
       response = await withTimeout(
@@ -504,17 +504,23 @@ export function createAIEngine(
     } catch (cause) {
       // Timeout or transport/API error fails the run and persists nothing (Req 12.6).
       if (cause instanceof TimeoutError) {
-        return err({ kind: 'TIMEOUT', message: cause.message });
+        return { rawText: '', result: err({ kind: 'TIMEOUT', message: cause.message }) };
       }
-      return err({
-        kind: 'API_ERROR',
-        message:
-          cause instanceof Error
-            ? `Claude API error: ${cause.message}`
-            : 'Claude API error',
-      });
+      return {
+        rawText: '',
+        result: err({
+          kind: 'API_ERROR',
+          message:
+            cause instanceof Error
+              ? `Claude API error: ${cause.message}`
+              : 'Claude API error',
+        }),
+      };
     }
-    return parseAndValidate(response.text);
+    return {
+      rawText: response.text,
+      result: parseAndValidate(response.text),
+    };
   }
 
   async function generate(
@@ -548,26 +554,26 @@ export function createAIEngine(
 
     // First attempt.
     const first = await callClaude(model, system, messages);
-    if (first.ok) {
-      return ok(toSlogans(first.value, p));
+    if (first.result.ok) {
+      return ok(toSlogans(first.result.value, p));
     }
     // Timeout / API errors are terminal — do not retry (Req 12.6).
-    if (first.error.kind !== 'SCHEMA_VALIDATION_FAILED') {
-      return first;
+    if (first.result.error.kind !== 'SCHEMA_VALIDATION_FAILED') {
+      return err(first.result.error);
     }
 
     // Exactly one repair retry on schema-validation failure (Req 12.5).
     const repairMessages: ClaudeMessage[] = [
       ...messages,
-      { role: 'assistant', content: '' },
-      { role: 'user', content: buildRepairInstruction(first.error.message) },
+      { role: 'assistant', content: first.rawText },
+      { role: 'user', content: buildRepairInstruction(first.result.error.message) },
     ];
     const second = await callClaude(model, system, repairMessages);
-    if (second.ok) {
-      return ok(toSlogans(second.value, p));
+    if (second.result.ok) {
+      return ok(toSlogans(second.result.value, p));
     }
     // Second failure ends the run, persisting nothing (Req 12.5).
-    return second;
+    return err(second.result.error);
   }
 
   return { validateParams, generate };

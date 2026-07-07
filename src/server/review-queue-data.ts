@@ -87,6 +87,11 @@ function aiBasePricePaise(env: NodeJS.ProcessEnv = process.env): number {
   return Number.isInteger(raw) && raw >= 0 ? raw : DEFAULT_AI_BASE_PRICE_PAISE;
 }
 
+function aiDefaultStock(env: NodeJS.ProcessEnv = process.env): number {
+  const raw = Number(env.AI_DEFAULT_STOCK);
+  return Number.isInteger(raw) && raw >= 0 ? raw : 50;
+}
+
 const MAX_BULK_APPROVE = 100; // Req 15.6
 
 async function client(): Promise<PrismaClient> {
@@ -403,7 +408,7 @@ async function createDraftForSlogan(
           color: v.color,
           size: v.size,
           fit: v.fit,
-          stock: 0,
+          stock: aiDefaultStock(env),
         },
       });
     }
