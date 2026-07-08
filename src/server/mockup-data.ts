@@ -89,70 +89,7 @@ export function composePreviewSvg(
     colorLower.includes('#f5f5f5') ||
     colorLower.includes('#fafafa');
 
-  // Color palette
-  const shirtFill = isWhiteShirt ? '#f0f0f0' : '#1c1c1c';
-  const shirtHighlight = isWhiteShirt ? '#fafafa' : '#2a2a2a';
-  const shirtShadow = isWhiteShirt ? '#d5d5d5' : '#0f0f0f';
   const textColor = isWhiteShirt ? '#111111' : '#f5f5f5';
-  const bgOuter = isWhiteShirt ? '#b0b0b0' : '#080808';
-  const bgInner = isWhiteShirt ? '#d8d8d8' : '#1a1a1a';
-  const strokeColor = isWhiteShirt ? '#c8c8c8' : '#2f2f2f';
-
-  // Realistic oversized t-shirt silhouette (dropped shoulders, wide body)
-  const tshirtPath = [
-    // Start at left shoulder
-    'M 340 220',
-    // Left shoulder slope (dropped/oversized)
-    'L 170 290',
-    // Left sleeve outer curve
-    'Q 100 320 80 430',
-    // Left sleeve bottom
-    'Q 90 470 160 480',
-    // Left armpit curve
-    'Q 230 490 260 370',
-    // Left body side (slight curve for fabric drape)
-    'Q 250 650 260 980',
-    // Bottom hem left curve
-    'Q 265 1020 320 1020',
-    // Bottom hem
-    'L 680 1020',
-    // Bottom hem right curve
-    'Q 735 1020 740 980',
-    // Right body side
-    'Q 750 650 740 370',
-    // Right armpit curve
-    'Q 770 490 840 480',
-    // Right sleeve bottom
-    'Q 910 470 920 430',
-    // Right sleeve outer curve
-    'Q 900 320 830 290',
-    // Right shoulder
-    'L 660 220',
-    // Neckline (crew neck curve)
-    'Q 580 175 500 170',
-    'Q 420 175 340 220',
-    'Z',
-  ].join(' ');
-
-  // Neckline ribbing detail
-  const neckPath = [
-    'M 370 225',
-    'Q 420 190 500 185',
-    'Q 580 190 630 225',
-    'Q 580 205 500 200',
-    'Q 420 205 370 225',
-    'Z',
-  ].join(' ');
-
-  // Fabric fold lines for realism
-  const foldLines = [
-    // Center chest fold
-    `<line x1="500" y1="280" x2="498" y2="850" stroke="${strokeColor}" stroke-width="0.8" opacity="0.3"/>`,
-    // Left body fold
-    `<line x1="360" y1="400" x2="350" y2="900" stroke="${strokeColor}" stroke-width="0.6" opacity="0.2"/>`,
-    // Right body fold
-    `<line x1="640" y1="400" x2="650" y2="900" stroke="${strokeColor}" stroke-width="0.6" opacity="0.2"/>`,
-  ].join('');
 
   // Print area for text: centered chest region
   const printCenterX = width / 2;
@@ -195,40 +132,12 @@ export function composePreviewSvg(
     })
     .join('');
 
+  const bgImg = isWhiteShirt ? '/blank-white-tee.png' : '/blank-black-tee.png';
+
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-    // Definitions: gradients and filters
-    '<defs>',
-    // Background radial gradient (studio lighting)
-    `<radialGradient id="bg" cx="50%" cy="40%" r="60%">`,
-    `<stop offset="0%" stop-color="${bgInner}"/>`,
-    `<stop offset="100%" stop-color="${bgOuter}"/>`,
-    '</radialGradient>',
-    // Shirt body gradient (subtle 3D feel)
-    `<linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1">`,
-    `<stop offset="0%" stop-color="${shirtHighlight}"/>`,
-    `<stop offset="50%" stop-color="${shirtFill}"/>`,
-    `<stop offset="100%" stop-color="${shirtShadow}"/>`,
-    '</linearGradient>',
-    // Drop shadow filter
-    '<filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">',
-    '<feDropShadow dx="0" dy="8" stdDeviation="20" flood-opacity="0.4"/>',
-    '</filter>',
-    '</defs>',
-    // Background
-    `<rect width="100%" height="100%" fill="url(#bg)"/>`,
-    // T-shirt with shadow
-    `<g filter="url(#shadow)">`,
-    `<path d="${tshirtPath}" fill="url(#shirt)"/>`,
-    `</g>`,
-    // Neckline ribbing
-    `<path d="${neckPath}" fill="${shirtShadow}" opacity="0.5"/>`,
-    // Fabric fold details
-    foldLines,
-    // Shirt outline (very subtle)
-    `<path d="${tshirtPath}" fill="none" stroke="${strokeColor}" stroke-width="1" opacity="0.3"/>`,
+    `<image href="${bgImg}" x="0" y="0" width="${width}" height="${height}" />`,
     `<desc>${escapeXml(options.garment)} preview</desc>`,
-    // Slogan text
     textElements,
     '</svg>',
   ].join('');

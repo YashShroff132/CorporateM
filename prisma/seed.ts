@@ -30,12 +30,13 @@ interface CollectionSeed {
   slug: string;
   title: string;
   sortOrder: number;
+  heroImage?: string;
 }
 
 const COLLECTIONS: readonly CollectionSeed[] = [
-  { slug: 'operator', title: 'Compliance Approved', sortOrder: 0 },
-  { slug: 'believer', title: 'Performance Managed', sortOrder: 1 },
-  { slug: 'heretic', title: 'Immediate Escalation', sortOrder: 2 },
+  { slug: 'operator', title: 'Compliance Approved', sortOrder: 0, heroImage: '/col-compliance-approved.png' },
+  { slug: 'believer', title: 'Performance Managed', sortOrder: 1, heroImage: '/col-performance-managed.png' },
+  { slug: 'heretic', title: 'Immediate Escalation', sortOrder: 2, heroImage: '/col-immediate-escalation.png' },
 ];
 
 interface VariantSeed {
@@ -227,8 +228,8 @@ async function main(): Promise<void> {
   for (const c of COLLECTIONS) {
     const row = await prisma.collection.upsert({
       where: { slug: c.slug },
-      update: { title: c.title, sortOrder: c.sortOrder },
-      create: { slug: c.slug, title: c.title, sortOrder: c.sortOrder },
+      update: { title: c.title, sortOrder: c.sortOrder, heroImage: c.heroImage ?? null },
+      create: { slug: c.slug, title: c.title, sortOrder: c.sortOrder, heroImage: c.heroImage ?? null },
     });
     collectionIdBySlug.set(c.slug, row.id);
   }
