@@ -47,6 +47,7 @@ export async function saveProductAction(formData: FormData): Promise<void> {
     seoTitle: formData.get('seoTitle'),
     seoDescription: formData.get('seoDescription'),
     mockupUrl: formData.get('mockupUrl'),
+    mockupBackUrl: formData.get('mockupBackUrl'),
   });
 
   if (!parsed.success) {
@@ -65,6 +66,7 @@ export async function saveProductAction(formData: FormData): Promise<void> {
     seoTitle: parsed.data.seoTitle,
     seoDescription: parsed.data.seoDescription,
     mockupUrl: parsed.data.mockupUrl,
+    mockupBackUrl: parsed.data.mockupBackUrl,
   };
 
   const result = editing

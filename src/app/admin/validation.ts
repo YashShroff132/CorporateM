@@ -74,6 +74,7 @@ export const productSchema = z.object({
       .nullable(),
   ),
   mockupUrl: optionalUrl,
+  mockupBackUrl: optionalUrl,
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;

@@ -63,10 +63,10 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
       const layoutResult = fitText(p.slogan, { width: 380, height: 350 }, preset);
       const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [p.slogan], width: 300, height: 100, preset };
       const garmentColor = isWhite ? 'White' : 'Black';
-      const mockupUrl = svgToDataUrl(
+      const mockupUrl = p.mockupUrl || svgToDataUrl(
         composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
       );
-      const mockupBackUrl = svgToDataUrl(
+      const mockupBackUrl = p.mockupBackUrl || svgToDataUrl(
         composeBackSvg({ garment: 'Classic Tee', color: garmentColor })
       );
 
@@ -169,10 +169,10 @@ export async function getProductBySlug(
     const layoutResult = fitText(row.slogan, { width: 380, height: 350 }, preset);
     const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [row.slogan], width: 300, height: 100, preset };
     const garmentColor = isWhite ? 'White' : 'Black';
-    const mockupUrl = svgToDataUrl(
+    const mockupUrl = row.mockupUrl || svgToDataUrl(
       composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
     );
-    const mockupBackUrl = svgToDataUrl(
+    const mockupBackUrl = row.mockupBackUrl || svgToDataUrl(
       composeBackSvg({ garment: 'Classic Tee', color: garmentColor })
     );
 

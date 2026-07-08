@@ -93,6 +93,7 @@ model Product {
   seoTitle        String? // 1..60
   seoDescription  String? // 1..160
   mockupUrl       String?
+  mockupBackUrl   String?
   variants        Variant[]
   reviews         Review[]
   designs         Design[]

@@ -335,6 +335,7 @@ export interface AdminProductDetail {
   seoTitle: string | null;
   seoDescription: string | null;
   mockupUrl: string | null;
+  mockupBackUrl: string | null;
   variants: AdminVariant[];
 }
 
@@ -369,6 +370,7 @@ export async function getProduct(
       seoTitle: p.seoTitle,
       seoDescription: p.seoDescription,
       mockupUrl: p.mockupUrl,
+      mockupBackUrl: p.mockupBackUrl,
       variants: p.variants.map((v) => ({
         id: v.id,
         sku: v.sku,
@@ -394,6 +396,7 @@ export interface ProductData {
   seoTitle: string | null;
   seoDescription: string | null;
   mockupUrl: string | null;
+  mockupBackUrl: string | null;
 }
 
 export async function createProduct(data: ProductData): Promise<AdminResult> {

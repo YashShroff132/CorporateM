@@ -141,15 +141,27 @@ export function ProductForm({
         </Field>
       </div>
 
-      <Field label="Mockup image URL" htmlFor="mockupUrl" hint="Optional. http(s) URL.">
-        <input
-          id="mockupUrl"
-          name="mockupUrl"
-          type="url"
-          defaultValue={product?.mockupUrl ?? ''}
-          className={inputClass}
-        />
-      </Field>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field label="Mockup image URL (Front)" htmlFor="mockupUrl" hint="Optional. http(s) URL.">
+          <input
+            id="mockupUrl"
+            name="mockupUrl"
+            type="url"
+            defaultValue={product?.mockupUrl ?? ''}
+            className={inputClass}
+          />
+        </Field>
+
+        <Field label="Mockup image URL (Back)" htmlFor="mockupBackUrl" hint="Optional. http(s) URL.">
+          <input
+            id="mockupBackUrl"
+            name="mockupBackUrl"
+            type="url"
+            defaultValue={product?.mockupBackUrl ?? ''}
+            className={inputClass}
+          />
+        </Field>
+      </div>
 
       <Field label="SEO title" htmlFor="seoTitle" hint="Optional, up to 60 characters.">
         <input
