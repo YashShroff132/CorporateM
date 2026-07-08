@@ -108,6 +108,8 @@ export interface ShopProductView extends ShopProduct {
   slogan: string;
   /** Optional product mockup image URL for the grid thumbnail (Req 24.4). */
   mockupUrl?: string;
+  /** Optional back-view mockup URL for the hover flip animation. */
+  mockupBackUrl?: string;
 }
 
 /** A single page of results plus the metadata needed for pagination links. */

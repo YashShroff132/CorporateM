@@ -132,13 +132,44 @@ export function composePreviewSvg(
     })
     .join('');
 
-  const bgImg = isWhiteShirt ? '/blank-white-tee.png' : '/blank-black-tee.png';
+  const bgImg = isWhiteShirt ? '/model-front-white.png' : '/model-front-black.png';
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
     `<image href="${bgImg}" x="0" y="0" width="${width}" height="${height}" />`,
     `<desc>${escapeXml(options.garment)} preview</desc>`,
     textElements,
+    '</svg>',
+  ].join('');
+}
+
+/**
+ * Compose a BACK-view SVG preview for the t-shirt. Shows the model from behind
+ * with 'CORPORATE CULT' branding on the upper back. Pure and deterministic.
+ * Uses the same sizing contract as composePreviewSvg so front/back match.
+ */
+export function composeBackSvg(
+  options: { garment: string; color: string } = { garment: 'tee', color: '#111111' },
+): string {
+  const width = 1000;
+  const height = 1200;
+
+  const colorLower = options.color.toLowerCase();
+  const isWhiteShirt =
+    colorLower.includes('white') ||
+    colorLower.includes('#fff') ||
+    colorLower.includes('#f5f5f5') ||
+    colorLower.includes('#fafafa');
+
+  const textColor = isWhiteShirt ? '#111111' : '#f5f5f5';
+  const bgImg = isWhiteShirt ? '/model-back-white.png' : '/model-back-black.png';
+
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
+    `<image href="${bgImg}" x="0" y="0" width="${width}" height="${height}" />`,
+    `<desc>${escapeXml(options.garment)} back preview</desc>`,
+    `<text x="500" y="420" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="42" font-weight="900" fill="${textColor}" text-anchor="middle" letter-spacing="8" opacity="0.85">CORPORATE</text>`,
+    `<text x="500" y="470" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="42" font-weight="900" fill="${textColor}" text-anchor="middle" letter-spacing="8" opacity="0.85">CULT</text>`,
     '</svg>',
   ].join('');
 }

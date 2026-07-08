@@ -35,3 +35,64 @@
     transition: none;
   }
 }
+
+/* -------------------------------------------------------
+ * Product card 3D backflip animation (OG Break–style)
+ * The card flips 180° on hover to reveal the back-view.
+ * Only activates on hover-capable devices (desktops).
+ * ------------------------------------------------------- */
+.product-flip-container {
+  perspective: 1000px;
+  overflow: hidden;
+}
+
+.product-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* Only animate the flip on devices with a real hover pointer */
+@media (hover: hover) and (pointer: fine) {
+  .product-flip-inner {
+    transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+  .product-flip-container:hover .product-flip-inner {
+    transform: rotateY(180deg);
+  }
+}
+
+.product-flip-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.product-flip-front {
+  z-index: 2;
+}
+
+.product-flip-back {
+  transform: rotateY(180deg);
+}
+
+/* On touch-only devices, hide the back face entirely */
+@media (hover: none) {
+  .product-flip-back {
+    display: none;
+  }
+}
+
+/* Disable flip for visitors who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .product-flip-inner {
+    transition: none;
+  }
+  .product-flip-container:hover .product-flip-inner {
+    transform: none;
+  }
+}

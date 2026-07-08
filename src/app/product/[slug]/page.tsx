@@ -180,13 +180,22 @@ export default async function ProductPage({
         props={{ slug: detail.product.slug, slogan: detail.product.slogan }}
       />
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {/* Product mockup (responsive, explicit dimensions to avoid CLS). */}
-        <ProductImage
-          src={detail.product.mockupUrl}
-          alt={detail.product.slogan}
-          priority
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
+        {/* Product mockups — front & back views */}
+        <div className="flex flex-col gap-3">
+          <ProductImage
+            src={detail.product.mockupUrl}
+            alt={detail.product.slogan}
+            priority
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          {detail.product.mockupBackUrl && (
+            <ProductImage
+              src={detail.product.mockupBackUrl}
+              alt={`${detail.product.slogan} — back view`}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          )}
+        </div>
 
         <div className="flex flex-col gap-5">
           <div className="flex flex-wrap items-center gap-2">
@@ -209,7 +218,7 @@ export default async function ProductPage({
             <div className="flex items-baseline gap-2.5">
               <span className="text-2xl font-bold text-ink">₹{vm.priceInr}</span>
               <span className="line-through text-base text-muted font-normal">
-                ₹{Math.round((vm.selectedVariant ? variantPricePaise(detail.product, vm.selectedVariant) : detail.product.basePrice) / 60)}
+                ₹{(Math.ceil(Number(vm.priceInr!.replace(/,/g, '')) / 0.6 / 100) * 100 - 1)}
               </span>
               <span className="bg-stamp-red/10 text-stamp-red px-2 py-0.5 text-xs font-bold rounded">
                 40% OFF

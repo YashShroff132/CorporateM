@@ -15,7 +15,7 @@
 import type { ShopProductView } from '@/services/shop';
 import type { Collection, Product, Variant } from '@/services/catalog';
 import { fitText, presetsForCollection, SAFE_CLASSIC_PRESET } from '@/services/mockup';
-import { composePreviewSvg, svgToDataUrl } from './mockup-data';
+import { composePreviewSvg, composeBackSvg, svgToDataUrl } from './mockup-data';
 
 export interface CollectionSummary {
   slug: string;
@@ -62,8 +62,12 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
       const preset = presets[0] ?? SAFE_CLASSIC_PRESET;
       const layoutResult = fitText(p.slogan, { width: 380, height: 350 }, preset);
       const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [p.slogan], width: 300, height: 100, preset };
+      const garmentColor = isWhite ? 'White' : 'Black';
       const mockupUrl = svgToDataUrl(
-        composePreviewSvg(layout, { garment: 'Classic Tee', color: isWhite ? 'White' : 'Black' })
+        composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
+      );
+      const mockupBackUrl = svgToDataUrl(
+        composeBackSvg({ garment: 'Classic Tee', color: garmentColor })
       );
 
       return {
@@ -79,6 +83,7 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
         createdAt: p.createdAt,
         unitsSold: 0,
         mockupUrl,
+        mockupBackUrl,
       } satisfies ShopProductView;
     });
   } catch {
@@ -163,8 +168,12 @@ export async function getProductBySlug(
     const preset = presets[0] ?? SAFE_CLASSIC_PRESET;
     const layoutResult = fitText(row.slogan, { width: 380, height: 350 }, preset);
     const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [row.slogan], width: 300, height: 100, preset };
+    const garmentColor = isWhite ? 'White' : 'Black';
     const mockupUrl = svgToDataUrl(
-      composePreviewSvg(layout, { garment: 'Classic Tee', color: isWhite ? 'White' : 'Black' })
+      composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
+    );
+    const mockupBackUrl = svgToDataUrl(
+      composeBackSvg({ garment: 'Classic Tee', color: garmentColor })
     );
 
     const product: Product = {
@@ -180,6 +189,7 @@ export async function getProductBySlug(
       seoTitle: row.seoTitle ?? undefined,
       seoDescription: row.seoDescription ?? undefined,
       mockupUrl,
+      mockupBackUrl,
       createdAt: row.createdAt,
     };
 

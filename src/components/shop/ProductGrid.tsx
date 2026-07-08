@@ -1,10 +1,10 @@
 /**
- * ProductGrid — server-rendered grid of the current page of PUBLISHED products,
- * or an empty-state message when nothing matches (Req 2.4, 2.7).
+ * ProductGrid — server-rendered grid of the current page of PUBLISHED products
+ * with a 3D backflip hover animation showing front/back t-shirt views.
  *
- * When the item list is empty this renders a clear "no matching products"
- * message. The caller keeps the filter controls mounted alongside this grid, so
- * an empty result never removes the filter UI (Req 2.7).
+ * The flip is built into the card itself: any product with a `mockupBackUrl`
+ * gets the 3D rotation on hover. Products without a back image degrade
+ * gracefully to the existing scale/lift effect.
  */
 
 import type { ShopProductView } from '@/services/shop';
@@ -19,6 +19,12 @@ export interface ProductGridProps {
 
 const DEFAULT_EMPTY_MESSAGE =
   'No matching products. Try adjusting or clearing your filters.';
+
+/** Round a raw MRP to a clean ₹X99 price point (e.g. ₹1499, ₹1999, ₹2499). */
+function cleanMrp(salePrice: number): number {
+  const raw = salePrice / 0.6;
+  return Math.ceil(raw / 100) * 100 - 1;
+}
 
 export function ProductGrid({
   items,
@@ -41,14 +47,15 @@ export function ProductGrid({
       {items.map((product, index) => (
         <li key={product.id} className="list-none">
           <ScrollReveal delay={(index % 4) * 100}>
-            <div className="border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:border-ink/25 group">
-              <a
-                href={`/product/${product.slug}`}
-                className="flex h-full flex-col gap-3.5 p-3.5"
-              >
-                {/* Image Container with zoom crop effect */}
-                <div className="overflow-hidden rounded-md bg-ink/5 aspect-square relative border border-ink/5">
-                  <div className="transition-transform duration-500 ease-out group-hover:scale-[1.04]">
+            <a
+              href={`/product/${product.slug}`}
+              className="block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-shadow duration-300 hover:shadow-lg hover:border-ink/25"
+            >
+              {/* --- 3D Flip Image Container --- */}
+              <div className="product-flip-container aspect-square relative border-b border-ink/5">
+                <div className="product-flip-inner">
+                  {/* FRONT face */}
+                  <div className="product-flip-face product-flip-front">
                     <ProductImage
                       src={product.mockupUrl}
                       alt={product.slogan}
@@ -56,26 +63,38 @@ export function ProductGrid({
                       height={320}
                     />
                   </div>
+                  {/* BACK face — only rendered when a back image exists */}
+                  {product.mockupBackUrl && (
+                    <div className="product-flip-face product-flip-back">
+                      <ProductImage
+                        src={product.mockupBackUrl}
+                        alt={`${product.slogan} — back view`}
+                        width={320}
+                        height={320}
+                      />
+                    </div>
+                  )}
                 </div>
+              </div>
 
-                <div className="flex flex-col gap-1">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-bold">
-                    {product.collectionSlug}
+              {/* --- Product Info --- */}
+              <div className="flex flex-col gap-1 p-3.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-bold">
+                  {product.collectionSlug}
+                </span>
+                <span className="text-sm font-bold text-ink leading-tight line-clamp-2 min-h-[2.5rem]">
+                  {product.slogan}
+                </span>
+                <div className="flex items-baseline gap-1.5 mt-1 font-mono">
+                  <span className="text-sm font-extrabold text-stamp-red">
+                    ₹{product.priceInr}
                   </span>
-                  <span className="text-sm font-bold text-ink leading-tight line-clamp-2 min-h-[2.5rem]">
-                    {product.slogan}
+                  <span className="line-through text-[11px] text-muted font-normal">
+                    ₹{cleanMrp(product.priceInr)}
                   </span>
-                  <div className="flex items-baseline gap-1.5 mt-1 font-mono">
-                    <span className="text-sm font-extrabold text-stamp-red">
-                      ₹{product.priceInr}
-                    </span>
-                    <span className="line-through text-[11px] text-muted font-normal">
-                      ₹{Math.round(product.priceInr / 0.6)}
-                    </span>
-                  </div>
                 </div>
-              </a>
-            </div>
+              </div>
+            </a>
           </ScrollReveal>
         </li>
       ))}
