@@ -1,26 +1,59 @@
-/**
- * Narrative homepage (Requirement 4).
- *
- * Rendering strategy:
- *  - The narrative acts are server-rendered as static, readable HTML in the
- *    fixed order (Req 4.1) and work fully with JavaScript disabled (Req 4.3).
- *  - The scroll-animation enhancement is a client component whose heavy work
- *    (the scroll/3D module) is code-split via a dynamic `import()` that only
- *    runs in the browser after hydration/FCP (Req 4.5, 4.6). The enhancer gates
- *    its behavior through the pure degradation decision (Req 4.2, 4.7, 4.10).
- *
- * Featured-product shoppable wiring is intentionally out of scope here — that is
- * task 6.2.
- */
+import type { Metadata } from 'next';
 
-import { NarrativeSections } from '@/components/homepage/NarrativeSections';
-import { NarrativeEnhancer } from '@/components/homepage/NarrativeEnhancer';
+import { ShopView } from '@/components/shop/ShopView';
+import { getPublishedShopProducts } from '@/server/shop-data';
+import { buildShopMetadata } from '@/server/shop-metadata';
+import {
+  facetValues,
+  toURLSearchParams,
+  type RawSearchParams,
+} from '@/server/search-params';
+import { encodeShopQuery, getShopPage, parseShopQuery } from '@/services/shop';
 
-export default function HomePage() {
+export const dynamic = 'force-dynamic';
+
+const SHOP_PATH = '/';
+
+interface HomePageProps {
+  searchParams: Promise<RawSearchParams>;
+}
+
+export async function generateMetadata({
+  searchParams,
+}: HomePageProps): Promise<Metadata> {
+  const raw = await searchParams;
+  const query = parseShopQuery(toURLSearchParams(raw));
+  const products = await getPublishedShopProducts();
+  const page = getShopPage(products, query);
+
+  return buildShopMetadata({
+    path: SHOP_PATH,
+    query,
+    page,
+    title: 'Shop',
+    description:
+      'Browse the full Corporate Cult catalog. Filter by tier, collection, color, size, and price.',
+  });
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const raw = await searchParams;
+  const query = parseShopQuery(toURLSearchParams(raw));
+
+  const products = await getPublishedShopProducts();
+  const page = getShopPage(products, query);
+  const { colors, sizes } = facetValues(products);
+
   return (
-    <>
-      <NarrativeSections />
-      <NarrativeEnhancer />
-    </>
+    <ShopView
+      heading="Shop"
+      intro="Corporate is a joke. Wear the punchline."
+      basePath={SHOP_PATH}
+      baseQuery={encodeShopQuery(query)}
+      query={query}
+      page={page}
+      colors={colors}
+      sizes={sizes}
+    />
   );
 }

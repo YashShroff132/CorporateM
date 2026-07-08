@@ -9,6 +9,7 @@
 import Link from 'next/link';
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
+  { href: '/manifesto', label: 'Manifesto' },
   { href: '/shop', label: 'Shop' },
   { href: '/collections', label: 'Collections' },
   { href: '/cart', label: 'Cart' },

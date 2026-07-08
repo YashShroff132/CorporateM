@@ -11,6 +11,8 @@ import { ShopFilters } from './ShopFilters';
 import { ProductGrid } from './ProductGrid';
 import { Pagination } from './Pagination';
 import { CollapsibleFilters } from './CollapsibleFilters';
+import { ShopLayout } from './ShopLayout';
+import { CouponPopup } from './CouponPopup';
 import type { Page, ShopProductView, ShopQuery } from '@/services/shop';
 
 export interface ShopViewProps {
@@ -38,8 +40,33 @@ export function ShopView({
   sizes,
   hideTier = false,
 }: ShopViewProps) {
+  const isHomepage = basePath === '/' || basePath === '/shop';
+
   return (
-    <main className="mx-auto flex max-w-6xl flex-col gap-8 p-6">
+    <main className="mx-auto flex max-w-6xl flex-col gap-6 p-6">
+      {/* 10% Welcome Coupon Popup */}
+      <CouponPopup />
+
+      {/* Hero Banner Image (Rendered only on main catalog views) */}
+      {isHomepage && (
+        <div className="relative w-full h-[240px] md:h-[320px] overflow-hidden border border-ink/10 rounded-lg shadow-sm mb-4 bg-ink/5">
+          <img
+            src="/hero-streetwear.png"
+            alt="Corporate Cult Streetwear Collection"
+            className="w-full h-full object-cover opacity-90 transition-transform duration-10000 ease-out hover:scale-105"
+          />
+          {/* Minimalist Overlay banner text */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex flex-col justify-end p-6 md:p-8">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-paper/85 mb-1.5">
+              Notice Period Apparel // Volume I
+            </span>
+            <h2 className="text-xl md:text-3xl font-black uppercase text-paper tracking-tight max-w-md drop-shadow">
+              Corporate is a joke. Wear the punchline.
+            </h2>
+          </div>
+        </div>
+      )}
+
       <header className="flex flex-col gap-2">
         <h1 className="text-3xl font-black tracking-tight">{heading}</h1>
         {intro && <p className="text-muted">{intro}</p>}
@@ -48,8 +75,9 @@ export function ShopView({
         </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-[220px_1fr]">
-        <aside className="md:sticky md:top-6 md:self-start">
+      {/* Integrate collapsible desktop/mobile layout manager */}
+      <ShopLayout
+        filters={
           <CollapsibleFilters>
             <ShopFilters
               action={basePath}
@@ -59,13 +87,14 @@ export function ShopView({
               hideTier={hideTier}
             />
           </CollapsibleFilters>
-        </aside>
-
-        <section className="flex flex-col gap-6">
-          <ProductGrid items={page.items} />
-          <Pagination basePath={basePath} baseQuery={baseQuery} page={page} />
-        </section>
-      </div>
+        }
+        products={
+          <>
+            <ProductGrid items={page.items} />
+            <Pagination basePath={basePath} baseQuery={baseQuery} page={page} />
+          </>
+        }
+      />
     </main>
   );
 }

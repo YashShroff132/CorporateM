@@ -9,6 +9,7 @@
 
 import type { ShopProductView } from '@/services/shop';
 import { ProductImage } from '@/components/ProductImage';
+import { ScrollReveal } from './ScrollReveal';
 
 export interface ProductGridProps {
   items: ShopProductView[];
@@ -36,27 +37,41 @@ export function ProductGrid({
   }
 
   return (
-    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
       {items.map((product) => (
-        <li key={product.id} className="border border-ink/10">
-          <a
-            href={`/product/${product.slug}`}
-            className="flex h-full flex-col gap-2 p-3 transition-colors hover:bg-ink/5"
-          >
-            <ProductImage
-              src={product.mockupUrl}
-              alt={product.slogan}
-              width={320}
-              height={320}
-            />
-            <div className="flex flex-col gap-1">
-              <span className="text-xs uppercase tracking-wide text-muted">
-                {product.collectionSlug}
-              </span>
-              <span className="text-sm font-semibold">{product.slogan}</span>
-              <span className="text-sm font-bold">₹{product.priceInr}</span>
+        <li key={product.id} className="list-none">
+          <ScrollReveal>
+            <div className="border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:border-ink/25 group">
+              <a
+                href={`/product/${product.slug}`}
+                className="flex h-full flex-col gap-3.5 p-3.5"
+              >
+                {/* Image Container with zoom crop effect */}
+                <div className="overflow-hidden rounded-md bg-ink/5 aspect-square relative border border-ink/5">
+                  <div className="transition-transform duration-500 ease-out group-hover:scale-[1.04]">
+                    <ProductImage
+                      src={product.mockupUrl}
+                      alt={product.slogan}
+                      width={320}
+                      height={320}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-bold">
+                    {product.collectionSlug}
+                  </span>
+                  <span className="text-sm font-bold text-ink leading-tight line-clamp-2 min-h-[2.5rem]">
+                    {product.slogan}
+                  </span>
+                  <span className="text-sm font-extrabold text-stamp-red mt-1 font-mono">
+                    ₹{product.priceInr}
+                  </span>
+                </div>
+              </a>
             </div>
-          </a>
+          </ScrollReveal>
         </li>
       ))}
     </ul>
