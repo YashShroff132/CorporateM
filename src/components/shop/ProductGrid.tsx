@@ -38,9 +38,9 @@ export function ProductGrid({
 
   return (
     <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-      {items.map((product) => (
+      {items.map((product, index) => (
         <li key={product.id} className="list-none">
-          <ScrollReveal>
+          <ScrollReveal delay={(index % 4) * 100}>
             <div className="border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:border-ink/25 group">
               <a
                 href={`/product/${product.slug}`}

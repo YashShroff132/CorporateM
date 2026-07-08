@@ -68,7 +68,7 @@ export function ShopView({
       )}
 
       <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-black tracking-tight">{heading}</h1>
+        {heading && <h1 className="text-3xl font-black tracking-tight">{heading}</h1>}
         {intro && <p className="text-muted">{intro}</p>}
         <p className="text-sm text-muted">
           {page.totalItems} {page.totalItems === 1 ? 'product' : 'products'}

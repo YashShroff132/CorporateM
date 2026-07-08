@@ -46,8 +46,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   return (
     <ShopView
-      heading="Shop"
-      intro="Corporate is a joke. Wear the punchline."
+      heading=""
       basePath={SHOP_PATH}
       baseQuery={encodeShopQuery(query)}
       query={query}

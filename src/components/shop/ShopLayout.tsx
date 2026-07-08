@@ -8,7 +8,7 @@ interface ShopLayoutProps {
 }
 
 export function ShopLayout({ filters, products }: ShopLayoutProps) {
-  const [showFilters, setShowFilters] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
 
   return (
     <div className="flex flex-col gap-5">
@@ -24,11 +24,11 @@ export function ShopLayout({ filters, products }: ShopLayoutProps) {
           <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" />
           </svg>
-          {showFilters ? 'Hide Filters' : 'Show Filters'}
+          Filters
+          {showFilters && (
+            <span className="text-[9px] font-normal normal-case tracking-normal text-ink/50">✕</span>
+          )}
         </button>
-        <span className="text-xs text-muted font-mono uppercase tracking-wider">
-          Double-click to expand viewport
-        </span>
       </div>
 
       {/* Responsive Grid Layout */}

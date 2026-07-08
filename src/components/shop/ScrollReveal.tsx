@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 
 interface ScrollRevealProps {
   children: React.ReactNode;
+  /** Stagger delay in ms — used to create a left-to-right wave effect across grid columns. */
+  delay?: number;
 }
 
-export function ScrollReveal({ children }: ScrollRevealProps) {
+export function ScrollReveal({ children, delay = 0 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -49,10 +51,11 @@ export function ScrollReveal({ children }: ScrollRevealProps) {
   return (
     <div
       ref={ref}
+      style={{ transitionDelay: `${delay}ms` }}
       className={`transition-all duration-700 ease-out transform ${
         isVisible
           ? 'opacity-100 translate-y-0 scale-100'
-          : 'opacity-0 translate-y-6 scale-98 pointer-events-none'
+          : 'opacity-0 translate-y-8 scale-95 pointer-events-none'
       }`}
     >
       {children}
