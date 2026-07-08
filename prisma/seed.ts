@@ -223,6 +223,16 @@ function skuFor(productSlug: string, v: VariantSeed): string {
 }
 
 async function main(): Promise<void> {
+  // Clean start: Delete all existing customer/catalog items to start from scratch with exactly 8 products
+  console.log('Cleaning database...');
+  await prisma.cartLine.deleteMany();
+  await prisma.wishlistItem.deleteMany();
+  await prisma.review.deleteMany();
+  await prisma.design.deleteMany();
+  await prisma.variant.deleteMany();
+  await prisma.product.deleteMany();
+  console.log('Database cleaned. Seeding Collections...');
+
   // Collections
   const collectionIdBySlug = new Map<string, string>();
   for (const c of COLLECTIONS) {
