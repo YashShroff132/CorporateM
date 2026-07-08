@@ -206,7 +206,15 @@ export default async function ProductPage({
           <h1 className="text-3xl font-black tracking-tight">{vm.slogan}</h1>
 
           {vm.priceInr !== undefined && (
-            <p className="text-2xl font-bold">₹{vm.priceInr}</p>
+            <div className="flex items-baseline gap-2.5">
+              <span className="text-2xl font-bold text-ink">₹{vm.priceInr}</span>
+              <span className="line-through text-base text-muted font-normal">
+                ₹{Math.round((vm.selectedVariant ? variantPricePaise(detail.product, vm.selectedVariant) : detail.product.basePrice) / 60)}
+              </span>
+              <span className="bg-stamp-red/10 text-stamp-red px-2 py-0.5 text-xs font-bold rounded">
+                40% OFF
+              </span>
+            </div>
           )}
 
           {/* Variant selectors — automatically re-renders on selection change. */}

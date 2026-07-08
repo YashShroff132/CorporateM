@@ -65,9 +65,14 @@ export function ProductGrid({
                   <span className="text-sm font-bold text-ink leading-tight line-clamp-2 min-h-[2.5rem]">
                     {product.slogan}
                   </span>
-                  <span className="text-sm font-extrabold text-stamp-red mt-1 font-mono">
-                    ₹{product.priceInr}
-                  </span>
+                  <div className="flex items-baseline gap-1.5 mt-1 font-mono">
+                    <span className="text-sm font-extrabold text-stamp-red">
+                      ₹{product.priceInr}
+                    </span>
+                    <span className="line-through text-[11px] text-muted font-normal">
+                      ₹{Math.round(product.priceInr / 0.6)}
+                    </span>
+                  </div>
                 </div>
               </a>
             </div>
