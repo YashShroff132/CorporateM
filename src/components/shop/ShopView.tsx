@@ -58,7 +58,7 @@ export function ShopView({
           {/* Minimalist Overlay banner text */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-6 md:p-10">
             <span className="text-[10px] font-mono uppercase tracking-widest text-paper/90 mb-1.5 font-bold">
-              Corporat // Rebel Sync
+              Corporate Cult // Rebel Sync
             </span>
             <h2 className="text-2xl md:text-4xl font-black uppercase text-paper tracking-tight max-w-xl drop-shadow">
               Compliance is optional.<br />Comfort is not.

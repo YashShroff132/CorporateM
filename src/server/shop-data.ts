@@ -63,6 +63,8 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
       const layoutResult = fitText(p.slogan, { width: 380, height: 350 }, preset);
       const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [p.slogan], width: 300, height: 100, preset };
       const garmentColor = isWhite ? 'White' : 'Black';
+      const mockupBgUrl = isWhite ? '/model-front-white.png' : '/model-front-black.png';
+      const mockupBackBgUrl = isWhite ? '/model-back-white.png' : '/model-back-black.png';
       const mockupUrl = p.mockupUrl || svgToDataUrl(
         composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
       );
@@ -84,6 +86,8 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
         unitsSold: 0,
         mockupUrl,
         mockupBackUrl,
+        mockupBgUrl,
+        mockupBackBgUrl,
       } satisfies ShopProductView;
     });
   } catch {
@@ -169,6 +173,8 @@ export async function getProductBySlug(
     const layoutResult = fitText(row.slogan, { width: 380, height: 350 }, preset);
     const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [row.slogan], width: 300, height: 100, preset };
     const garmentColor = isWhite ? 'White' : 'Black';
+    const mockupBgUrl = isWhite ? '/model-front-white.png' : '/model-front-black.png';
+    const mockupBackBgUrl = isWhite ? '/model-back-white.png' : '/model-back-black.png';
     const mockupUrl = row.mockupUrl || svgToDataUrl(
       composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
     );
@@ -190,6 +196,8 @@ export async function getProductBySlug(
       seoDescription: row.seoDescription ?? undefined,
       mockupUrl,
       mockupBackUrl,
+      mockupBgUrl,
+      mockupBackBgUrl,
       createdAt: row.createdAt,
     };
 

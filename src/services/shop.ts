@@ -110,6 +110,10 @@ export interface ShopProductView extends ShopProduct {
   mockupUrl?: string;
   /** Optional back-view mockup URL for the hover flip animation. */
   mockupBackUrl?: string;
+  /** Optional front background template image (e.g. /model-front-white.png). */
+  mockupBgUrl?: string;
+  /** Optional back background template image (e.g. /model-back-white.png). */
+  mockupBackBgUrl?: string;
 }
 
 /** A single page of results plus the metadata needed for pagination links. */

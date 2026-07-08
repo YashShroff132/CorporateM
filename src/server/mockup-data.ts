@@ -17,33 +17,8 @@
  * error is returned (Req 14.9).
  */
 
-import fs from 'fs';
-import path from 'path';
 import { type Result, ok, err } from '@/lib/result';
 import type { TextLayout } from '@/services/mockup';
-
-// Cache for inlined base64 images to prevent reading from disk repeatedly
-const base64Cache: Record<string, string> = {};
-
-function getBase64Image(relativePath: string): string {
-  const cleanPath = relativePath.startsWith('/') ? relativePath.slice(1) : relativePath;
-  if (base64Cache[cleanPath]) {
-    return base64Cache[cleanPath];
-  }
-  try {
-    const filePath = path.join(process.cwd(), 'public', cleanPath);
-    const fileBuffer = fs.readFileSync(filePath);
-    const ext = path.extname(cleanPath).slice(1);
-    const mimeType = ext === 'svg' ? 'image/svg+xml' : `image/${ext}`;
-    const base64 = fileBuffer.toString('base64');
-    const dataUrl = `data:${mimeType};base64,${base64}`;
-    base64Cache[cleanPath] = dataUrl;
-    return dataUrl;
-  } catch (err) {
-    console.error(`Failed to load base64 image for ${cleanPath}:`, err);
-    return relativePath; // Fallback
-  }
-}
 
 /** Minimum longest-edge size for the web preview image (Req 14.4). */
 export const PREVIEW_MIN_LONGEST_EDGE_PX = 1000;
@@ -157,11 +132,8 @@ export function composePreviewSvg(
     })
     .join('');
 
-  const bgImg = isWhiteShirt ? '/model-front-white.png' : '/model-front-black.png';
-
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-    `<image href="${getBase64Image(bgImg)}" x="0" y="0" width="${width}" height="${height}" />`,
     `<desc>${escapeXml(options.garment)} preview</desc>`,
     textElements,
     '</svg>',
@@ -187,11 +159,8 @@ export function composeBackSvg(
     colorLower.includes('#fafafa');
 
   const textColor = isWhiteShirt ? '#111111' : '#f5f5f5';
-  const bgImg = isWhiteShirt ? '/model-back-white.png' : '/model-back-black.png';
-
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
-    `<image href="${getBase64Image(bgImg)}" x="0" y="0" width="${width}" height="${height}" />`,
     `<desc>${escapeXml(options.garment)} back preview</desc>`,
     `<text x="500" y="420" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="42" font-weight="900" fill="${textColor}" text-anchor="middle" letter-spacing="8" opacity="0.85">CORPORATE</text>`,
     `<text x="500" y="470" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="42" font-weight="900" fill="${textColor}" text-anchor="middle" letter-spacing="8" opacity="0.85">CULT</text>`,

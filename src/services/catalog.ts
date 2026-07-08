@@ -64,6 +64,8 @@ export interface Product {
   seoDescription?: string;
   mockupUrl?: string;
   mockupBackUrl?: string;
+  mockupBgUrl?: string;
+  mockupBackBgUrl?: string;
   createdAt: Date;
 }
 

@@ -182,18 +182,58 @@ export default async function ProductPage({
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         {/* Product mockups — front & back views */}
         <div className="flex flex-col gap-3">
-          <ProductImage
-            src={detail.product.mockupUrl}
-            alt={detail.product.slogan}
-            priority
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
+          <div className="relative aspect-square w-full">
+            {detail.product.mockupUrl?.startsWith('data:') ? (
+              <>
+                <ProductImage
+                  src={detail.product.mockupBgUrl || (detail.variants.some(v => v.color.toLowerCase().includes('white')) ? '/model-front-white.png' : '/model-front-black.png')}
+                  alt={detail.product.slogan}
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 pointer-events-none select-none">
+                  <img
+                    src={detail.product.mockupUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </>
+            ) : (
+              <ProductImage
+                src={detail.product.mockupUrl}
+                alt={detail.product.slogan}
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            )}
+          </div>
+
           {detail.product.mockupBackUrl && (
-            <ProductImage
-              src={detail.product.mockupBackUrl}
-              alt={`${detail.product.slogan} — back view`}
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
+            <div className="relative aspect-square w-full">
+              {detail.product.mockupBackUrl?.startsWith('data:') ? (
+                <>
+                  <ProductImage
+                    src={detail.product.mockupBackBgUrl || (detail.variants.some(v => v.color.toLowerCase().includes('white')) ? '/model-back-white.png' : '/model-back-black.png')}
+                    alt={`${detail.product.slogan} — back view`}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 pointer-events-none select-none">
+                    <img
+                      src={detail.product.mockupBackUrl}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </>
+              ) : (
+                <ProductImage
+                  src={detail.product.mockupBackUrl}
+                  alt={`${detail.product.slogan} — back view`}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              )}
+            </div>
           )}
         </div>
 

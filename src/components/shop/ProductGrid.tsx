@@ -55,23 +55,59 @@ export function ProductGrid({
               <div className="product-flip-container aspect-square relative border-b border-ink/5">
                 <div className="product-flip-inner">
                   {/* FRONT face */}
-                  <div className="product-flip-face product-flip-front">
-                    <ProductImage
-                      src={product.mockupUrl}
-                      alt={product.slogan}
-                      width={320}
-                      height={320}
-                    />
-                  </div>
-                  {/* BACK face — only rendered when a back image exists */}
-                  {product.mockupBackUrl && (
-                    <div className="product-flip-face product-flip-back">
+                  <div className="product-flip-face product-flip-front relative">
+                    {product.mockupUrl?.startsWith('data:') ? (
+                      <>
+                        <ProductImage
+                          src={product.mockupBgUrl || (product.colors.includes('white') ? '/model-front-white.png' : '/model-front-black.png')}
+                          alt={product.slogan}
+                          width={320}
+                          height={320}
+                        />
+                        <div className="absolute inset-0 pointer-events-none select-none">
+                          <img
+                            src={product.mockupUrl}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </>
+                    ) : (
                       <ProductImage
-                        src={product.mockupBackUrl}
-                        alt={`${product.slogan} — back view`}
+                        src={product.mockupUrl}
+                        alt={product.slogan}
                         width={320}
                         height={320}
                       />
+                    )}
+                  </div>
+                  {/* BACK face — only rendered when a back image exists */}
+                  {product.mockupBackUrl && (
+                    <div className="product-flip-face product-flip-back relative">
+                      {product.mockupBackUrl?.startsWith('data:') ? (
+                        <>
+                          <ProductImage
+                            src={product.mockupBackBgUrl || (product.colors.includes('white') ? '/model-back-white.png' : '/model-back-black.png')}
+                            alt={`${product.slogan} — back view`}
+                            width={320}
+                            height={320}
+                          />
+                          <div className="absolute inset-0 pointer-events-none select-none">
+                            <img
+                              src={product.mockupBackUrl}
+                              alt=""
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </>
+                      ) : (
+                        <ProductImage
+                          src={product.mockupBackUrl}
+                          alt={`${product.slogan} — back view`}
+                          width={320}
+                          height={320}
+                        />
+                      )}
                     </div>
                   )}
                 </div>
