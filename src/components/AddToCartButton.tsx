@@ -10,6 +10,7 @@
  */
 
 import { trackAddToCart, type AnalyticsProps } from '@/lib/analytics';
+import { triggerTeamsNotification } from '@/components/TeamsNotification';
 
 export function AddToCartButton({
   enabled,
@@ -26,7 +27,10 @@ export function AddToCartButton({
       disabled={!enabled}
       aria-disabled={!enabled}
       onClick={() => {
-        if (enabled) trackAddToCart(eventProps ?? {});
+        if (enabled) {
+          trackAddToCart(eventProps ?? {});
+          triggerTeamsNotification();
+        }
       }}
       className="bg-highlighter px-4 py-3 text-sm font-black uppercase tracking-wide text-ink disabled:cursor-not-allowed disabled:opacity-50"
     >

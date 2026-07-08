@@ -3,6 +3,7 @@ import './globals.css';
 import { SiteHeader } from '@/components/SiteHeader';
 import { SiteFooter } from '@/components/SiteFooter';
 import { Analytics } from '@/components/Analytics';
+import { TeamsNotification } from '@/components/TeamsNotification';
 import { getSiteOrigin } from '@/lib/site';
 
 const SITE_NAME = 'Corporate Cult';
@@ -51,6 +52,7 @@ export default function RootLayout({
         {children}
         <SiteFooter />
         <Analytics />
+        <TeamsNotification />
       </body>
     </html>
   );

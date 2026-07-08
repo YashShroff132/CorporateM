@@ -38,103 +38,103 @@ export default async function CartPage() {
       : await loadGuestCart(sessionId);
 
   if (cart.lines.length === 0) {
-    return (
-      <main className="mx-auto flex max-w-3xl flex-col gap-6 p-6">
-        <h1 className="text-3xl font-black tracking-tight">Your cart</h1>
-        <p className="text-muted">Your cart is empty.</p>
-        <Link
-          href="/shop"
-          className="w-fit border border-ink px-4 py-2 text-sm font-bold uppercase tracking-wide"
-        >
-          Continue shopping
-        </Link>
-      </main>
-    );
-  }
+     return (
+       <main className="mx-auto flex max-w-3xl flex-col gap-6 p-6 font-mono">
+         <h1 className="text-3xl font-black tracking-tight uppercase">Sprint Backlog</h1>
+         <p className="text-sm text-muted">[WARNING] You currently have 0 active action items. Backlog is empty.</p>
+         <Link
+           href="/shop"
+           className="w-fit border border-ink bg-ink text-paper px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded"
+         >
+           Sprint Planning (Browse Shop)
+         </Link>
+       </main>
+     );
+   }
 
-  return (
-    <main className="mx-auto flex max-w-3xl flex-col gap-8 p-6">
-      <h1 className="text-3xl font-black tracking-tight">Your cart</h1>
+   return (
+     <main className="mx-auto flex max-w-3xl flex-col gap-8 p-6 font-mono">
+       <h1 className="text-3xl font-black tracking-tight uppercase">Sprint Backlog</h1>
 
-      <ul className="flex flex-col divide-y divide-ink/10 border-y border-ink/10">
-        {cart.lines.map((line) => (
-          <li key={line.lineId} className="flex flex-col gap-3 py-4">
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <Link
-                href={`/product/${line.productSlug}`}
-                className="text-lg font-bold hover:underline"
-              >
-                {line.slogan}
-              </Link>
-              <span className="text-sm font-bold">{inr(line.lineTotal)}</span>
-            </div>
+       <ul className="flex flex-col divide-y divide-ink/10 border-y border-ink/10">
+         {cart.lines.map((line) => (
+           <li key={line.lineId} className="flex flex-col gap-3 py-4">
+             <div className="flex flex-wrap items-baseline justify-between gap-2">
+               <Link
+                 href={`/product/${line.productSlug}`}
+                 className="text-lg font-bold hover:underline font-sans normal-case"
+               >
+                 {line.slogan}
+               </Link>
+               <span className="text-sm font-bold">{inr(line.lineTotal)}</span>
+             </div>
 
-            <p className="text-sm text-muted">
-              {line.color} · {line.size} · {line.fit}
-            </p>
-            <p className="text-sm text-muted">
-              Unit price {inr(line.unitPrice)}
-            </p>
+             <p className="text-xs text-muted">
+               Dimension: {line.color} / {line.size} / {line.fit}
+             </p>
+             <p className="text-xs text-muted">
+               Unit Rate: {inr(line.unitPrice)}
+             </p>
 
-            <div className="flex flex-wrap items-center gap-4">
-              {/* Update quantity — no-JS form. */}
-              <form
-                action={updateCartLineAction}
-                className="flex items-center gap-2"
-              >
-                <input type="hidden" name="lineId" value={line.lineId} />
-                <label
-                  htmlFor={`qty-${line.lineId}`}
-                  className="text-xs font-bold uppercase tracking-wide"
-                >
-                  Qty
-                </label>
-                <input
-                  id={`qty-${line.lineId}`}
-                  type="number"
-                  name="qty"
-                  min={1}
-                  max={99}
-                  defaultValue={line.qty}
-                  className="w-16 border border-ink/20 px-2 py-1 text-sm"
-                />
-                <button
-                  type="submit"
-                  className="border border-ink px-3 py-1 text-xs font-bold uppercase tracking-wide"
-                >
-                  Update
-                </button>
-              </form>
+             <div className="flex flex-wrap items-center gap-4">
+               {/* Update quantity — no-JS form. */}
+               <form
+                 action={updateCartLineAction}
+                 className="flex items-center gap-2"
+               >
+                 <input type="hidden" name="lineId" value={line.lineId} />
+                 <label
+                   htmlFor={`qty-${line.lineId}`}
+                   className="text-xs font-bold uppercase tracking-wide"
+                 >
+                   Qty
+                 </label>
+                 <input
+                   id={`qty-${line.lineId}`}
+                   type="number"
+                   name="qty"
+                   min={1}
+                   max={99}
+                   defaultValue={line.qty}
+                   className="w-16 border border-ink/20 px-2 py-1 text-xs font-sans"
+                 />
+                 <button
+                   type="submit"
+                   className="border border-ink px-3 py-1 text-xs font-bold uppercase tracking-wide hover:bg-ink/5 transition-colors"
+                 >
+                   Update
+                 </button>
+               </form>
 
-              {/* Remove line — no-JS form. */}
-              <form action={removeCartLineAction}>
-                <input type="hidden" name="lineId" value={line.lineId} />
-                <button
-                  type="submit"
-                  className="text-xs font-bold uppercase tracking-wide text-stamp-red underline"
-                >
-                  Remove
-                </button>
-              </form>
-            </div>
-          </li>
-        ))}
-      </ul>
+               {/* Remove line — no-JS form. */}
+               <form action={removeCartLineAction}>
+                 <input type="hidden" name="lineId" value={line.lineId} />
+                 <button
+                   type="submit"
+                   className="text-xs font-bold uppercase tracking-wide text-stamp-red underline"
+                 >
+                   Remove
+                 </button>
+               </form>
+             </div>
+           </li>
+         ))}
+       </ul>
 
-      <div className="flex items-center justify-between border-t border-ink pt-4">
-        <span className="text-lg font-bold uppercase tracking-wide">Subtotal</span>
-        <span className="text-2xl font-black">{inr(cart.subtotal)}</span>
-      </div>
-      <p className="text-xs text-muted">
-        Shipping and taxes are calculated at checkout.
-      </p>
+       <div className="flex items-center justify-between border-t border-ink pt-4">
+         <span className="text-sm font-bold uppercase tracking-wide">Backlog Subtotal</span>
+         <span className="text-2xl font-black">{inr(cart.subtotal)}</span>
+       </div>
+       <p className="text-xs text-muted font-sans normal-case">
+         Shipping/logistics costs and compliance taxes are calculated at checkout.
+       </p>
 
-      <Link
-        href="/checkout"
-        className="w-fit bg-highlighter px-6 py-3 text-sm font-black uppercase tracking-wide text-ink"
-      >
-        Proceed to checkout
-      </Link>
-    </main>
+       <Link
+         href="/checkout"
+         className="w-fit bg-highlighter px-6 py-3.5 text-xs font-black uppercase tracking-wider text-ink hover:bg-highlighter/95 transition-colors rounded"
+       >
+         Commit to Sprint &amp; Align (Checkout)
+       </Link>
+     </main>
   );
 }
