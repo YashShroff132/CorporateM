@@ -21,16 +21,20 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="border-b border-ink/10 bg-paper sticky top-0 z-30">
+    <header className="border-b border-white/10 bg-black sticky top-0 z-30">
       <nav
         aria-label="Primary"
         className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4"
       >
         <Link
           href="/"
-          className="text-lg font-black uppercase tracking-tight text-ink"
+          className="flex items-center transition-transform active:scale-95"
         >
-          Corporate Cult
+          <img
+            src="/logo/corporat_glitch.png"
+            alt="Corporat Logo"
+            className="h-7 md:h-9 w-auto object-contain"
+          />
         </Link>
 
         {/* Desktop nav — hidden on mobile */}
@@ -39,7 +43,7 @@ export function SiteHeader() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="text-sm font-bold uppercase tracking-wide text-ink hover:text-stamp-red transition-colors"
+                className="text-sm font-bold uppercase tracking-wide text-white/95 hover:text-stamp-red transition-colors"
               >
                 {link.label}
               </Link>
@@ -56,30 +60,30 @@ export function SiteHeader() {
           aria-expanded={menuOpen}
         >
           <span
-            className={`block w-5 h-[2px] bg-ink transition-transform duration-300 ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`}
+            className={`block w-5 h-[2px] bg-white transition-transform duration-300 ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`}
           />
           <span
-            className={`block w-5 h-[2px] bg-ink transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`}
+            className={`block w-5 h-[2px] bg-white transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`}
           />
           <span
-            className={`block w-5 h-[2px] bg-ink transition-transform duration-300 ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`}
+            className={`block w-5 h-[2px] bg-white transition-transform duration-300 ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`}
           />
         </button>
       </nav>
 
       {/* Mobile dropdown menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-ink/5 ${
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-white/10 ${
           menuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <ul className="flex flex-col gap-1 px-6 py-4 bg-paper">
+        <ul className="flex flex-col gap-1 px-6 py-4 bg-black">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="block py-2.5 text-sm font-bold uppercase tracking-wide text-ink hover:text-stamp-red transition-colors"
+                className="block py-2.5 text-sm font-bold uppercase tracking-wide text-white/95 hover:text-stamp-red transition-colors"
               >
                 {link.label}
               </Link>
