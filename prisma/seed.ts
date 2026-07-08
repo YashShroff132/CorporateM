@@ -33,9 +33,9 @@ interface CollectionSeed {
 }
 
 const COLLECTIONS: readonly CollectionSeed[] = [
-  { slug: 'operator', title: 'Operator', sortOrder: 0 },
-  { slug: 'believer', title: 'Believer', sortOrder: 1 },
-  { slug: 'heretic', title: 'Heretic', sortOrder: 2 },
+  { slug: 'operator', title: 'Compliance Approved', sortOrder: 0 },
+  { slug: 'believer', title: 'Performance Managed', sortOrder: 1 },
+  { slug: 'heretic', title: 'Immediate Escalation', sortOrder: 2 },
 ];
 
 interface VariantSeed {

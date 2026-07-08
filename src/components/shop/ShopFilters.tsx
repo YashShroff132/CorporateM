@@ -20,9 +20,9 @@ const SORT_LABELS: Record<Sort, string> = {
 };
 
 const TIER_LABELS: Record<Tier, string> = {
-  SAFE: 'Safe',
-  DIRECT: 'Direct',
-  VERY_DIRECT: 'Very Direct',
+  SAFE: 'Safe for Work',
+  DIRECT: 'Off the Record',
+  VERY_DIRECT: 'Severance Pending',
 };
 
 export interface ShopFiltersProps {
