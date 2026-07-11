@@ -53,7 +53,7 @@ export function ShopView({
           <img
             src="/hero-streetwear.png"
             alt="Out of Office Streetwear Collection"
-            className="w-full h-full object-cover object-top opacity-90 transition-transform duration-10000 ease-out hover:scale-105"
+            className="w-full h-full object-cover object-[center_22%] opacity-90 transition-transform duration-10000 ease-out hover:scale-105"
           />
           {/* Minimalist Overlay banner text */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-10">

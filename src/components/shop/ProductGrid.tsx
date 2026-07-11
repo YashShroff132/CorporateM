@@ -10,6 +10,7 @@
 import type { ShopProductView } from '@/services/shop';
 import { ProductImage } from '@/components/ProductImage';
 import { ScrollReveal } from './ScrollReveal';
+import { OOOLogo } from '../OOOLogo';
 
 export interface ProductGridProps {
   items: ShopProductView[];
@@ -86,7 +87,7 @@ export function ProductGrid({
                   {/* BACK face — Typographic Minimalist Design (No human model) */}
                   <div className="product-flip-face product-flip-back absolute inset-0 w-full h-full flex flex-col justify-between p-8 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none text-center">
                     <div className="flex flex-col items-center justify-center my-auto">
-                      <span className="text-5xl font-black tracking-[0.25em] leading-none mb-2">OOO</span>
+                      <OOOLogo className="h-9 w-auto mb-2 text-paper dark:text-ink" />
                       <span className="text-[10px] uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
                     </div>
                     

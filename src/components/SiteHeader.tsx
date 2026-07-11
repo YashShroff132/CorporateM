@@ -14,6 +14,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { ThemeToggle } from './ThemeToggle';
+import { OOOLogo } from './OOOLogo';
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: '/manifesto', label: 'Manifesto' },
@@ -121,13 +122,11 @@ export function SiteHeader() {
         <div className="flex w-2/4 md:w-auto justify-center md:justify-start">
           <Link
             href="/"
-            className={`font-black uppercase text-ink dark:text-white transition-all duration-500 ease-in-out origin-center md:origin-left ${
-              scrolled
-                ? 'scale-75 tracking-[0.15em] opacity-90 text-lg md:text-xl'
-                : 'scale-110 tracking-[0.35em] text-xl md:text-2xl'
+            className={`transition-all duration-500 ease-in-out origin-center md:origin-left block ${
+              scrolled ? 'scale-[0.85] opacity-90' : 'scale-[1.15]'
             }`}
           >
-            OOO
+            <OOOLogo className="h-6 md:h-7 w-auto text-ink dark:text-white" />
           </Link>
         </div>
 

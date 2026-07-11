@@ -23,6 +23,7 @@ import { addToCartAction } from '@/app/cart/actions';
 import { ProductImage } from '@/components/ProductImage';
 import { AddToCartButton } from '@/components/AddToCartButton';
 import { TrackOnMount } from '@/components/TrackOnMount';
+import { OOOLogo } from '@/components/OOOLogo';
 import { VariantSelector } from '@/components/VariantSelector';
 import {
   VARIANT_DIMENSIONS,
@@ -214,7 +215,7 @@ export default async function ProductPage({
           {detail.product.mockupBackUrl && (
             <div className="relative aspect-square w-full flex flex-col justify-between p-12 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none rounded-lg shadow-sm text-center">
               <div className="flex flex-col items-center justify-center my-auto">
-                <span className="text-6xl font-black tracking-[0.25em] leading-none mb-2">OOO</span>
+                <OOOLogo className="h-12 w-auto mb-2 text-paper dark:text-ink" />
                 <span className="text-xs uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
               </div>
               
