@@ -71,103 +71,113 @@ function sizeSpread(color: string, fit: string, stock: number): VariantSeed[] {
 }
 
 const PRODUCTS: readonly ProductSeed[] = [
-  // --- SAFE tier (Operator) ---
+  // --- Compliance Approved (operator) ---
   {
-    slug: 'quiet-quitting-champion',
-    slogan: 'Quiet Quitting Champion',
+    slug: 'unavailable-team-dinner',
+    slogan: 'EOD Status: Currently Unavailable for Team Dinner',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
-    seoTitle: 'Quiet Quitting Champion Tee',
-    seoDescription: 'A calm, understated flex for the corporate operator. 100% cotton.',
+    seoTitle: 'Currently Unavailable for Team Dinner Tee',
+    seoDescription: 'Let the team know where you stand. Comfortable premium cotton.',
     variants: [
       ...sizeSpread('Black', 'Regular', 25),
       ...sizeSpread('White', 'Regular', 20),
     ],
   },
   {
-    slug: 'reply-all-survivor',
-    slogan: 'Reply-All Survivor',
+    slug: 'stop-hallucinating',
+    slogan: 'Stop Hallucinating My Performance',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 74900, // ₹749
-    seoTitle: 'Reply-All Survivor Tee',
-    seoDescription: 'For everyone who lived through the thread. Soft, breathable cotton.',
+    seoTitle: 'Stop Hallucinating My Performance Tee',
+    seoDescription: 'For when the metrics get creative. Heavyweight cotton tee.',
     variants: [
-      ...sizeSpread('Navy', 'Regular', 18),
+      ...sizeSpread('Charcoal', 'Regular', 18),
       ...sizeSpread('Grey', 'Oversized', 15),
     ],
   },
   {
-    slug: 'circle-back-later',
-    slogan: "Let's Circle Back Later",
+    slug: 'revert-back',
+    slogan: 'Please Revert Back',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
-    basePrice: 79900,
-    seoTitle: "Let's Circle Back Later Tee",
-    seoDescription: 'The polite deferral, immortalised on a premium tee.',
-    variants: [...sizeSpread('Black', 'Oversized', 22)],
+    basePrice: 79900, // ₹799
+    seoTitle: 'Please Revert Back Tee',
+    seoDescription: 'The classic deferral. Stencil font styling.',
+    variants: [...sizeSpread('White', 'Oversized', 22)],
   },
-  // --- DIRECT tier (Believer) ---
+  // --- Performance Managed (believer) ---
   {
-    slug: 'this-couldve-been-an-email',
+    slug: 'couldve-been-email',
     slogan: "This Could've Been an Email",
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
     basePrice: 89900, // ₹899
     seoTitle: "This Could've Been an Email Tee",
-    seoDescription: 'Say the quiet part out loud. Heavyweight combed cotton.',
+    seoDescription: 'Save everyone some time. Heavyweight combed cotton.',
     variants: [
       ...sizeSpread('Black', 'Regular', 30),
       ...sizeSpread('Olive', 'Oversized', 12),
     ],
   },
   {
-    slug: 'per-my-last-email',
-    slogan: 'Per My Last Email',
+    slug: 'do-not-disturb',
+    slogan: 'Do not disturb, serving notice.',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
-    basePrice: 84900,
-    seoTitle: 'Per My Last Email Tee',
-    seoDescription: 'Passive-aggression, now wearable. Premium cotton.',
+    basePrice: 84900, // ₹849
+    seoTitle: 'Do Not Disturb Serving Notice Tee',
+    seoDescription: 'Serving notice in style. Distressed stamp font print.',
     variants: [
-      ...sizeSpread('White', 'Regular', 26),
-      ...sizeSpread('Maroon', 'Regular', 14),
+      ...sizeSpread('Grey', 'Regular', 26),
+      ...sizeSpread('Black', 'Oversized', 14),
     ],
   },
   {
-    slug: 'synergy-is-a-lie',
-    slogan: 'Synergy Is a Lie',
+    slug: 'team-bonding',
+    slogan: 'Team Bonding nahi Permanent WFH chaiye.',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
-    basePrice: 89900,
-    seoTitle: 'Synergy Is a Lie Tee',
-    seoDescription: 'Call the buzzword bluff. Comfortable everyday fit.',
-    variants: [...sizeSpread('Charcoal', 'Oversized', 19)],
+    basePrice: 89900, // ₹899
+    seoTitle: 'Permanent WFH Chaiye Tee',
+    seoDescription: 'Bonding is over, work from home is now. Soft everyday cotton.',
+    variants: [...sizeSpread('Cream', 'Oversized', 19)],
   },
-  // --- VERY_DIRECT tier (Heretic) ---
+  // --- Immediate Escalation (heretic) ---
   {
-    slug: 'i-am-the-attrition-problem',
-    slogan: 'I Am the Attrition Problem',
+    slug: 'resume-gap',
+    slogan: 'I am just here to avoid a gap in my resume',
     tier: Tier.VERY_DIRECT,
     collectionSlug: 'heretic',
     basePrice: 99900, // ₹999
-    seoTitle: 'I Am the Attrition Problem Tee',
-    seoDescription: 'For the openly unbothered. Heavyweight statement tee.',
+    seoTitle: 'Avoid a Gap in My Resume Tee',
+    seoDescription: 'Honest survivalist apparel. Minimalist label design.',
     variants: [
-      ...sizeSpread('Black', 'Oversized', 16),
-      ...sizeSpread('Blood Red', 'Regular', 10),
+      ...sizeSpread('White', 'Oversized', 16),
+      ...sizeSpread('Black', 'Regular', 10),
     ],
   },
   {
-    slug: 'burn-the-org-chart',
-    slogan: 'Burn the Org Chart',
+    slug: 'immediate-quitter',
+    slogan: 'Immediate joiner? No, immediate quitter.',
     tier: Tier.VERY_DIRECT,
     collectionSlug: 'heretic',
     basePrice: 104900, // ₹1049
-    seoTitle: 'Burn the Org Chart Tee',
-    seoDescription: 'Maximum bravery, minimum apology. Premium heavyweight cotton.',
+    seoTitle: 'Immediate Quitter Tee',
+    seoDescription: 'Record attrition speeds. High-contrast impact print.',
     variants: [...sizeSpread('Black', 'Oversized', 13)],
+  },
+  {
+    slug: 'chai-breaks',
+    slogan: 'Chai breaks are the only milestones I actually care about achieving',
+    tier: Tier.VERY_DIRECT,
+    collectionSlug: 'heretic',
+    basePrice: 99900, // ₹999
+    seoTitle: 'Chai Breaks Are the Only Milestones Tee',
+    seoDescription: 'The ultimate tea breaks celebration. Groovy modern font print.',
+    variants: [...sizeSpread('Olive', 'Oversized', 15)],
   },
 ];
 
@@ -177,12 +187,15 @@ interface SloganSeed {
 }
 
 const SLOGANS: readonly SloganSeed[] = [
-  { text: 'Quiet Quitting Champion', tier: Tier.SAFE },
-  { text: 'Reply-All Survivor', tier: Tier.SAFE },
+  { text: 'EOD Status: Currently Unavailable for Team Dinner', tier: Tier.SAFE },
+  { text: 'Stop Hallucinating My Performance', tier: Tier.SAFE },
+  { text: 'Please Revert Back', tier: Tier.SAFE },
   { text: "This Could've Been an Email", tier: Tier.DIRECT },
-  { text: 'Per My Last Email', tier: Tier.DIRECT },
-  { text: 'I Am the Attrition Problem', tier: Tier.VERY_DIRECT },
-  { text: 'Burn the Org Chart', tier: Tier.VERY_DIRECT },
+  { text: 'Do not disturb, serving notice.', tier: Tier.DIRECT },
+  { text: 'Team Bonding nahi Permanent WFH chaiye.', tier: Tier.DIRECT },
+  { text: 'I am just here to avoid a gap in my resume', tier: Tier.VERY_DIRECT },
+  { text: 'Immediate joiner? No, immediate quitter.', tier: Tier.VERY_DIRECT },
+  { text: 'Chai breaks are the only milestones I actually care about achieving', tier: Tier.VERY_DIRECT },
 ];
 
 interface BlankTemplateSeed {
