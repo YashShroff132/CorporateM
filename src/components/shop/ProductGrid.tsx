@@ -27,6 +27,12 @@ function cleanMrp(salePrice: number): number {
   return Math.ceil(raw / 100) * 100 - 1;
 }
 
+const COLLECTION_TITLES: Record<string, string> = {
+  operator: 'Intern',
+  believer: 'Associate',
+  heretic: 'Manager',
+};
+
 export function ProductGrid({
   items,
   emptyMessage = DEFAULT_EMPTY_MESSAGE,
@@ -101,7 +107,7 @@ export function ProductGrid({
               {/* --- Product Info --- */}
               <div className="flex flex-col gap-1 p-3.5">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-bold">
-                  {product.collectionSlug}
+                  {COLLECTION_TITLES[product.collectionSlug] || product.collectionSlug}
                 </span>
                 <span className="text-sm font-bold text-ink leading-tight line-clamp-2 min-h-[2.5rem]">
                   {product.slogan}

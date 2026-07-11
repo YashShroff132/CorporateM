@@ -91,7 +91,7 @@ describe('ProductGrid empty state', () => {
     ];
     const html = renderToStaticMarkup(<ProductGrid items={items} />);
     expect(html).not.toContain('No matching products');
-    expect(html).toContain('operator');
+    expect(html).toContain('Intern');
     expect(html).toContain('799');
     // The card shows the slogan and links to the product detail page.
     expect(html).toContain('The Quiet Quitter');
