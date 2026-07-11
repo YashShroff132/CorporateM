@@ -96,11 +96,11 @@ export default async function CartPage() {
                   min={1}
                   max={99}
                   defaultValue={line.qty}
-                  className="w-16 border border-ink/20 px-2 py-1 text-sm"
+                  className="w-16 border border-ink/20 dark:border-white/20 bg-transparent text-ink px-2 py-1 text-sm rounded"
                 />
                 <button
                   type="submit"
-                  className="border border-ink px-3 py-1 text-xs font-bold uppercase tracking-wide"
+                  className="border border-ink dark:border-white/40 bg-transparent text-ink hover:bg-ink/5 dark:hover:bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-wide transition-colors rounded"
                 >
                   Update
                 </button>

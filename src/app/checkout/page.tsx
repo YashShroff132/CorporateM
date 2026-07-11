@@ -108,7 +108,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 name="name"
                 required
                 defaultValue={val('name')}
-                className="border border-ink/20 px-3 py-2"
+                className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
               />
             </label>
 
@@ -120,7 +120,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 required
                 defaultValue={val('email')}
                 aria-invalid={isInvalid('email')}
-                className="border border-ink/20 px-3 py-2"
+                className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
               />
               {isInvalid('email') && (
                 <span className="text-xs text-stamp-red">Enter a valid email address.</span>
@@ -136,7 +136,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 required
                 defaultValue={val('phone')}
                 aria-invalid={isInvalid('phone')}
-                className="border border-ink/20 px-3 py-2"
+                className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
               />
               {isInvalid('phone') && (
                 <span className="text-xs text-stamp-red">
@@ -155,7 +155,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 name="line1"
                 required
                 defaultValue={val('line1')}
-                className="border border-ink/20 px-3 py-2"
+                className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
               />
             </label>
 
@@ -164,7 +164,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
               <input
                 name="line2"
                 defaultValue={val('line2')}
-                className="border border-ink/20 px-3 py-2"
+                className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
               />
             </label>
 
@@ -174,7 +174,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 <input
                   name="city"
                   defaultValue={val('city')}
-                  className="border border-ink/20 px-3 py-2"
+                  className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
                 />
               </label>
 
@@ -183,7 +183,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 <input
                   name="state"
                   defaultValue={val('state')}
-                  className="border border-ink/20 px-3 py-2"
+                  className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
                 />
               </label>
             </div>
@@ -197,7 +197,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 required
                 defaultValue={val('pincode')}
                 aria-invalid={error === 'pincode'}
-                className="border border-ink/20 px-3 py-2"
+                className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
               />
               {error === 'pincode' && (
                 <span className="text-xs text-stamp-red">
