@@ -49,11 +49,11 @@ export function ShopView({
 
       {/* Hero Banner Image (Rendered only on main catalog views) */}
       {isHomepage && (
-        <div className="relative w-full h-auto aspect-square md:h-[600px] md:aspect-auto overflow-hidden border-b border-ink/10 mb-4 bg-ink/5 -mt-[102px] md:-mt-[106px]">
+        <div className="relative w-full h-auto aspect-square md:h-[600px] md:aspect-auto overflow-hidden border-b border-ink/10 mb-4 bg-[#0A0A0A] flex items-center justify-center -mt-[102px] md:-mt-[106px]">
           <img
             src="/hero-streetwear.png"
             alt="Out of Office Streetwear Collection"
-            className="w-full h-full object-cover object-center md:object-[center_28%] opacity-90 transition-transform duration-10000 ease-out hover:scale-105"
+            className="h-full max-w-full object-contain opacity-90 transition-transform duration-10000 ease-out hover:scale-102"
           />
           {/* Minimalist Overlay banner text */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-10">

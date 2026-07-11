@@ -12,27 +12,35 @@ export function OOOLogo({ className = 'h-6 w-auto' }: OOOLogoProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Three overlapping rings that touch exactly at their tangents with zero overlap */}
+      {/* 
+        Three premium thick rings touching exactly:
+        strokeWidth (W) = 5.5
+        radius (r) = 12.25
+        Left cx = 20
+        Center cx = 50
+        Right cx = 80
+        Outer edge meets at cx +/- (r + W/2) = cx +/- 15
+      */}
       <circle
-        cx="23"
+        cx="20"
         cy="18"
-        r="13.5"
+        r="12.25"
         stroke="currentColor"
-        strokeWidth="3.5"
+        strokeWidth="5.5"
       />
       <circle
         cx="50"
         cy="18"
-        r="13.5"
+        r="12.25"
         stroke="currentColor"
-        strokeWidth="3.5"
+        strokeWidth="5.5"
       />
       <circle
-        cx="77"
+        cx="80"
         cy="18"
-        r="13.5"
+        r="12.25"
         stroke="currentColor"
-        strokeWidth="3.5"
+        strokeWidth="5.5"
       />
     </svg>
   );
