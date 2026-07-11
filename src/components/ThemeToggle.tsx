@@ -27,7 +27,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg text-ink hover:bg-ink/5 dark:hover:bg-paper/10 transition-colors"
+      className="p-2 rounded-lg text-ink dark:text-white hover:bg-ink/5 dark:hover:bg-paper/10 transition-colors"
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
       {theme === 'light' ? (
@@ -59,7 +59,7 @@ export function ThemeToggle() {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="M12 3v2.25m0 13.5V21M4.95 4.95l1.59 1.59M16.35 16.35l1.59 1.59m-18 0l1.59-1.59M16.35 4.95l-1.59 1.59M12 7.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z"
+            d="M12 3v2.25m0 13.5V21M4.95 4.95l1.59 1.59M16.35 16.35l1.59 1.59m-18 0l1.59-1.59M16.35 4.95l-1.59 1.59M12 7.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"
           />
         </svg>
       )}
