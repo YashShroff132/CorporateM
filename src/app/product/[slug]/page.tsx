@@ -191,7 +191,9 @@ export default async function ProductPage({
                   priority
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 pointer-events-none select-none">
+                <div className={`absolute inset-0 pointer-events-none select-none ${
+                  detail.variants.some(v => v.color.toLowerCase().includes('white')) ? 'mix-blend-multiply opacity-90' : 'mix-blend-screen opacity-90'
+                }`}>
                   <img
                     src={detail.product.mockupUrl}
                     alt=""
@@ -210,20 +212,14 @@ export default async function ProductPage({
           </div>
 
           {detail.product.mockupBackUrl && (
-            <div className="relative aspect-square w-full flex flex-col justify-between p-12 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none rounded-lg shadow-sm">
-              <div className="flex justify-between items-center text-[10px] opacity-70">
-                <span>[ AUTO-REPLY: ACTIVE ]</span>
-                <span>[ TIER: {detail.product.tier} ]</span>
-              </div>
-              
+            <div className="relative aspect-square w-full flex flex-col justify-between p-12 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none rounded-lg shadow-sm text-center">
               <div className="flex flex-col items-center justify-center my-auto">
                 <span className="text-6xl font-black tracking-[0.25em] leading-none mb-2 text-paper dark:text-ink">OOO</span>
                 <span className="text-xs uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
               </div>
               
-              <div className="flex flex-col gap-1 border-t border-paper/10 dark:border-ink/10 pt-6 text-left">
-                <span className="text-[10px] uppercase tracking-wider text-muted">Slogan ID // {detail.product.slug}</span>
-                <span className="text-xs font-bold uppercase">{detail.product.slogan}</span>
+              <div className="border-t border-paper/10 dark:border-ink/10 pt-6">
+                <span className="text-sm font-bold uppercase tracking-wide leading-relaxed block">{detail.product.slogan}</span>
               </div>
             </div>
           )}

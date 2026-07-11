@@ -11,7 +11,7 @@
   --color-muted: #6B6B6B;
 }
 
-html.dark {
+.dark {
   --color-paper: #000000; /* Pure black */
   --color-ink: #F5F5F0;   /* White text */
   --color-highlighter: #BCE600; /* Subtle green highlighter in dark mode */

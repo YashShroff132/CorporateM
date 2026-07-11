@@ -64,7 +64,9 @@ export function ProductGrid({
                           width={320}
                           height={320}
                         />
-                        <div className="absolute inset-0 pointer-events-none select-none">
+                        <div className={`absolute inset-0 pointer-events-none select-none ${
+                          product.colors.some(c => c.toLowerCase().includes('white')) ? 'mix-blend-multiply opacity-90' : 'mix-blend-screen opacity-90'
+                        }`}>
                           <img
                             src={product.mockupUrl}
                             alt=""
@@ -82,20 +84,14 @@ export function ProductGrid({
                     )}
                   </div>
                   {/* BACK face — Typographic Minimalist Design (No human model) */}
-                  <div className="product-flip-face product-flip-back absolute inset-0 w-full h-full flex flex-col justify-between p-6 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none">
-                    <div className="flex justify-between items-center text-[9px] opacity-70">
-                      <span>[ AUTO-REPLY: ON ]</span>
-                      <span>[ TIER: {product.tier} ]</span>
-                    </div>
-                    
+                  <div className="product-flip-face product-flip-back absolute inset-0 w-full h-full flex flex-col justify-between p-8 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none text-center">
                     <div className="flex flex-col items-center justify-center my-auto">
-                      <span className="text-4xl font-black tracking-[0.25em] leading-none mb-1 text-paper dark:text-ink">OOO</span>
-                      <span className="text-[9px] uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
+                      <span className="text-5xl font-black tracking-[0.25em] leading-none mb-2 text-paper dark:text-ink">OOO</span>
+                      <span className="text-[10px] uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
                     </div>
                     
-                    <div className="flex flex-col gap-1 border-t border-paper/10 dark:border-ink/10 pt-4 text-left">
-                      <span className="text-[9px] uppercase tracking-wider text-muted">Slogan ID // {product.slug}</span>
-                      <span className="text-[10px] truncate max-w-full font-bold uppercase">{product.slogan}</span>
+                    <div className="border-t border-paper/10 dark:border-ink/10 pt-4">
+                      <span className="text-xs font-bold uppercase tracking-wide leading-relaxed block">{product.slogan}</span>
                     </div>
                   </div>
                 </div>
