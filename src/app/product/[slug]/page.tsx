@@ -214,7 +214,7 @@ export default async function ProductPage({
           {detail.product.mockupBackUrl && (
             <div className="relative aspect-square w-full flex flex-col justify-between p-12 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none rounded-lg shadow-sm text-center">
               <div className="flex flex-col items-center justify-center my-auto">
-                <span className="text-6xl font-black tracking-[0.25em] leading-none mb-2 text-paper dark:text-ink">OOO</span>
+                <span className="text-6xl font-black tracking-[0.25em] leading-none mb-2">OOO</span>
                 <span className="text-xs uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
               </div>
               

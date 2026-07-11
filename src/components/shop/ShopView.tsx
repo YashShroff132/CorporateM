@@ -56,11 +56,11 @@ export function ShopView({
             className="w-full h-full object-cover opacity-90 transition-transform duration-10000 ease-out hover:scale-105"
           />
           {/* Minimalist Overlay banner text */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-6 md:p-10">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-paper/90 mb-1.5 font-bold">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-10">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-white/90 mb-1.5 font-bold">
               Out of Office // Always On Style
             </span>
-            <h2 className="text-2xl md:text-4xl font-black uppercase text-paper tracking-tight max-w-xl drop-shadow">
+            <h2 className="text-2xl md:text-4xl font-black uppercase text-white tracking-tight max-w-xl drop-shadow">
               Currently unavailable<br />& permanently out of office.
             </h2>
           </div>
