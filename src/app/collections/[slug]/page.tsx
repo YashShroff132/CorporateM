@@ -65,7 +65,7 @@ export async function generateMetadata({
     query,
     page,
     title: collection.title,
-    description: `Shop the ${collection.title} collection from Corporate Cult.`,
+    description: `Shop the ${collection.title} collection from Out of Office.`,
   });
 }
 

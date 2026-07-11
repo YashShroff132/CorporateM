@@ -1,4 +1,4 @@
-# CI — Corporate Cult E-Commerce (task 30.3)
+# CI — Out of Office E-Commerce (task 30.3)
 #
 # Runs on every push to main and on all PRs targeting main.
 # Blocks merge on any failure.
@@ -35,14 +35,14 @@ jobs:
 
       # ── Required for `next build` / startup validation bypass ─────────────
       # These are placeholder/dummy values safe for CI; no real secrets here.
-      BRAND_NAME:            "Corporate Cult"
+      BRAND_NAME:            "Out of Office"
       BRAND_LOGO_URL:        "https://example.com/logo.png"
       BRAND_COLOR_TOKENS:    '{"ink":"#111111"}'
       GST_RATE_PERCENT:      "5"
       SELLER_GSTIN:          "22AAAAA0000A1Z5"
       GARMENT_HSN:           "6109"
       SELLER_STATE:          "Maharashtra"
-      LEGAL_ENTITY_NAME:     "Corporate Cult Pvt Ltd"
+      LEGAL_ENTITY_NAME:     "Out of Office Pvt Ltd"
       LEGAL_ENTITY_ADDRESS:  "123 Office Park, Mumbai, MH 400001"
       CLAUDE_MODEL_ID:       "claude-3-5-sonnet-20241022"
 

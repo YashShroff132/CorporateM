@@ -14,12 +14,12 @@ import { config } from '@/services/config';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'How Corporate Cult collects, uses, and protects your personal data.',
+  description: 'How Out of Office collects, uses, and protects your personal data.',
   alternates: { canonical: absoluteUrl('/legal/privacy') },
 };
 
 export default function PrivacyPolicyPage() {
-  const brand = config.brand().name || 'Corporate Cult';
+  const brand = config.brand().name || 'Out of Office';
   const entity = config.legalEntityName();
   const supportEmail = process.env.SUPPORT_EMAIL ?? '';
   const grievanceOfficer = process.env.GRIEVANCE_OFFICER_NAME ?? '';

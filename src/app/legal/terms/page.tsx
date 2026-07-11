@@ -14,12 +14,12 @@ import { config } from '@/services/config';
 
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
-  description: 'The terms that govern your use of the Corporate Cult store.',
+  description: 'The terms that govern your use of the Out of Office store.',
   alternates: { canonical: absoluteUrl('/legal/terms') },
 };
 
 export default function TermsPage() {
-  const brand = config.brand().name || 'Corporate Cult';
+  const brand = config.brand().name || 'Out of Office';
   const entity = config.legalEntityName();
   const entityAddress = config.legalEntityAddress();
 

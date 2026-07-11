@@ -9,7 +9,7 @@ This is your checklist to take the store live. Do these in order. You do NOT nee
 The store needs a place to store products, orders, etc. We use Neon (free Postgres).
 
 1. Go to **neon.com** → **Sign up** (use Google/GitHub, it's fastest).
-2. Click **New Project**, give it any name (e.g. "corporate-cult"), pick region **AWS Asia Pacific (Mumbai)**, click **Create**.
+2. Click **New Project**, give it any name (e.g. "out-of-office"), pick region **AWS Asia Pacific (Mumbai)**, click **Create**.
 3. On the project dashboard, click the **Connect** button.
 4. Copy the **connection string**. It looks like:
    `postgresql://user:password@ep-xxx.ap-south-1.aws.neon.tech/dbname?sslmode=require`

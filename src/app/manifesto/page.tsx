@@ -15,7 +15,7 @@ import { NarrativeEnhancer } from '@/components/homepage/NarrativeEnhancer';
 
 export const metadata = {
   title: 'Manifesto',
-  description: 'Corporate is a joke. Wear the punchline. Read the Corporate Cult manifesto.',
+  description: 'Currently unavailable. Permanently comfortable. Read the Out of Office manifesto.',
 };
 
 export default function ManifestoPage() {

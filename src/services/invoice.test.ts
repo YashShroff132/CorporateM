@@ -21,7 +21,7 @@ const baseEnv: Record<string, string> = {
   SELLER_GSTIN: '29ABCDE1234F1Z5',
   GARMENT_HSN: '61091000',
   SELLER_STATE: 'Karnataka',
-  LEGAL_ENTITY_NAME: 'Corporate Cult Retail Pvt Ltd',
+  LEGAL_ENTITY_NAME: 'Out of Office Retail Pvt Ltd',
   LEGAL_ENTITY_ADDRESS: 'No. 1, MG Road, Bengaluru, Karnataka 560001',
 };
 
@@ -144,7 +144,7 @@ describe('generateInvoice (Req 9.5, 9.6, 9.7, 9.8)', () => {
       expect(res.value.invoiceNumber).toBe('INV-2026-000042');
       expect(res.value.sellerGstin).toBe('29ABCDE1234F1Z5');
       expect(res.value.hsn).toBe('61091000');
-      expect(res.value.legalEntityName).toBe('Corporate Cult Retail Pvt Ltd');
+      expect(res.value.legalEntityName).toBe('Out of Office Retail Pvt Ltd');
       expect(res.value.legalEntityAddress).toContain('Bengaluru');
       // 10000 net + 1800 tax = 11800 grand total; INR display two decimals (Req 9.7).
       expect(res.value.display.taxableValue).toBe('100.00');

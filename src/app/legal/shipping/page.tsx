@@ -20,12 +20,12 @@ function inr(paise: number): string {
 
 export const metadata: Metadata = {
   title: 'Shipping Policy',
-  description: 'Dispatch times, coverage, and shipping charges for Corporate Cult orders.',
+  description: 'Dispatch times, coverage, and shipping charges for Out of Office orders.',
   alternates: { canonical: absoluteUrl('/legal/shipping') },
 };
 
 export default function ShippingPage() {
-  const brand = config.brand().name || 'Corporate Cult';
+  const brand = config.brand().name || 'Out of Office';
   const dispatchTime = config.dispatchTime();
   const freeThreshold = inr(config.freeShippingThreshold());
   const flatCharge = inr(config.flatShippingCharge());

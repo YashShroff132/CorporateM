@@ -5,8 +5,8 @@ import { SiteFooter } from '@/components/SiteFooter';
 import { Analytics } from '@/components/Analytics';
 import { getSiteOrigin } from '@/lib/site';
 
-const SITE_NAME = 'Corporate Cult';
-const SITE_DESCRIPTION = 'Corporate is a joke. Wear the punchline.';
+const SITE_NAME = 'Out of Office';
+const SITE_DESCRIPTION = 'Currently unavailable. Permanently comfortable.';
 
 /**
  * Default site metadata (Req 19.2, 19.6, 19.7).

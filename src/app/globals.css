@@ -96,3 +96,35 @@
     transform: none;
   }
 }
+
+/* -------------------------------------------------------
+ * OG Break–style diagonal shine sweep on product cards.
+ * A translucent white gradient sweeps left-to-right across
+ * the card image on hover, giving a premium glass sheen.
+ * ------------------------------------------------------- */
+.product-card .product-flip-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(255, 255, 255, 0.25) 45%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.25) 55%,
+    transparent 70%,
+    transparent 100%
+  );
+  transform: translateX(-110%);
+  transition: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .product-card:hover .product-flip-container::after {
+    transform: translateX(110%);
+    transition: transform 0.6s ease-in-out;
+  }
+}

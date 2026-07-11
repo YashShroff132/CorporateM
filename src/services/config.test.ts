@@ -33,14 +33,14 @@ type RequiredKey = (typeof REQUIRED_KEYS)[number];
 /** Build a fully-valid environment satisfying every required field. */
 function validEnv(): Record<string, string> {
   return {
-    BRAND_NAME: 'Corporate Cult',
+    BRAND_NAME: 'Out of Office',
     BRAND_LOGO_URL: 'https://cdn.example.com/logo.svg',
     BRAND_COLOR_TOKENS: JSON.stringify({ primary: '#101010', accent: '#ff0055' }),
     GST_RATE_PERCENT: '5',
     SELLER_GSTIN: '29ABCDE1234F1Z5', // exactly 15 chars
     GARMENT_HSN: '6109',
     SELLER_STATE: 'Karnataka',
-    LEGAL_ENTITY_NAME: 'Corporate Cult Retail Pvt Ltd',
+    LEGAL_ENTITY_NAME: 'Out of Office Retail Pvt Ltd',
     LEGAL_ENTITY_ADDRESS: 'No. 1, MG Road, Bengaluru, Karnataka 560001',
     CLAUDE_MODEL_ID: 'claude-3-5-sonnet',
   };

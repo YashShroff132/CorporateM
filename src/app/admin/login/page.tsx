@@ -31,7 +31,7 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
       <div className="w-full max-w-sm space-y-6">
         <div>
           <h1 className="text-2xl font-black uppercase tracking-tight">Admin Login</h1>
-          <p className="mt-1 text-sm text-muted">Corporate Cult store management.</p>
+          <p className="mt-1 text-sm text-muted">Out of Office store management.</p>
         </div>
 
         {!configured ? (

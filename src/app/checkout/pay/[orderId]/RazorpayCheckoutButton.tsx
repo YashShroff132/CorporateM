@@ -120,7 +120,7 @@ export function RazorpayCheckoutButton({
       amount: options.amount,
       currency: options.currency,
       order_id: options.orderId,
-      name: 'Corporate Cult',
+      name: 'Out of Office',
       description: `Order ${options.receipt}`,
       handler: (response: RazorpaySuccess) => {
         void verify(response);

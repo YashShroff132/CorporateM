@@ -26,7 +26,7 @@ const LEGAL_LINKS: ReadonlyArray<{ href: string; label: string }> = [
 ];
 
 export function SiteFooter() {
-  const brand = process.env.BRAND_NAME?.trim() || 'Corporate Cult';
+  const brand = process.env.BRAND_NAME?.trim() || 'Out of Office';
   const year = new Date().getFullYear();
 
   return (

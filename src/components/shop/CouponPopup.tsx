@@ -33,7 +33,7 @@ export function CouponPopup() {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText('STAKEHOLDER10');
+    navigator.clipboard.writeText('OOO10');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -73,25 +73,25 @@ export function CouponPopup() {
             {/* Header */}
             <div className="text-center mb-5">
               <span className="text-[9px] font-mono uppercase tracking-[0.25em] text-muted block mb-2">
-                New Stakeholder Onboarding
+                Auto-Reply Activated
               </span>
               <h2
                 id="coupon-title"
                 className="text-3xl font-black uppercase tracking-tight text-ink leading-none"
               >
-                Welcome to<br />the Cult
+                You&apos;re Now<br />Out of Office
               </h2>
             </div>
 
             {/* Promo Message */}
             <p className="text-sm text-ink/70 text-center mb-6 leading-relaxed">
-              As part of your onboarding, here&apos;s a <strong className="text-ink">10% budget allocation</strong> for your first streetwear requisition. Apply at checkout.
+              Your auto-reply is set. Here&apos;s <strong className="text-ink">10% off</strong> your first order. Apply at checkout before you clock back in.
             </p>
 
             {/* Code Box */}
             <div className="flex items-center justify-between border-2 border-dashed border-ink/30 bg-ink/5 p-3.5 rounded-md mb-5">
               <span className="font-mono font-black text-base tracking-widest text-ink select-all">
-                STAKEHOLDER10
+                OOO10
               </span>
               <button
                 onClick={handleCopy}

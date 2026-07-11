@@ -1,4 +1,4 @@
-// Corporate Cult E-Commerce — Prisma schema
+// Out of Office E-Commerce — Prisma schema
 // Task 2.1: data layer for the locked stack (PostgreSQL + Prisma).
 //
 // Design invariants encoded here:

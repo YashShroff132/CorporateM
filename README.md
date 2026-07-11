@@ -1,4 +1,4 @@
-# Corporate Cult
+# Out of Office
 
 A mobile-first, SEO-strong D2C e-commerce store for corporate-humor T-shirts in
 India. Built on Next.js 15 (App Router) + TypeScript + Tailwind CSS + Prisma

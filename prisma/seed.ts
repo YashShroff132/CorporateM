@@ -1,5 +1,5 @@
 /**
- * Prisma seed script — Corporate Cult.
+ * Prisma seed script — Out of Office.
  *
  * Idempotent: safe to run repeatedly. Every row is created via `upsert` keyed on
  * a unique column (Collection.slug, Product.slug, Variant.sku, the Variant

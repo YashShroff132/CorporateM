@@ -13,12 +13,12 @@ import { config } from '@/services/config';
 
 export const metadata: Metadata = {
   title: 'Returns & Refund Policy',
-  description: 'How returns, exchanges, and refunds work at Corporate Cult.',
+  description: 'How returns, exchanges, and refunds work at Out of Office.',
   alternates: { canonical: absoluteUrl('/legal/refunds') },
 };
 
 export default function RefundsPage() {
-  const brand = config.brand().name || 'Corporate Cult';
+  const brand = config.brand().name || 'Out of Office';
   const returnsWindow = config.returnsWindow();
   const supportEmail = process.env.SUPPORT_EMAIL ?? '';
 

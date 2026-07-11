@@ -1,7 +1,7 @@
 /**
  * Money module — the single source of truth for monetary correctness.
  *
- * All monetary values in Corporate Cult are integer paise in INR
+ * All monetary values in Out of Office are integer paise in INR
  * (1 INR = 100 paise). This module enforces:
  *   - integer-only amounts (no fractional paise are ever stored)
  *   - range 0..9,999,999,999 paise inclusive

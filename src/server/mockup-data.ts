@@ -142,7 +142,7 @@ export function composePreviewSvg(
 
 /**
  * Compose a BACK-view SVG preview for the t-shirt. Shows the model from behind
- * with 'CORPORATE CULT' branding on the upper back. Pure and deterministic.
+ * with 'OUT OF OFFICE' branding on the upper back. Pure and deterministic.
  * Uses the same sizing contract as composePreviewSvg so front/back match.
  */
 export function composeBackSvg(
@@ -162,8 +162,8 @@ export function composeBackSvg(
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`,
     `<desc>${escapeXml(options.garment)} back preview</desc>`,
-    `<text x="500" y="420" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="42" font-weight="900" fill="${textColor}" text-anchor="middle" letter-spacing="8" opacity="0.85">CORPORATE</text>`,
-    `<text x="500" y="470" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="42" font-weight="900" fill="${textColor}" text-anchor="middle" letter-spacing="8" opacity="0.85">CULT</text>`,
+    `<text x="500" y="420" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="42" font-weight="900" fill="${textColor}" text-anchor="middle" letter-spacing="8" opacity="0.85">OUT OF</text>`,
+    `<text x="500" y="470" font-family="'Inter', 'Helvetica Neue', sans-serif" font-size="42" font-weight="900" fill="${textColor}" text-anchor="middle" letter-spacing="8" opacity="0.85">OFFICE</text>`,
     '</svg>',
   ].join('');
 }

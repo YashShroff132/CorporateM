@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic';
 export function generateMetadata(): Metadata {
   return {
     title: 'Collections',
-    description: 'Explore Corporate Cult collections and find your next favourite tee.',
+    description: 'Explore Out of Office collections and find your next favourite tee.',
     alternates: { canonical: absoluteUrl('/collections') },
   };
 }

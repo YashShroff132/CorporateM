@@ -32,7 +32,7 @@ export async function generateMetadata({
     page,
     title: 'Shop',
     description:
-      'Browse the full Corporate Cult catalog. Filter by tier, collection, color, size, and price.',
+      'Browse the full Out of Office catalog. Filter by tier, collection, color, size, and price.',
   });
 }
 

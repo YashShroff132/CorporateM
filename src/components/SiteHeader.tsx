@@ -28,10 +28,9 @@ export function SiteHeader() {
       >
         <Link
           href="/"
-          className="text-lg font-black uppercase tracking-wider text-ink transition-transform active:scale-95 flex items-center"
+          className="text-xl font-black uppercase tracking-[0.25em] text-ink transition-transform active:scale-95"
         >
-          <span>CORPO</span>
-          <span className="text-stamp-red bg-stamp-red/10 px-1 py-0.5 rounded text-xs select-none ml-1 font-mono">RAT</span>
+          OOO
         </Link>
 
         {/* Desktop nav — hidden on mobile */}

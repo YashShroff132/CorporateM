@@ -1,4 +1,4 @@
-# Handoff / Context Transfer — Corporate Cult E-Commerce
+# Handoff / Context Transfer — Out of Office E-Commerce
 
 This document lets another engineer (or agent) with full repo access continue the work. It describes the architecture, what is DONE, what REMAINS, and how to verify.
 

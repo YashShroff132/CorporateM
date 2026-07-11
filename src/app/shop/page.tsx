@@ -46,7 +46,7 @@ export async function generateMetadata({
     page,
     title: 'Shop',
     description:
-      'Browse the full Corporate Cult catalog. Filter by tier, collection, color, size, and price.',
+      'Browse the full Out of Office catalog. Filter by tier, collection, color, size, and price.',
   });
 }
 
@@ -61,7 +61,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   return (
     <ShopView
       heading="Shop"
-      intro="Corporate is a joke. Wear the punchline."
+      intro="Currently unavailable. Permanently comfortable."
       basePath={SHOP_PATH}
       baseQuery={encodeShopQuery(query)}
       query={query}

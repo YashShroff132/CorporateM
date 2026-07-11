@@ -36,7 +36,7 @@ const invoice18 = createInvoiceService(
     SELLER_GSTIN: '29ABCDE1234F1Z5',
     GARMENT_HSN: '61091000',
     SELLER_STATE: 'Karnataka',
-    LEGAL_ENTITY_NAME: 'Corporate Cult Retail Pvt Ltd',
+    LEGAL_ENTITY_NAME: 'Out of Office Retail Pvt Ltd',
     LEGAL_ENTITY_ADDRESS: 'No. 1, MG Road, Bengaluru, Karnataka 560001',
   }),
 );

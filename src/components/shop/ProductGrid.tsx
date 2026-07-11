@@ -49,7 +49,7 @@ export function ProductGrid({
           <ScrollReveal delay={(index % 4) * 100}>
             <a
               href={`/product/${product.slug}`}
-              className="block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-shadow duration-300 hover:shadow-lg hover:border-ink/25"
+              className="product-card block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:shadow-xl hover:border-ink/25 hover:-translate-y-2"
             >
               {/* --- 3D Flip Image Container --- */}
               <div className="product-flip-container aspect-square relative border-b border-ink/5">

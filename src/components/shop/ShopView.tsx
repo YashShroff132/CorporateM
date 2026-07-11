@@ -52,16 +52,16 @@ export function ShopView({
         <div className="relative w-full h-[320px] md:h-[460px] overflow-hidden border border-ink/10 rounded-lg shadow-sm mb-4 bg-ink/5">
           <img
             src="/hero-streetwear.png"
-            alt="Corporate Cult Streetwear Collection"
+            alt="Out of Office Streetwear Collection"
             className="w-full h-full object-cover opacity-90 transition-transform duration-10000 ease-out hover:scale-105"
           />
           {/* Minimalist Overlay banner text */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-6 md:p-10">
             <span className="text-[10px] font-mono uppercase tracking-widest text-paper/90 mb-1.5 font-bold">
-              Corporate Cult // Rebel Sync
+              Out of Office // Always On Style
             </span>
             <h2 className="text-2xl md:text-4xl font-black uppercase text-paper tracking-tight max-w-xl drop-shadow">
-              Compliance is optional.<br />Comfort is not.
+              Currently unavailable.<br />Permanently comfortable.
             </h2>
           </div>
         </div>

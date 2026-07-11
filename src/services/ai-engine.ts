@@ -221,7 +221,7 @@ export function buildSystemPrompt(
   brandName: string,
   fewShot: readonly SloganBankExample[],
 ): string {
-  const brand = brandName.trim().length > 0 ? brandName.trim() : 'Corporate Cult';
+  const brand = brandName.trim().length > 0 ? brandName.trim() : 'Out of Office';
 
   const finalFewShot = fewShot.length > 0
     ? fewShot

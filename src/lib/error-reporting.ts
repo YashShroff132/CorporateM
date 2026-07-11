@@ -147,7 +147,7 @@ export function reportError(error: unknown, context: ErrorContext = {}): void {
 
     const authHeader = [
       'Sentry sentry_version=7',
-      'sentry_client=corporate-cult-min/1.0',
+      'sentry_client=out-of-office-min/1.0',
       `sentry_key=${parsed.publicKey}`,
     ].join(', ');
 

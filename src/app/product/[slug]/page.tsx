@@ -74,7 +74,7 @@ export async function generateMetadata({
   );
   const description = clamp(
     product.seoDescription ??
-      `${product.slogan}. Shop this design from Corporate Cult.`,
+      `${product.slogan}. Shop this design from Out of Office.`,
     160,
   );
   const images = product.mockupUrl !== undefined ? [product.mockupUrl] : [];
@@ -125,7 +125,7 @@ function buildProductJsonLd(detail: ProductDetail): Record<string, unknown> {
     name: product.slogan,
     description:
       product.seoDescription ??
-      `${product.slogan}. Shop this design from Corporate Cult.`,
+      `${product.slogan}. Shop this design from Out of Office.`,
     ...(product.mockupUrl !== undefined ? { image: product.mockupUrl } : {}),
     sku: product.slug,
     offers: {

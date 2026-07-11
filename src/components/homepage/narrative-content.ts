@@ -38,8 +38,8 @@ export interface NarrativeAct {
 export const NARRATIVE_ACTS: readonly NarrativeAct[] = [
   {
     id: 'hook',
-    kicker: 'Corporate Cult',
-    title: 'Corporate is a joke. Wear the punchline.',
+    kicker: 'Out of Office',
+    title: 'Currently unavailable. Permanently comfortable.',
     body: [
       'You did everything right. The degree, the internships, the LinkedIn optimism. Then you met the calendar invite that could have been an email.',
     ],
@@ -85,7 +85,7 @@ export const NARRATIVE_ACTS: readonly NarrativeAct[] = [
   },
   {
     id: 'footer-cta',
-    kicker: 'Join the Cult',
+    kicker: 'Go OOO',
     title: 'Clock out. Dress up. Speak freely.',
     body: [
       'Every shirt is fully shoppable — no animation, no JavaScript, no meeting required.',

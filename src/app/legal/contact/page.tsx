@@ -14,12 +14,12 @@ import { config } from '@/services/config';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Reach the Corporate Cult support and grievance team.',
+  description: 'Reach the Out of Office support and grievance team.',
   alternates: { canonical: absoluteUrl('/legal/contact') },
 };
 
 export default function ContactPage() {
-  const brand = config.brand().name || 'Corporate Cult';
+  const brand = config.brand().name || 'Out of Office';
   const entity = config.legalEntityName();
   const supportEmail = process.env.SUPPORT_EMAIL ?? '';
   const businessAddress =
