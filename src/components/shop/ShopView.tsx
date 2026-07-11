@@ -43,13 +43,13 @@ export function ShopView({
   const isHomepage = basePath === '/' || basePath === '/shop';
 
   return (
-    <main className="mx-auto flex max-w-6xl flex-col gap-6 p-6">
+    <div className="w-full">
       {/* 10% Welcome Coupon Popup */}
       <CouponPopup />
 
       {/* Hero Banner Image (Rendered only on main catalog views) */}
       {isHomepage && (
-        <div className="relative w-full h-[360px] md:h-[500px] overflow-hidden border-b border-ink/10 mb-4 bg-ink/5 -mt-[72px] md:-mt-[76px]">
+        <div className="relative w-full h-[360px] md:h-[500px] overflow-hidden border-b border-ink/10 mb-4 bg-ink/5 -mt-[102px] md:-mt-[106px]">
           <img
             src="/hero-streetwear.png"
             alt="Out of Office Streetwear Collection"
@@ -67,34 +67,37 @@ export function ShopView({
         </div>
       )}
 
-      <header className="flex flex-col gap-2">
-        {heading && <h1 className="text-3xl font-black tracking-tight">{heading}</h1>}
-        {intro && <p className="text-muted">{intro}</p>}
-        <p className="text-sm text-muted">
-          {page.totalItems} {page.totalItems === 1 ? 'product' : 'products'}
-        </p>
-      </header>
+      {/* Content wrapper - centered max-width layout */}
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 p-6">
+        <header className="flex flex-col gap-2">
+          {heading && <h1 className="text-3xl font-black tracking-tight">{heading}</h1>}
+          {intro && <p className="text-muted">{intro}</p>}
+          <p className="text-sm text-muted">
+            {page.totalItems} {page.totalItems === 1 ? 'product' : 'products'}
+          </p>
+        </header>
 
-      {/* Integrate collapsible desktop/mobile layout manager */}
-      <ShopLayout
-        filters={
-          <CollapsibleFilters>
-            <ShopFilters
-              action={basePath}
-              query={query}
-              colors={colors}
-              sizes={sizes}
-              hideTier={hideTier}
-            />
-          </CollapsibleFilters>
-        }
-        products={
-          <>
-            <ProductGrid items={page.items} />
-            <Pagination basePath={basePath} baseQuery={baseQuery} page={page} />
-          </>
-        }
-      />
-    </main>
+        {/* Integrate collapsible desktop/mobile layout manager */}
+        <ShopLayout
+          filters={
+            <CollapsibleFilters>
+              <ShopFilters
+                action={basePath}
+                query={query}
+                colors={colors}
+                sizes={sizes}
+                hideTier={hideTier}
+              />
+            </CollapsibleFilters>
+          }
+          products={
+            <>
+              <ProductGrid items={page.items} />
+              <Pagination basePath={basePath} baseQuery={baseQuery} page={page} />
+            </>
+          }
+        />
+      </div>
+    </div>
   );
 }

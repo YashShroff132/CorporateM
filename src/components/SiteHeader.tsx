@@ -2,6 +2,7 @@
  * SiteHeader — minimal, on-brand top navigation with mobile hamburger menu.
  *
  * Fixed position with scroll animations:
+ * - Top black announcement bar with cycling messages and cycle buttons.
  * - Transparent background when at the top of the viewport.
  * - Solid blurred background + slightly smaller animated logo on scroll.
  * - Mobile: Hamburger on left, Centered logo, Actions (theme toggle + cart) on right.
@@ -21,31 +22,73 @@ const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: '/cart', label: 'Cart' },
 ];
 
+const ANNOUNCEMENT_MESSAGES = [
+  'USE CODE OOO10 FOR 10% OFF ON YOUR FIRST ORDER',
+  'FREE SHIPPING NATIONWIDE ON ORDERS OVER RS. 999',
+  'AUTO-REPLY ACTIVE — OUT OF OFFICE IS THE WAY',
+];
+
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [announcementIdx, setAnnouncementIdx] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
     };
-    // Initialize immediately
     handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setAnnouncementIdx((prev) => (prev + 1) % ANNOUNCEMENT_MESSAGES.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const prevAnnouncement = () => {
+    setAnnouncementIdx((prev) => (prev - 1 + ANNOUNCEMENT_MESSAGES.length) % ANNOUNCEMENT_MESSAGES.length);
+  };
+
+  const nextAnnouncement = () => {
+    setAnnouncementIdx((prev) => (prev + 1) % ANNOUNCEMENT_MESSAGES.length);
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-30 transition-all duration-300 border-b ${
         scrolled
-          ? 'bg-paper/95 dark:bg-black/95 backdrop-blur-md border-ink/10 dark:border-white/10 py-3 shadow-sm'
-          : 'bg-transparent border-transparent py-5'
+          ? 'bg-paper/95 dark:bg-black/95 backdrop-blur-md border-ink/10 dark:border-white/10 shadow-sm'
+          : 'bg-transparent border-transparent'
       }`}
     >
+      {/* Announcement Bar Ticker */}
+      <div className="bg-black text-white py-1.5 px-4 text-[9px] font-mono tracking-widest flex items-center justify-between border-b border-white/10 select-none">
+        <button
+          onClick={prevAnnouncement}
+          className="hover:text-highlighter transition-colors p-1"
+          aria-label="Previous announcement"
+        >
+          &lt;
+        </button>
+        <span className="text-center font-bold truncate px-4">{ANNOUNCEMENT_MESSAGES[announcementIdx]}</span>
+        <button
+          onClick={nextAnnouncement}
+          className="hover:text-highlighter transition-colors p-1"
+          aria-label="Next announcement"
+        >
+          &gt;
+        </button>
+      </div>
+
       <nav
         aria-label="Primary"
-        className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6"
+        className={`mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 transition-all duration-500 ease-in-out ${
+          scrolled ? 'py-2' : 'py-6'
+        }`}
       >
         {/* Mobile Left Column: Hamburger Menu Icon */}
         <div className="flex md:hidden w-1/4 justify-start">
@@ -78,8 +121,10 @@ export function SiteHeader() {
         <div className="flex w-2/4 md:w-auto justify-center md:justify-start">
           <Link
             href="/"
-            className={`font-black uppercase tracking-[0.25em] text-ink dark:text-white transition-all duration-300 ${
-              scrolled ? 'text-lg md:text-xl' : 'text-xl md:text-2xl'
+            className={`font-black uppercase text-ink dark:text-white transition-all duration-500 ease-in-out origin-center md:origin-left ${
+              scrolled
+                ? 'scale-75 tracking-[0.15em] opacity-90 text-lg md:text-xl'
+                : 'scale-110 tracking-[0.35em] text-xl md:text-2xl'
             }`}
           >
             OOO
