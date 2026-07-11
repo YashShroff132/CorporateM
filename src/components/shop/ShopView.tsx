@@ -61,7 +61,7 @@ export function ShopView({
               Out of Office // Always On Style
             </span>
             <h2 className="text-2xl md:text-4xl font-black uppercase text-paper tracking-tight max-w-xl drop-shadow">
-              Currently unavailable.<br />Permanently comfortable.
+              Currently unavailable<br />& permanently out of office.
             </h2>
           </div>
         </div>

@@ -15,7 +15,7 @@ import { NarrativeEnhancer } from '@/components/homepage/NarrativeEnhancer';
 
 export const metadata = {
   title: 'Manifesto',
-  description: 'Currently unavailable. Permanently comfortable. Read the Out of Office manifesto.',
+  description: 'Currently unavailable and permanently out of office. Read the Out of Office manifesto.',
 };
 
 export default function ManifestoPage() {

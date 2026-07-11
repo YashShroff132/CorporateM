@@ -61,7 +61,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   return (
     <ShopView
       heading="Shop"
-      intro="Currently unavailable. Permanently comfortable."
+      intro="Currently unavailable and permanently out of office."
       basePath={SHOP_PATH}
       baseQuery={encodeShopQuery(query)}
       query={query}

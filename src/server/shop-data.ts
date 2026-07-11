@@ -15,7 +15,83 @@
 import type { ShopProductView } from '@/services/shop';
 import type { Collection, Product, Variant } from '@/services/catalog';
 import { fitText, presetsForCollection, SAFE_CLASSIC_PRESET } from '@/services/mockup';
+import type { LayoutPreset } from '@/services/mockup';
 import { composePreviewSvg, composeBackSvg, svgToDataUrl } from './mockup-data';
+
+export const CUSTOM_PRODUCT_PRESETS: Record<string, LayoutPreset> = {
+  'unavailable-team-dinner': {
+    id: 'ooo-syne',
+    fontFamily: '"Syne", sans-serif',
+    monospace: false,
+    charWidthRatio: 0.58,
+    lineHeightRatio: 1.15,
+    align: 'center',
+  },
+  'stop-hallucinating': {
+    id: 'ooo-space-mono',
+    fontFamily: '"Space Mono", monospace',
+    monospace: true,
+    charWidthRatio: 0.6,
+    lineHeightRatio: 1.3,
+    align: 'left',
+  },
+  'revert-back': {
+    id: 'ooo-bebas-neue',
+    fontFamily: '"Bebas Neue", sans-serif',
+    monospace: false,
+    charWidthRatio: 0.38,
+    lineHeightRatio: 1.1,
+    align: 'center',
+  },
+  'couldve-been-email': {
+    id: 'ooo-outfit',
+    fontFamily: '"Outfit", sans-serif',
+    monospace: false,
+    charWidthRatio: 0.52,
+    lineHeightRatio: 1.2,
+    align: 'center',
+  },
+  'do-not-disturb': {
+    id: 'ooo-permanent-marker',
+    fontFamily: '"Permanent Marker", cursive',
+    monospace: false,
+    charWidthRatio: 0.55,
+    lineHeightRatio: 1.3,
+    align: 'center',
+  },
+  'team-bonding': {
+    id: 'ooo-zilla-slab',
+    fontFamily: '"Zilla Slab", serif',
+    monospace: false,
+    charWidthRatio: 0.56,
+    lineHeightRatio: 1.25,
+    align: 'left',
+  },
+  'resume-gap': {
+    id: 'ooo-jetbrains-mono',
+    fontFamily: '"JetBrains Mono", monospace',
+    monospace: true,
+    charWidthRatio: 0.6,
+    lineHeightRatio: 1.3,
+    align: 'center',
+  },
+  'immediate-quitter': {
+    id: 'ooo-anton',
+    fontFamily: '"Anton", sans-serif',
+    monospace: false,
+    charWidthRatio: 0.5,
+    lineHeightRatio: 1.1,
+    align: 'center',
+  },
+  'chai-breaks': {
+    id: 'ooo-dm-serif',
+    fontFamily: '"DM Serif Display", serif',
+    monospace: false,
+    charWidthRatio: 0.54,
+    lineHeightRatio: 1.2,
+    align: 'center',
+  },
+};
 
 export interface CollectionSummary {
   slug: string;
@@ -59,12 +135,12 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
       const sizes = [...new Set(p.variants.map((v) => v.size))].sort();
       const isWhite = colors.some((c) => c.toLowerCase().includes('white'));
       const presets = presetsForCollection(p.collection.slug, p.tier);
-      const preset = presets[0] ?? SAFE_CLASSIC_PRESET;
+      const preset = CUSTOM_PRODUCT_PRESETS[p.slug] || presets[0] || SAFE_CLASSIC_PRESET;
       const layoutResult = fitText(p.slogan, { width: 380, height: 350 }, preset);
       const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [p.slogan], width: 300, height: 100, preset };
       const garmentColor = isWhite ? 'White' : 'Black';
-      const mockupBgUrl = isWhite ? '/model-front-white.png' : '/model-front-black.png';
-      const mockupBackBgUrl = isWhite ? '/model-back-white.png' : '/model-back-black.png';
+      const mockupBgUrl = isWhite ? '/blank-white-tee.png' : '/blank-black-tee.png';
+      const mockupBackBgUrl = isWhite ? '/blank-white-tee.png' : '/blank-black-tee.png';
       const mockupUrl = p.mockupUrl || svgToDataUrl(
         composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
       );
@@ -169,12 +245,12 @@ export async function getProductBySlug(
 
     const isWhite = row.variants.some((v) => v.color.toLowerCase().includes('white'));
     const presets = presetsForCollection(row.collection.slug, row.tier);
-    const preset = presets[0] ?? SAFE_CLASSIC_PRESET;
+    const preset = CUSTOM_PRODUCT_PRESETS[row.slug] || presets[0] || SAFE_CLASSIC_PRESET;
     const layoutResult = fitText(row.slogan, { width: 380, height: 350 }, preset);
     const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [row.slogan], width: 300, height: 100, preset };
     const garmentColor = isWhite ? 'White' : 'Black';
-    const mockupBgUrl = isWhite ? '/model-front-white.png' : '/model-front-black.png';
-    const mockupBackBgUrl = isWhite ? '/model-back-white.png' : '/model-back-black.png';
+    const mockupBgUrl = isWhite ? '/blank-white-tee.png' : '/blank-black-tee.png';
+    const mockupBackBgUrl = isWhite ? '/blank-white-tee.png' : '/blank-black-tee.png';
     const mockupUrl = row.mockupUrl || svgToDataUrl(
       composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
     );

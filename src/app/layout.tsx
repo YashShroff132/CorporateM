@@ -6,7 +6,7 @@ import { Analytics } from '@/components/Analytics';
 import { getSiteOrigin } from '@/lib/site';
 
 const SITE_NAME = 'Out of Office';
-const SITE_DESCRIPTION = 'Currently unavailable. Permanently comfortable.';
+const SITE_DESCRIPTION = 'Currently unavailable and permanently out of office.';
 
 /**
  * Default site metadata (Req 19.2, 19.6, 19.7).
@@ -51,7 +51,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                if (localStorage.theme === 'dark' || !('theme' in localStorage)) {
                   document.documentElement.classList.add('dark');
                 } else {
                   document.documentElement.classList.remove('dark');

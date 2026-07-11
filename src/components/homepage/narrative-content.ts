@@ -39,7 +39,7 @@ export const NARRATIVE_ACTS: readonly NarrativeAct[] = [
   {
     id: 'hook',
     kicker: 'Out of Office',
-    title: 'Currently unavailable. Permanently comfortable.',
+    title: 'Currently unavailable and permanently out of office.',
     body: [
       'You did everything right. The degree, the internships, the LinkedIn optimism. Then you met the calendar invite that could have been an email.',
     ],
