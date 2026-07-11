@@ -12,9 +12,9 @@ export function OOOLogo({ className = 'h-6 w-auto' }: OOOLogoProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Three overlapping rings to simulate the OOO logo graphic */}
+      {/* Three overlapping rings that touch exactly at their tangents with zero overlap */}
       <circle
-        cx="28"
+        cx="23"
         cy="18"
         r="13.5"
         stroke="currentColor"
@@ -28,7 +28,7 @@ export function OOOLogo({ className = 'h-6 w-auto' }: OOOLogoProps) {
         strokeWidth="3.5"
       />
       <circle
-        cx="72"
+        cx="77"
         cy="18"
         r="13.5"
         stroke="currentColor"

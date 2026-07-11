@@ -47,7 +47,7 @@ export function ThemeToggle() {
           />
         </svg>
       ) : (
-        // Sun Icon
+        // Sun Icon (Arc-less clean path)
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -59,7 +59,7 @@ export function ThemeToggle() {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="M12 3v2.25m0 13.5V21M4.95 4.95l1.59 1.59M16.35 16.35l1.59 1.59m-18 0l1.59-1.59M16.35 4.95l-1.59 1.59M12 7.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"
+            d="M12 18a6 6 0 100-12 6 6 0 000 12zM22 12h-2M4 12H2M12 2v2M12 22v-2M19.071 4.929l-1.414 1.414M6.343 17.657l-1.414 1.414M19.071 19.071l-1.414-1.414M6.343 6.343L4.929 4.929"
           />
         </svg>
       )}
