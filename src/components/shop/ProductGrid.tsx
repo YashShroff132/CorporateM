@@ -59,7 +59,7 @@ export function ProductGrid({
                     {product.mockupUrl?.startsWith('data:') ? (
                       <>
                         <ProductImage
-                          src={product.mockupBgUrl || (product.colors.includes('white') ? '/model-front-white.png' : '/model-front-black.png')}
+                          src={product.mockupBgUrl || (product.colors.includes('white') ? '/blank-white-tee.png' : '/blank-black-tee.png')}
                           alt={product.slogan}
                           width={320}
                           height={320}
@@ -81,35 +81,23 @@ export function ProductGrid({
                       />
                     )}
                   </div>
-                  {/* BACK face — only rendered when a back image exists */}
-                  {product.mockupBackUrl && (
-                    <div className="product-flip-face product-flip-back relative">
-                      {product.mockupBackUrl?.startsWith('data:') ? (
-                        <>
-                          <ProductImage
-                            src={product.mockupBackBgUrl || (product.colors.includes('white') ? '/model-back-white.png' : '/model-back-black.png')}
-                            alt={`${product.slogan} — back view`}
-                            width={320}
-                            height={320}
-                          />
-                          <div className="absolute inset-0 pointer-events-none select-none">
-                            <img
-                              src={product.mockupBackUrl}
-                              alt=""
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        </>
-                      ) : (
-                        <ProductImage
-                          src={product.mockupBackUrl}
-                          alt={`${product.slogan} — back view`}
-                          width={320}
-                          height={320}
-                        />
-                      )}
+                  {/* BACK face — Typographic Minimalist Design (No human model) */}
+                  <div className="product-flip-face product-flip-back absolute inset-0 w-full h-full flex flex-col justify-between p-6 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none">
+                    <div className="flex justify-between items-center text-[9px] opacity-70">
+                      <span>[ AUTO-REPLY: ON ]</span>
+                      <span>[ TIER: {product.tier} ]</span>
                     </div>
-                  )}
+                    
+                    <div className="flex flex-col items-center justify-center my-auto">
+                      <span className="text-4xl font-black tracking-[0.25em] leading-none mb-1 text-paper dark:text-ink">OOO</span>
+                      <span className="text-[9px] uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
+                    </div>
+                    
+                    <div className="flex flex-col gap-1 border-t border-paper/10 dark:border-ink/10 pt-4 text-left">
+                      <span className="text-[9px] uppercase tracking-wider text-muted">Slogan ID // {product.slug}</span>
+                      <span className="text-[10px] truncate max-w-full font-bold uppercase">{product.slogan}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 

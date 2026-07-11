@@ -9,6 +9,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: '/manifesto', label: 'Manifesto' },
@@ -47,24 +48,29 @@ export function SiteHeader() {
           ))}
         </ul>
 
-        {/* Hamburger button — visible only on mobile */}
-        <button
-          type="button"
-          onClick={() => setMenuOpen((prev) => !prev)}
-          className="md:hidden flex flex-col items-center justify-center gap-[5px] w-8 h-8"
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-        >
-          <span
-            className={`block w-5 h-[2px] bg-ink transition-transform duration-300 ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`}
-          />
-          <span
-            className={`block w-5 h-[2px] bg-ink transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`}
-          />
-          <span
-            className={`block w-5 h-[2px] bg-ink transition-transform duration-300 ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`}
-          />
-        </button>
+        {/* Header Actions */}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          
+          {/* Hamburger button — visible only on mobile */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            className="md:hidden flex flex-col items-center justify-center gap-[5px] w-8 h-8"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            <span
+              className={`block w-5 h-[2px] bg-ink transition-transform duration-300 ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`}
+            />
+            <span
+              className={`block w-5 h-[2px] bg-ink transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`}
+            />
+            <span
+              className={`block w-5 h-[2px] bg-ink transition-transform duration-300 ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`}
+            />
+          </button>
+        </div>
       </nav>
 
       {/* Mobile dropdown menu */}

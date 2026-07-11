@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-paper: #F5F5F0; /* Warm white */
+  --color-ink: #0A0A0A;   /* Near black */
+  --color-highlighter: #D9FF00;
+  --color-muted: #6B6B6B;
+}
+
+html.dark {
+  --color-paper: #000000; /* Pure black */
+  --color-ink: #F5F5F0;   /* White text */
+  --color-highlighter: #BCE600; /* Subtle green highlighter in dark mode */
+  --color-muted: #9E9E9E;
+}
+
 /*
  * Narrative homepage enhancement styles (Requirement 4).
  *
@@ -125,6 +139,6 @@
 @media (hover: hover) and (pointer: fine) {
   .product-card:hover .product-flip-container::after {
     transform: translateX(110%);
-    transition: transform 0.6s ease-in-out;
+    transition: transform 1.2s ease-in-out;
   }
 }
