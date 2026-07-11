@@ -1,14 +1,17 @@
 /**
  * SiteHeader — minimal, on-brand top navigation with mobile hamburger menu.
  *
- * Server-rendered with a client-side mobile toggle. On desktop, nav links
- * display inline. On mobile (<768px), links collapse behind a hamburger icon.
+ * Fixed position with scroll animations:
+ * - Transparent background when at the top of the viewport.
+ * - Solid blurred background + slightly smaller animated logo on scroll.
+ * - Mobile: Hamburger on left, Centered logo, Actions (theme toggle + cart) on right.
+ * - Desktop: Left-aligned logo, Inline links, Actions on right.
  */
 
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ThemeToggle } from './ThemeToggle';
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
@@ -20,19 +23,68 @@ const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 30);
+    };
+    // Initialize immediately
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="border-b border-ink/10 dark:border-white/10 bg-paper dark:bg-black sticky top-0 z-30 transition-colors duration-300">
+    <header
+      className={`fixed top-0 left-0 right-0 z-30 transition-all duration-300 border-b ${
+        scrolled
+          ? 'bg-paper/95 dark:bg-black/95 backdrop-blur-md border-ink/10 dark:border-white/10 py-3 shadow-sm'
+          : 'bg-transparent border-transparent py-5'
+      }`}
+    >
       <nav
         aria-label="Primary"
-        className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4"
+        className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6"
       >
-        <Link
-          href="/"
-          className="text-xl font-black uppercase tracking-[0.25em] text-ink dark:text-white transition-transform active:scale-95"
-        >
-          OOO
-        </Link>
+        {/* Mobile Left Column: Hamburger Menu Icon */}
+        <div className="flex md:hidden w-1/4 justify-start">
+          <button
+            type="button"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            className="flex flex-col items-center justify-center gap-[5px] w-8 h-8 text-ink dark:text-white"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            <span
+              className={`block w-5 h-[2px] bg-ink dark:bg-white transition-transform duration-300 ${
+                menuOpen ? 'rotate-45 translate-y-[7px]' : ''
+              }`}
+            />
+            <span
+              className={`block w-5 h-[2px] bg-ink dark:bg-white transition-opacity duration-300 ${
+                menuOpen ? 'opacity-0' : ''
+              }`}
+            />
+            <span
+              className={`block w-5 h-[2px] bg-ink dark:bg-white transition-transform duration-300 ${
+                menuOpen ? '-rotate-45 -translate-y-[7px]' : ''
+              }`}
+            />
+          </button>
+        </div>
+
+        {/* Logo Column: Centered on mobile, Left-aligned on desktop */}
+        <div className="flex w-2/4 md:w-auto justify-center md:justify-start">
+          <Link
+            href="/"
+            className={`font-black uppercase tracking-[0.25em] text-ink dark:text-white transition-all duration-300 ${
+              scrolled ? 'text-lg md:text-xl' : 'text-xl md:text-2xl'
+            }`}
+          >
+            OOO
+          </Link>
+        </div>
 
         {/* Desktop nav — hidden on mobile */}
         <ul className="hidden md:flex items-center gap-6">
@@ -48,28 +100,31 @@ export function SiteHeader() {
           ))}
         </ul>
 
-        {/* Header Actions */}
-        <div className="flex items-center gap-2">
+        {/* Header Actions: Theme toggle + Cart link (Mobile & Desktop) */}
+        <div className="flex w-1/4 md:w-auto justify-end items-center gap-3">
           <ThemeToggle />
           
-          {/* Hamburger button — visible only on mobile */}
-          <button
-            type="button"
-            onClick={() => setMenuOpen((prev) => !prev)}
-            className="md:hidden flex flex-col items-center justify-center gap-[5px] w-8 h-8"
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
+          {/* Cart Icon Quick Link on mobile */}
+          <Link
+            href="/cart"
+            className="md:hidden text-ink dark:text-white hover:text-stamp-red transition-colors p-1"
+            aria-label="View Cart"
           >
-            <span
-              className={`block w-5 h-[2px] bg-ink dark:bg-white transition-transform duration-300 ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`}
-            />
-            <span
-              className={`block w-5 h-[2px] bg-ink dark:bg-white transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`}
-            />
-            <span
-              className={`block w-5 h-[2px] bg-ink dark:bg-white transition-transform duration-300 ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`}
-            />
-          </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2.2}
+              stroke="currentColor"
+              className="w-5 h-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+              />
+            </svg>
+          </Link>
         </div>
       </nav>
 

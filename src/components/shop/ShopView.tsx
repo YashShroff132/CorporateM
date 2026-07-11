@@ -49,7 +49,7 @@ export function ShopView({
 
       {/* Hero Banner Image (Rendered only on main catalog views) */}
       {isHomepage && (
-        <div className="relative w-full h-[320px] md:h-[460px] overflow-hidden border border-ink/10 rounded-lg shadow-sm mb-4 bg-ink/5">
+        <div className="relative w-full h-[360px] md:h-[500px] overflow-hidden border-b border-ink/10 mb-4 bg-ink/5 -mt-[72px] md:-mt-[76px]">
           <img
             src="/hero-streetwear.png"
             alt="Out of Office Streetwear Collection"

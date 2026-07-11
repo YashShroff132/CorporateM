@@ -63,7 +63,7 @@ export default function RootLayout({
       </head>
       <body className="bg-paper text-ink antialiased">
         <SiteHeader />
-        {children}
+        <div className="pt-[72px] md:pt-[76px]">{children}</div>
         <SiteFooter />
         <Analytics />
       </body>
