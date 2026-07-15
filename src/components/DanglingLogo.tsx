@@ -67,9 +67,9 @@ export function DanglingLogo() {
     scene.add(pointLight);
 
     // --- Logo Geometry (Three Interlocking Rings) ---
-    // spaced by 1.7 to create perfect tangent-touching look for radius = 0.85
-    const ringRadius = 0.85;
-    const tubeRadius = 0.14;
+    // spaced by 1.16 to create perfect tangent-touching look for radius = 0.58
+    const ringRadius = 0.58;
+    const tubeRadius = 0.105;
     const radialSegments = 24;
     const tubularSegments = 80;
 
@@ -83,7 +83,7 @@ export function DanglingLogo() {
     // Dynamic Materials (Theme Adaptive)
     const createMaterial = (isDark: boolean) => {
       return new THREE.MeshPhysicalMaterial({
-        color: isDark ? 0xf5f5f0 : 0x111111,
+        color: isDark ? 0xf5f5f0 : 0x222222,
         metalness: 0.95,
         roughness: isDark ? 0.15 : 0.25,
         clearcoat: 0.8,
@@ -98,13 +98,13 @@ export function DanglingLogo() {
 
     // 3 rings centered relative to the group
     const leftRing = new THREE.Mesh(torusGeo, ringMat);
-    leftRing.position.x = -1.7;
+    leftRing.position.x = -1.16;
 
     const centerRing = new THREE.Mesh(torusGeo, ringMat);
     centerRing.position.x = 0;
 
     const rightRing = new THREE.Mesh(torusGeo, ringMat);
-    rightRing.position.x = 1.7;
+    rightRing.position.x = 1.16;
 
     group.add(leftRing);
     group.add(centerRing);
