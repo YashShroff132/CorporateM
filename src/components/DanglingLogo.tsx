@@ -12,6 +12,7 @@ export function DanglingLogo() {
   const stateRef = useRef({
     isAutoRotating: true,
     isDragging: false,
+    isScrolling: false,
     prevPointerX: 0,
     prevPointerY: 0,
     targetRotationX: 0,
@@ -120,16 +121,37 @@ export function DanglingLogo() {
 
     // --- Interaction Handlers ---
     const handlePointerDown = (e: PointerEvent) => {
-      setIsAutoRotating(false);
-      stateRef.current.isDragging = true;
+      const rect = canvas.getBoundingClientRect();
+      const mouse = new THREE.Vector2(
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        -((e.clientY - rect.top) / rect.height) * 2 + 1
+      );
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+
+      // Check if the user touched the 3D interlocking OOO rings meshes
+      const intersects = raycaster.intersectObjects(group.children);
+
       stateRef.current.prevPointerX = e.clientX;
       stateRef.current.prevPointerY = e.clientY;
-      canvas.setPointerCapture(e.pointerId);
+
+      if (intersects.length > 0) {
+        // Touched the 3D logo directly: rotate
+        setIsAutoRotating(false);
+        stateRef.current.isDragging = true;
+        stateRef.current.isScrolling = false;
+        canvas.setPointerCapture(e.pointerId);
+      } else {
+        // Touched background: scroll page instead
+        stateRef.current.isDragging = false;
+        stateRef.current.isScrolling = true;
+      }
     };
 
     const handlePointerMove = (e: PointerEvent) => {
       const state = stateRef.current;
-      if (!state.isDragging) return;
+      if (!state.isDragging && !state.isScrolling) return;
 
       const deltaX = e.clientX - state.prevPointerX;
       const deltaY = e.clientY - state.prevPointerY;
@@ -137,18 +159,21 @@ export function DanglingLogo() {
       state.prevPointerX = e.clientX;
       state.prevPointerY = e.clientY;
 
-      // Rotate group on drag (freely on all devices)
-      state.targetRotationY += deltaX * 0.007;
-      state.targetRotationX += deltaY * 0.007;
-
-      // On mobile touch, also scroll the page vertically to prevent getting stuck
-      if (e.pointerType === 'touch') {
-        window.scrollBy(0, -deltaY);
+      if (state.isDragging) {
+        // Only rotate the logo. Do NOT scroll the page.
+        state.targetRotationY += deltaX * 0.007;
+        state.targetRotationX += deltaY * 0.007;
+      } else if (state.isScrolling) {
+        // Only scroll the page. Do NOT rotate the logo.
+        if (e.pointerType === 'touch') {
+          window.scrollBy(0, -deltaY);
+        }
       }
     };
 
     const handlePointerUp = () => {
       stateRef.current.isDragging = false;
+      stateRef.current.isScrolling = false;
       setIsAutoRotating(true);
     };
 
