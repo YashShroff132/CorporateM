@@ -17,16 +17,19 @@ import { ThemeToggle } from './ThemeToggle';
 import { OOOLogo } from './OOOLogo';
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
-  { href: '/manifesto', label: 'Manifesto' },
+  { href: '/manifesto', label: 'Story' },
   { href: '/shop', label: 'Shop' },
   { href: '/collections', label: 'Collections' },
   { href: '/cart', label: 'Cart' },
 ];
 
 const ANNOUNCEMENT_MESSAGES = [
-  'USE CODE OOO10 FOR 10% OFF ON YOUR FIRST ORDER',
-  'FREE SHIPPING NATIONWIDE ON ORDERS OVER RS. 999',
-  'AUTO-REPLY ACTIVE — OUT OF OFFICE IS THE WAY',
+  'USE CODE OOO10 FOR 10% OFF (OR DON\'T, I\'M NOT YOUR BOSS)',
+  'FREE SHIPPING ON ORDERS OVER RS. 999 — PLS DO NOT SLACK US ABOUT IT',
+  'PER MY PREVIOUS EMAIL: I AM PERMANENTLY OUT OF OFFICE',
+  'LETS TAKE THIS OFFLINE. PERMANENTLY.',
+  'YOUR EMAIL HAS BEEN SUCCESSFULLY MARKED AS UNREAD',
+  'AUTO-REPLY: CLOSED FOR SPIRITUAL REBRANDING AND DEEP-WORK NAPTIME',
 ];
 
 export function SiteHeader() {
