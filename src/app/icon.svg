@@ -1,0 +1,19 @@
+<svg
+  viewBox="0 0 100 100"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <style>
+    circle {
+      stroke: #0A0A0A;
+    }
+    @media (prefers-color-scheme: dark) {
+      circle {
+        stroke: #F5F5F0;
+      }
+    }
+  </style>
+  <circle cx="20" cy="50" r="12.25" stroke-width="5.5" />
+  <circle cx="50" cy="50" r="12.25" stroke-width="5.5" />
+  <circle cx="80" cy="50" r="12.25" stroke-width="5.5" />
+</svg>

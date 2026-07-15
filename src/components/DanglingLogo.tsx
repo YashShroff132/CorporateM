@@ -137,9 +137,11 @@ export function DanglingLogo() {
       state.prevPointerX = e.clientX;
       state.prevPointerY = e.clientY;
 
-      // Rotate group on drag (360-degree rotation potential)
+      // Rotate group on drag (only horizontal rotation on touch to avoid scroll conflict)
       state.targetRotationY += deltaX * 0.007;
-      state.targetRotationX += deltaY * 0.007;
+      if (e.pointerType !== 'touch') {
+        state.targetRotationX += deltaY * 0.007;
+      }
     };
 
     const handlePointerUp = () => {
@@ -150,6 +152,8 @@ export function DanglingLogo() {
     canvas.addEventListener('pointerdown', handlePointerDown);
     canvas.addEventListener('pointermove', handlePointerMove);
     canvas.addEventListener('pointerup', handlePointerUp);
+    canvas.addEventListener('pointercancel', handlePointerUp);
+    canvas.addEventListener('pointerleave', handlePointerUp);
 
     // --- Animation Loop ---
     let animationFrameId: number;
@@ -203,6 +207,8 @@ export function DanglingLogo() {
       canvas.removeEventListener('pointerdown', handlePointerDown);
       canvas.removeEventListener('pointermove', handlePointerMove);
       canvas.removeEventListener('pointerup', handlePointerUp);
+      canvas.removeEventListener('pointercancel', handlePointerUp);
+      canvas.removeEventListener('pointerleave', handlePointerUp);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
       torusGeo.dispose();
@@ -219,7 +225,7 @@ export function DanglingLogo() {
       {/* 3D Canvas rendering region */}
       <canvas
         ref={canvasRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing outline-none touch-none"
+        className="w-full h-full cursor-grab active:cursor-grabbing outline-none touch-pan-y"
       />
     </section>
   );
