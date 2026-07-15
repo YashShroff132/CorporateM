@@ -1,140 +1,238 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { OOOLogo } from './OOOLogo';
+import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
 
-/**
- * DanglingLogo — an interactive 3D pendulum version of the OOO logo.
- *
- * The logo auto-swings like a pendulum from a fixed pivot point at the top.
- * - Click/tap to stop the swing and "grab" the logo
- * - Drag to manually rotate it
- * - Click/tap again (or release) to resume swinging
- *
- * Uses pure CSS 3D transforms + minimal JS — zero external dependencies.
- */
 export function DanglingLogo() {
-  const [isSwinging, setIsSwinging] = useState(true);
-  const [manualAngle, setManualAngle] = useState(0);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
-  const startX = useRef(0);
-  const startAngle = useRef(0);
+  const [isAutoRotating, setIsAutoRotating] = useState(true);
 
-  const handleClick = useCallback(() => {
-    if (isDragging.current) return; // Don't toggle on drag release
-    setIsSwinging((prev) => !prev);
-  }, []);
+  // Keep interaction state in refs for the loop
+  const stateRef = useRef({
+    isAutoRotating: true,
+    isDragging: false,
+    prevPointerX: 0,
+    prevPointerY: 0,
+    targetRotationX: 0,
+    targetRotationY: 0,
+    targetRotationZ: 0,
+    currentRotationX: 0,
+    currentRotationY: 0,
+    currentRotationZ: 0,
+  });
 
-  const handlePointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      if (isSwinging) {
-        setIsSwinging(false);
-      }
-      isDragging.current = false;
-      startX.current = e.clientX;
-      startAngle.current = manualAngle;
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    },
-    [isSwinging, manualAngle],
-  );
-
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent) => {
-      if (e.buttons === 0) return;
-      const dx = e.clientX - startX.current;
-      if (Math.abs(dx) > 3) isDragging.current = true;
-      // Map horizontal drag to rotation: 1px = 0.5deg
-      const newAngle = startAngle.current + dx * 0.5;
-      // Clamp to realistic pendulum range
-      setManualAngle(Math.max(-45, Math.min(45, newAngle)));
-    },
-    [],
-  );
-
-  const handlePointerUp = useCallback(() => {
-    if (isDragging.current) {
-      // On drag release, resume swinging from current angle
-      isDragging.current = false;
-      setIsSwinging(true);
-      setManualAngle(0);
-    }
-  }, []);
-
-  // Reset manual angle when resuming swing
   useEffect(() => {
-    if (isSwinging) setManualAngle(0);
-  }, [isSwinging]);
+    stateRef.current.isAutoRotating = isAutoRotating;
+  }, [isAutoRotating]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    // --- Scene Setup ---
+    const scene = new THREE.Scene();
+
+    // --- Camera ---
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+    camera.position.z = 7;
+
+    // --- Renderer ---
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: 'high-performance',
+    });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // --- Lighting ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight1.position.set(5, 5, 5);
+    scene.add(dirLight1);
+
+    const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.6);
+    dirLight2.position.set(-5, -5, -3);
+    scene.add(dirLight2);
+
+    const pointLight = new THREE.PointLight(0xffffff, 0.8, 10);
+    pointLight.position.set(0, 0, 2);
+    scene.add(pointLight);
+
+    // --- Logo Geometry (Three Interlocking Rings) ---
+    // spaced by 1.7 to create perfect tangent-touching look for radius = 0.85
+    const ringRadius = 0.85;
+    const tubeRadius = 0.14;
+    const radialSegments = 24;
+    const tubularSegments = 80;
+
+    const torusGeo = new THREE.TorusGeometry(
+      ringRadius,
+      tubeRadius,
+      radialSegments,
+      tubularSegments
+    );
+
+    // Dynamic Materials (Theme Adaptive)
+    const createMaterial = (isDark: boolean) => {
+      return new THREE.MeshPhysicalMaterial({
+        color: isDark ? 0xf5f5f0 : 0x111111,
+        metalness: 0.95,
+        roughness: isDark ? 0.15 : 0.25,
+        clearcoat: 0.8,
+        clearcoatRoughness: 0.1,
+      });
+    };
+
+    let isDarkMode = document.documentElement.classList.contains('dark');
+    const ringMat = createMaterial(isDarkMode);
+
+    const group = new THREE.Group();
+
+    // 3 rings centered relative to the group
+    const leftRing = new THREE.Mesh(torusGeo, ringMat);
+    leftRing.position.x = -1.7;
+
+    const centerRing = new THREE.Mesh(torusGeo, ringMat);
+    centerRing.position.x = 0;
+
+    const rightRing = new THREE.Mesh(torusGeo, ringMat);
+    rightRing.position.x = 1.7;
+
+    group.add(leftRing);
+    group.add(centerRing);
+    group.add(rightRing);
+
+    scene.add(group);
+
+    // Set initial target rotation to have a premium diagonal tilt
+    stateRef.current.targetRotationX = 0.25;
+    stateRef.current.targetRotationY = -0.4;
+    group.rotation.x = 0.25;
+    group.rotation.y = -0.4;
+
+    // --- Interaction Handlers ---
+    const handlePointerDown = (e: PointerEvent) => {
+      setIsAutoRotating(false);
+      stateRef.current.isDragging = true;
+      stateRef.current.prevPointerX = e.clientX;
+      stateRef.current.prevPointerY = e.clientY;
+      canvas.setPointerCapture(e.pointerId);
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      const state = stateRef.current;
+      if (!state.isDragging) return;
+
+      const deltaX = e.clientX - state.prevPointerX;
+      const deltaY = e.clientY - state.prevPointerY;
+
+      state.prevPointerX = e.clientX;
+      state.prevPointerY = e.clientY;
+
+      // Rotate group on drag (360-degree rotation potential)
+      state.targetRotationY += deltaX * 0.007;
+      state.targetRotationX += deltaY * 0.007;
+    };
+
+    const handlePointerUp = () => {
+      stateRef.current.isDragging = false;
+    };
+
+    canvas.addEventListener('pointerdown', handlePointerDown);
+    canvas.addEventListener('pointermove', handlePointerMove);
+    canvas.addEventListener('pointerup', handlePointerUp);
+
+    // --- Animation Loop ---
+    let animationFrameId: number;
+
+    const tick = () => {
+      const state = stateRef.current;
+
+      // Sync theme adaptive color
+      const currentDark = document.documentElement.classList.contains('dark');
+      if (currentDark !== isDarkMode) {
+        isDarkMode = currentDark;
+        const newMat = createMaterial(isDarkMode);
+        leftRing.material = newMat;
+        centerRing.material = newMat;
+        rightRing.material = newMat;
+      }
+
+      if (state.isAutoRotating) {
+        // Slow rotating spin around multiple axes (yaw & roll/pitch)
+        state.targetRotationY += 0.006;
+        state.targetRotationX = 0.25 + Math.sin(Date.now() * 0.001) * 0.15;
+      }
+
+      // Smooth interpolation (damping) for buttery movement
+      state.currentRotationX += (state.targetRotationX - state.currentRotationX) * 0.1;
+      state.currentRotationY += (state.targetRotationY - state.currentRotationY) * 0.1;
+
+      group.rotation.x = state.currentRotationX;
+      group.rotation.y = state.currentRotationY;
+
+      renderer.render(scene, camera);
+      animationFrameId = requestAnimationFrame(tick);
+    };
+
+    tick();
+
+    // --- Resize Handler ---
+    const handleResize = () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // --- Cleanup ---
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      canvas.removeEventListener('pointerdown', handlePointerDown);
+      canvas.removeEventListener('pointermove', handlePointerMove);
+      canvas.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('resize', handleResize);
+      renderer.dispose();
+      torusGeo.dispose();
+      ringMat.dispose();
+    };
+  }, []);
 
   return (
     <section
-      className="relative w-full flex items-center justify-center py-10 md:py-14 overflow-hidden select-none"
-      aria-label="Interactive OOO logo"
+      ref={containerRef}
+      className="relative w-full h-[260px] md:h-[360px] flex flex-col items-center justify-center overflow-hidden select-none bg-transparent py-4 border-b border-ink/5"
+      aria-label="3D Interactive OOO Logo"
     >
-      {/* Pivot point indicator */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-ink/20 dark:bg-white/20 z-10" />
-
-      {/* Hanging wire */}
-      <div
-        className="absolute top-[22px] left-1/2 w-[1.5px] bg-ink/15 dark:bg-white/15 origin-top z-10"
-        style={{
-          height: '40px',
-          transform: isSwinging
-            ? undefined
-            : `rotate(${manualAngle * 0.3}deg)`,
-          animation: isSwinging
-            ? 'pendulum-wire 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-            : 'none',
-          transformOrigin: 'top center',
-        }}
+      {/* 3D Canvas rendering region */}
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full cursor-grab active:cursor-grabbing outline-none touch-none"
       />
 
-      {/* The swinging logo */}
-      <div
-        ref={containerRef}
-        className="dangling-logo-container cursor-grab active:cursor-grabbing"
-        style={{
-          perspective: '800px',
-          transformOrigin: 'top center',
-          animation: isSwinging
-            ? 'pendulum-swing 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-            : 'none',
-          transform: isSwinging
-            ? undefined
-            : `rotate(${manualAngle}deg) rotateY(${manualAngle * 0.8}deg)`,
-          transition: isSwinging ? 'none' : 'transform 0.1s ease-out',
-          paddingTop: '20px',
-        }}
-        onClick={handleClick}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-      >
-        <div
-          className="relative"
-          style={{
-            transformStyle: 'preserve-3d',
-          }}
+      {/* Floating control helper text */}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-3">
+        <button
+          onClick={() => setIsAutoRotating((prev) => !prev)}
+          className="px-2.5 py-0.5 border border-ink/15 dark:border-white/15 bg-paper/60 dark:bg-black/60 rounded text-[9px] font-mono uppercase tracking-widest text-ink dark:text-white hover:bg-ink/5 dark:hover:bg-white/10 transition-colors"
         >
-          {/* Shadow/glow beneath */}
-          <div
-            className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-3 rounded-full bg-ink/10 dark:bg-white/10 blur-md"
-            style={{
-              animation: isSwinging
-                ? 'pendulum-shadow 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-                : 'none',
-            }}
-          />
-
-          {/* The actual OOO logo — enlarged for impact */}
-          <OOOLogo className="h-16 md:h-20 w-auto text-ink dark:text-white drop-shadow-lg" />
-        </div>
+          {isAutoRotating ? 'Pause Spin' : 'Auto Spin'}
+        </button>
+        <span className="text-[9px] font-mono uppercase tracking-widest text-muted/60">
+          Drag anywhere to rotate
+        </span>
       </div>
-
-      {/* Subtle instruction text */}
-      <p className="absolute bottom-2 text-[9px] font-mono uppercase tracking-widest text-muted/50 transition-opacity duration-500">
-        {isSwinging ? 'click to grab' : 'drag to rotate · click to release'}
-      </p>
     </section>
   );
 }

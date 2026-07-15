@@ -145,38 +145,4 @@
   }
 }
 
-/* -------------------------------------------------------
- * Dangling OOO Logo — Pendulum swing animation.
- * The logo swings like a pendulum from a fixed top pivot.
- * Uses transform-origin: top center for the swing arc.
- * ------------------------------------------------------- */
-@keyframes pendulum-swing {
-  0%   { transform: rotate(-12deg) rotateY(-8deg); }
-  25%  { transform: rotate(10deg) rotateY(6deg); }
-  50%  { transform: rotate(-8deg) rotateY(-5deg); }
-  75%  { transform: rotate(6deg) rotateY(4deg); }
-  100% { transform: rotate(-12deg) rotateY(-8deg); }
-}
 
-@keyframes pendulum-wire {
-  0%   { transform: rotate(-4deg); }
-  25%  { transform: rotate(3deg); }
-  50%  { transform: rotate(-2.5deg); }
-  75%  { transform: rotate(2deg); }
-  100% { transform: rotate(-4deg); }
-}
-
-@keyframes pendulum-shadow {
-  0%   { transform: translateX(-50%) scaleX(0.8); opacity: 0.3; }
-  25%  { transform: translateX(-40%) scaleX(1.1); opacity: 0.5; }
-  50%  { transform: translateX(-50%) scaleX(0.9); opacity: 0.35; }
-  75%  { transform: translateX(-60%) scaleX(1.05); opacity: 0.45; }
-  100% { transform: translateX(-50%) scaleX(0.8); opacity: 0.3; }
-}
-
-/* Disable pendulum for visitors who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .dangling-logo-container {
-    animation: none !important;
-  }
-}
