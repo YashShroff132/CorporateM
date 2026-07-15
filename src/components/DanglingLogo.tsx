@@ -144,6 +144,7 @@ export function DanglingLogo() {
 
     const handlePointerUp = () => {
       stateRef.current.isDragging = false;
+      setIsAutoRotating(true);
     };
 
     canvas.addEventListener('pointerdown', handlePointerDown);
@@ -220,19 +221,6 @@ export function DanglingLogo() {
         ref={canvasRef}
         className="w-full h-full cursor-grab active:cursor-grabbing outline-none touch-none"
       />
-
-      {/* Floating control helper text */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-3">
-        <button
-          onClick={() => setIsAutoRotating((prev) => !prev)}
-          className="px-2.5 py-0.5 border border-ink/15 dark:border-white/15 bg-paper/60 dark:bg-black/60 rounded text-[9px] font-mono uppercase tracking-widest text-ink dark:text-white hover:bg-ink/5 dark:hover:bg-white/10 transition-colors"
-        >
-          {isAutoRotating ? 'Pause Spin' : 'Auto Spin'}
-        </button>
-        <span className="text-[9px] font-mono uppercase tracking-widest text-muted/60">
-          Drag anywhere to rotate
-        </span>
-      </div>
     </section>
   );
 }
