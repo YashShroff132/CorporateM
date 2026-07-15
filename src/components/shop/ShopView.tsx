@@ -13,6 +13,7 @@ import { Pagination } from './Pagination';
 import { CollapsibleFilters } from './CollapsibleFilters';
 import { ShopLayout } from './ShopLayout';
 import { CouponPopup } from './CouponPopup';
+import { DanglingLogo } from '@/components/DanglingLogo';
 import type { Page, ShopProductView, ShopQuery } from '@/services/shop';
 
 export interface ShopViewProps {
@@ -66,6 +67,9 @@ export function ShopView({
           </div>
         </div>
       )}
+
+      {/* Interactive 3D Dangling OOO Logo — homepage only */}
+      {isHomepage && <DanglingLogo />}
 
       {/* Content wrapper - centered max-width layout */}
       <div className="mx-auto flex max-w-6xl flex-col gap-6 p-6">
