@@ -137,10 +137,13 @@ export function DanglingLogo() {
       state.prevPointerX = e.clientX;
       state.prevPointerY = e.clientY;
 
-      // Rotate group on drag (only horizontal rotation on touch to avoid scroll conflict)
+      // Rotate group on drag (freely on all devices)
       state.targetRotationY += deltaX * 0.007;
-      if (e.pointerType !== 'touch') {
-        state.targetRotationX += deltaY * 0.007;
+      state.targetRotationX += deltaY * 0.007;
+
+      // On mobile touch, also scroll the page vertically to prevent getting stuck
+      if (e.pointerType === 'touch') {
+        window.scrollBy(0, -deltaY);
       }
     };
 
@@ -225,7 +228,7 @@ export function DanglingLogo() {
       {/* 3D Canvas rendering region */}
       <canvas
         ref={canvasRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing outline-none touch-pan-y"
+        className="w-full h-full cursor-grab active:cursor-grabbing outline-none touch-none"
       />
     </section>
   );
