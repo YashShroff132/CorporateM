@@ -120,30 +120,53 @@ export function DanglingLogo() {
     group.rotation.y = -0.4;
 
     // --- Interaction Handlers ---
-    const handlePointerDown = (e: PointerEvent) => {
+    // Compute the bounding sphere of the full logo group in screen-space pixels.
+    // We project the 3D center of the group and its bounding-sphere radius so
+    // that ANY touch inside the circle (including gaps between rings and the
+    // corners of the logo area) activates rotation, not just the thin meshes.
+    const getLogoScreenBounds = () => {
+      // Compute bounding sphere of the group
+      const box = new THREE.Box3().setFromObject(group);
+      const center3D = new THREE.Vector3();
+      box.getCenter(center3D);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      // Use the larger of width/height as the bounding radius (add 15% padding)
+      const radius3D = Math.max(size.x, size.y) / 2 * 1.15;
+
+      // Project center to NDC then to canvas pixels
+      const centerNDC = center3D.clone().project(camera);
       const rect = canvas.getBoundingClientRect();
-      const mouse = new THREE.Vector2(
-        ((e.clientX - rect.left) / rect.width) * 2 - 1,
-        -((e.clientY - rect.top) / rect.height) * 2 + 1
-      );
+      const cx = (centerNDC.x + 1) / 2 * rect.width + rect.left;
+      const cy = (-centerNDC.y + 1) / 2 * rect.height + rect.top;
 
-      const raycaster = new THREE.Raycaster();
-      raycaster.setFromCamera(mouse, camera);
+      // Project a point offset by radius to get pixel radius
+      const edgeNDC = center3D.clone().add(new THREE.Vector3(radius3D, 0, 0)).project(camera);
+      const ex = (edgeNDC.x + 1) / 2 * rect.width + rect.left;
+      const pixelRadius = Math.abs(ex - cx);
 
-      // Check if the user touched the 3D interlocking OOO rings meshes
-      const intersects = raycaster.intersectObjects(group.children);
+      return { cx, cy, pixelRadius };
+    };
+
+    const handlePointerDown = (e: PointerEvent) => {
+      const { cx, cy, pixelRadius } = getLogoScreenBounds();
+
+      // Hit test: is this touch inside the logo's bounding circle?
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const withinLogo = Math.sqrt(dx * dx + dy * dy) <= pixelRadius;
 
       stateRef.current.prevPointerX = e.clientX;
       stateRef.current.prevPointerY = e.clientY;
 
-      if (intersects.length > 0) {
-        // Touched the 3D logo directly: rotate
+      if (withinLogo) {
+        // Touched anywhere within the logo visual footprint: rotate
         setIsAutoRotating(false);
         stateRef.current.isDragging = true;
         stateRef.current.isScrolling = false;
         canvas.setPointerCapture(e.pointerId);
       } else {
-        // Touched background: scroll page instead
+        // Touched outside logo: scroll page instead
         stateRef.current.isDragging = false;
         stateRef.current.isScrolling = true;
       }
