@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { SiteHeader } from '@/components/SiteHeader';
-import { SiteFooter } from '@/components/SiteFooter';
 import { Analytics } from '@/components/Analytics';
 import { getSiteOrigin } from '@/lib/site';
 
@@ -39,6 +37,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { StoreLayoutWrapper } from '@/components/StoreLayoutWrapper';
+
 export default function RootLayout({
   children,
 }: {
@@ -62,9 +62,9 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-paper text-ink antialiased">
-        <SiteHeader />
-        <div className="pt-[72px] md:pt-[76px]">{children}</div>
-        <SiteFooter />
+        <StoreLayoutWrapper>
+          {children}
+        </StoreLayoutWrapper>
         <Analytics />
       </body>
     </html>
