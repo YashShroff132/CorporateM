@@ -120,19 +120,21 @@ export function DanglingLogo() {
     group.rotation.y = -0.4;
 
     // --- Interaction Handlers ---
-    // Compute the bounding sphere of the full logo group in screen-space pixels.
-    // We project the 3D center of the group and its bounding-sphere radius so
-    // that ANY touch inside the circle (including gaps between rings and the
-    // corners of the logo area) activates rotation, not just the thin meshes.
+    // Compute the bounding box of the full logo group in screen-space pixels.
+    // We project the 3D center and size of the group to calculate screen-space
+    // half-width and half-height. This ensures the touch area perfectly matches
+    // the wide, short shape of the logo and prevents touch zones extending too
+    // far above or below it.
     const getLogoScreenBounds = () => {
-      // Compute bounding sphere of the group
       const box = new THREE.Box3().setFromObject(group);
       const center3D = new THREE.Vector3();
       box.getCenter(center3D);
       const size = new THREE.Vector3();
       box.getSize(size);
-      // Use the larger of width/height as the bounding radius (add 15% padding)
-      const radius3D = Math.max(size.x, size.y) / 2 * 1.15;
+
+      // Add a small 5% padding to the dimensions
+      const halfWidth3D = (size.x / 2) * 1.05;
+      const halfHeight3D = (size.y / 2) * 1.05;
 
       // Project center to NDC then to canvas pixels
       const centerNDC = center3D.clone().project(camera);
@@ -140,21 +142,26 @@ export function DanglingLogo() {
       const cx = (centerNDC.x + 1) / 2 * rect.width + rect.left;
       const cy = (-centerNDC.y + 1) / 2 * rect.height + rect.top;
 
-      // Project a point offset by radius to get pixel radius
-      const edgeNDC = center3D.clone().add(new THREE.Vector3(radius3D, 0, 0)).project(camera);
-      const ex = (edgeNDC.x + 1) / 2 * rect.width + rect.left;
-      const pixelRadius = Math.abs(ex - cx);
+      // Project edge points to get screen-space dimensions in pixels
+      const rightNDC = center3D.clone().add(new THREE.Vector3(halfWidth3D, 0, 0)).project(camera);
+      const topNDC = center3D.clone().add(new THREE.Vector3(0, halfHeight3D, 0)).project(camera);
 
-      return { cx, cy, pixelRadius };
+      const rx = (rightNDC.x + 1) / 2 * rect.width + rect.left;
+      const ty = (-topNDC.y + 1) / 2 * rect.height + rect.top;
+
+      const pixelHalfWidth = Math.abs(rx - cx);
+      const pixelHalfHeight = Math.abs(ty - cy);
+
+      return { cx, cy, pixelHalfWidth, pixelHalfHeight };
     };
 
     const handlePointerDown = (e: PointerEvent) => {
-      const { cx, cy, pixelRadius } = getLogoScreenBounds();
+      const { cx, cy, pixelHalfWidth, pixelHalfHeight } = getLogoScreenBounds();
 
-      // Hit test: is this touch inside the logo's bounding circle?
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      const withinLogo = Math.sqrt(dx * dx + dy * dy) <= pixelRadius;
+      // Hit test: is this touch inside the logo's bounding rectangle?
+      const dx = Math.abs(e.clientX - cx);
+      const dy = Math.abs(e.clientY - cy);
+      const withinLogo = dx <= pixelHalfWidth && dy <= pixelHalfHeight;
 
       stateRef.current.prevPointerX = e.clientX;
       stateRef.current.prevPointerY = e.clientY;
