@@ -151,14 +151,27 @@
  * Uses native <details>/<summary> — zero JS required.
  * ------------------------------------------------------- */
 .pdp-story-accordion {
-  border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  border: 1px solid rgba(var(--color-ink-rgb, 0, 0, 0), 0.12);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--color-paper) 98%, var(--color-ink));
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .pdp-story-accordion {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.pdp-story-accordion:hover {
+  border-color: rgba(var(--color-ink-rgb, 0, 0, 0), 0.25);
 }
 
 .pdp-story-summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.1rem 0;
+  padding: 1.1rem 1.25rem;
   cursor: pointer;
   list-style: none;
   user-select: none;
@@ -170,9 +183,9 @@
 .pdp-story-summary::marker { display: none; }
 
 .pdp-story-label {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -188,24 +201,30 @@ details[open] .pdp-story-chevron {
   transform: rotate(90deg);
 }
 
+/* Line separating summary and body when expanded */
+details[open] .pdp-story-summary {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+}
+
 .pdp-story-body {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  padding-bottom: 1.5rem;
+  padding: 1.25rem;
+  background: var(--color-paper);
   animation: storyFadeSlide 0.3s ease forwards;
 }
 
 .pdp-story-body p {
   font-size: 0.9375rem;
   line-height: 1.75;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .pdp-story-footer {
   font-size: 0.8125rem !important;
   font-style: italic;
-  opacity: 0.5 !important;
+  opacity: 0.65 !important;
 }
 
 @keyframes storyFadeSlide {
@@ -218,3 +237,4 @@ details[open] .pdp-story-chevron {
     transform: translateY(0);
   }
 }
+
