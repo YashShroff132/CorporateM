@@ -265,6 +265,25 @@ export default async function ProductPage({
             />
           </form>
 
+          {/* Story — collapsible accordion */}
+          <details className="pdp-story-accordion group border-t border-ink/10">
+            <summary className="pdp-story-summary">
+              <span className="pdp-story-label">Story</span>
+              <span className="pdp-story-chevron" aria-hidden="true">›</span>
+            </summary>
+            <div className="pdp-story-body">
+              <p>
+                Every office has that one Slack message that aged poorly. This design was born in a Monday standup that could have been an email, and honestly, should have been silence.
+              </p>
+              <p>
+                Out of Office isn&apos;t just a status. It&apos;s a philosophy. A quiet rebellion stitched into 100% cotton. Wear it to the all-hands. Wear it to your exit interview. Wear it while doing absolutely nothing productive (which, let&apos;s face it, is the most honest work you&apos;ll ever do).
+              </p>
+              <p className="pdp-story-footer">
+                More to come. Stay tuned or don&apos;t. We respect your boundaries.
+              </p>
+            </div>
+          </details>
+
           {/* Add to cart — gated on a complete, in-stock selection. */}
           <form action={addToCartAction} className="flex flex-col gap-2">
             {vm.selectedVariant !== undefined && (
@@ -286,25 +305,6 @@ export default async function ProductPage({
           </form>
         </div>
       </div>
-
-      {/* Story — collapsible accordion */}
-      <details className="pdp-story-accordion group border-t border-ink/10">
-        <summary className="pdp-story-summary">
-          <span className="pdp-story-label">Story</span>
-          <span className="pdp-story-chevron" aria-hidden="true">›</span>
-        </summary>
-        <div className="pdp-story-body">
-          <p>
-            Every office has that one Slack message that aged poorly. This design was born in a Monday standup that could have been an email — and honestly, should have been silence.
-          </p>
-          <p>
-            Out of Office isn&apos;t just a status. It&apos;s a philosophy. A quiet rebellion stitched into 100% cotton. Wear it to the all-hands. Wear it to your exit interview. Wear it while doing absolutely nothing productive — which, let&apos;s face it, is the most honest work you&apos;ll ever do.
-          </p>
-          <p className="pdp-story-footer">
-            More to come. Stay tuned — or don&apos;t. We respect your boundaries.
-          </p>
-        </div>
-      </details>
 
       {/* Size guide (Req 3.5) */}
       {vm.sizeGuide.length > 0 && (
