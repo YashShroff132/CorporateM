@@ -24,6 +24,7 @@ import { transitionOrder, type Order, type OrderStatus } from '@/services/order'
 import { config } from '@/services/config';
 import { isErr } from '@/lib/result';
 import { makePaise, type Paise } from '@/lib/money';
+import { sendMetaCapiPurchase } from '@/server/meta-capi';
 import { pincodeDirectory } from './pincode-directory';
 
 /** Shared Payment_Service bound to the real Razorpay HTTP client + config. */
@@ -201,10 +202,18 @@ export async function verifyAndMarkPaid(callback: {
         paymentMethod: details.value.paymentMethod,
       },
     });
+
     // Fire the order-confirmation notification on the PAID transition (Req 18.1,
     // 10.3). Fire-and-forget: it must never block the HTTP response or throw
     // into the payment flow.
     void dispatchOrderConfirmation(row.id);
+    // Dispatch Meta Conversions API (CAPI) server-side purchase event for 100% accurate ad tracking
+    void sendMetaCapiPurchase({
+      orderId: row.id,
+      amountPaise: row.total,
+      email: domainOrder.addressSnapshot.email,
+      phone: domainOrder.addressSnapshot.phone,
+    });
     // Route fulfillment on the PAID transition (Req 16.8). Dormant unless the
     // `pod` flag is enabled; makes no POD network call while disabled (Req 16.6).
     void dispatchFulfillmentRouting(row.id);
