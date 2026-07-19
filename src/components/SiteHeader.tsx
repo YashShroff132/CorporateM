@@ -18,7 +18,7 @@ import { OOOLogo } from './OOOLogo';
 
 const NAV_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: '/manifesto', label: 'Story' },
-  { href: '/shop', label: 'Shop' },
+  { href: '/shop#catalog', label: 'Shop' },
   { href: '/collections', label: 'Collections' },
   { href: '/cart', label: 'Cart' },
 ];

@@ -36,6 +36,23 @@ export type NotificationKind = 'ORDER_CONFIRMATION' | 'SHIPMENT';
 /** The transport channel a message is delivered over. */
 export type NotificationChannel = 'EMAIL' | 'WHATSAPP';
 
+export interface NotifiableOrderItem {
+  readonly slogan: string;
+  readonly color: string;
+  readonly size: string;
+  readonly fit: string;
+  readonly quantity: number;
+  readonly lineTotal: number;
+}
+
+export interface NotifiableOrderTotals {
+  readonly subtotal: number;
+  readonly discount: number;
+  readonly shipping: number;
+  readonly tax: number;
+  readonly total: number;
+}
+
 /**
  * The minimal projection of an order the Notification_Service needs. Kept
  * decoupled from the Order_Service `Order` type so notifications can be
@@ -51,6 +68,8 @@ export interface NotifiableOrder {
   readonly trackingId?: string | null;
   /** Tracking URL, present once the order has shipped (Req 18.2). */
   readonly trackingUrl?: string | null;
+  readonly items?: readonly NotifiableOrderItem[];
+  readonly totals?: NotifiableOrderTotals;
 }
 
 /** A fully-resolved message ready to hand to a channel sender. */
@@ -63,6 +82,8 @@ export interface NotificationMessage {
   /** For shipment messages, the tracking info to relay (Req 18.2). */
   readonly trackingId?: string;
   readonly trackingUrl?: string;
+  readonly items?: readonly NotifiableOrderItem[];
+  readonly totals?: NotifiableOrderTotals;
 }
 
 // ---------------------------------------------------------------------------
@@ -263,6 +284,8 @@ export function createNotificationService(
         to: order.email,
         trackingId,
         trackingUrl,
+        items: order.items,
+        totals: order.totals,
       };
       outcomes.push(
         await deliverWithRetry(senders.email, message, maxRetries, failureSink),
@@ -279,6 +302,8 @@ export function createNotificationService(
         to: order.phone,
         trackingId,
         trackingUrl,
+        items: order.items,
+        totals: order.totals,
       };
       outcomes.push(
         await deliverWithRetry(

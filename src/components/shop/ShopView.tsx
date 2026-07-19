@@ -65,15 +65,16 @@ export function ShopView({
               Currently unavailable<br />& permanently out of office.
             </h2>
           </div>
+          {/* Floating 3D Logo Card */}
+          <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 z-20">
+            <DanglingLogo />
+          </div>
         </div>
       )}
 
-      {/* Interactive 3D Dangling OOO Logo — homepage only */}
-      {isHomepage && <DanglingLogo />}
-
       {/* Content wrapper - centered max-width layout */}
       <div className="mx-auto flex max-w-6xl flex-col gap-6 p-6">
-        <header className="flex flex-col gap-2">
+        <header id="catalog" className="flex flex-col gap-2">
           {heading && <h1 className="text-3xl font-black tracking-tight">{heading}</h1>}
           {intro && <p className="text-muted">{intro}</p>}
           <p className="text-sm text-muted">

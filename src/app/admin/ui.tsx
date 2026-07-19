@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 import { isFlagEnabled } from '@/server/security/feature-flags';
 
 export const inputClass =
-  'w-full rounded border border-ink/20 bg-white px-3 py-2 text-sm text-ink outline-none focus:border-corporate focus:ring-1 focus:ring-corporate';
+  'w-full rounded border border-ink/20 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-ink outline-none focus:border-corporate focus:ring-1 focus:ring-corporate';
 
 export const labelClass =
   'block text-xs font-bold uppercase tracking-wide text-muted';
@@ -19,7 +19,7 @@ export const primaryButtonClass =
   'inline-flex items-center justify-center rounded bg-corporate px-4 py-2 text-sm font-bold uppercase tracking-wide text-white hover:bg-ink';
 
 export const secondaryButtonClass =
-  'inline-flex items-center justify-center rounded border border-ink/20 bg-white px-4 py-2 text-sm font-bold uppercase tracking-wide text-ink hover:border-ink';
+  'inline-flex items-center justify-center rounded border border-ink/20 bg-white dark:bg-zinc-800 px-4 py-2 text-sm font-bold uppercase tracking-wide text-ink hover:border-ink';
 
 export const dangerButtonClass =
   'inline-flex items-center justify-center rounded border border-stamp-red px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-stamp-red hover:bg-stamp-red hover:text-white';
@@ -74,7 +74,7 @@ export function AdminShell({
 }) {
   return (
     <div className="min-h-screen bg-paper text-ink">
-      <header className="border-b border-ink/10 bg-white">
+      <header className="border-b border-ink/10 bg-white dark:bg-zinc-900">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
           <div className="flex items-center gap-6">
             <Link href="/admin" className="text-base font-black uppercase tracking-tight">

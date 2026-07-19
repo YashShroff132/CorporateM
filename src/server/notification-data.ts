@@ -33,9 +33,15 @@ import {
   type Notification_Service,
 } from '@/services/notification';
 import { config } from '@/services/config';
+import { toINRString, makePaise } from '@/lib/money';
 
 /** Resend transactional-email HTTP endpoint. */
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
+
+function formatINR(paise: number): string {
+  const val = makePaise(paise);
+  return `₹${val.ok ? toINRString(val.value) : '0.00'}`;
+}
 
 /** Human-readable subject + body for a message, kept simple and text-only. */
 function renderEmail(message: NotificationMessage): {
@@ -43,14 +49,38 @@ function renderEmail(message: NotificationMessage): {
   text: string;
 } {
   if (message.kind === 'ORDER_CONFIRMATION') {
+    const lines = [
+      'Thanks for your order!',
+      '',
+      `Your order ${message.orderId} is confirmed and payment received.`,
+      '',
+    ];
+
+    if (message.items && message.items.length > 0) {
+      lines.push('ITEMS ORDERED:');
+      for (const item of message.items) {
+        lines.push(`- "${item.slogan}" (${item.color} / ${item.size} / ${item.fit}) x ${item.quantity} — ${formatINR(item.lineTotal)}`);
+      }
+      lines.push('');
+    }
+
+    if (message.totals) {
+      lines.push('SUMMARY:');
+      lines.push(`Subtotal: ${formatINR(message.totals.subtotal)}`);
+      if (message.totals.discount > 0) {
+        lines.push(`Discount: -${formatINR(message.totals.discount)}`);
+      }
+      lines.push(`Shipping: ${formatINR(message.totals.shipping)}`);
+      lines.push(`Tax (GST): ${formatINR(message.totals.tax)}`);
+      lines.push(`Total: ${formatINR(message.totals.total)}`);
+      lines.push('');
+    }
+
+    lines.push('We will email you tracking details once it ships.');
+
     return {
       subject: `Order confirmed — ${message.orderId}`,
-      text: [
-        'Thanks for your order!',
-        '',
-        `Your order ${message.orderId} is confirmed and payment received.`,
-        'We will email you tracking details once it ships.',
-      ].join('\n'),
+      text: lines.join('\n'),
     };
   }
   // SHIPMENT: include the recorded tracking id and URL (Req 18.2, 17.5).
@@ -215,15 +245,40 @@ async function loadNotifiableOrder(orderId: string): Promise<NotifiableOrder | n
         addressSnapshot: true,
         trackingId: true,
         trackingUrl: true,
+        subtotal: true,
+        discount: true,
+        shipping: true,
+        tax: true,
+        total: true,
+        lineSnapshots: true,
       },
     });
     if (order === null) return null;
+
+    const rawLines = (Array.isArray(order.lineSnapshots) ? order.lineSnapshots : []) as any[];
+    const items = rawLines.map((l) => ({
+      slogan: typeof l.slogan === 'string' ? l.slogan : '',
+      color: typeof l.color === 'string' ? l.color : '',
+      size: typeof l.size === 'string' ? l.size : '',
+      fit: typeof l.fit === 'string' ? l.fit : '',
+      quantity: typeof l.quantity === 'number' ? l.quantity : 1,
+      lineTotal: typeof l.lineTotal === 'number' ? l.lineTotal : 0,
+    }));
+
     return {
       id: order.id,
       email: emailFromAddressSnapshot(order.addressSnapshot),
       phone: phoneFromAddressSnapshot(order.addressSnapshot),
       trackingId: order.trackingId,
       trackingUrl: order.trackingUrl,
+      items,
+      totals: {
+        subtotal: order.subtotal,
+        discount: order.discount,
+        shipping: order.shipping,
+        tax: order.tax,
+        total: order.total,
+      },
     };
   } catch {
     return null;
