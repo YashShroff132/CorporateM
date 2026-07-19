@@ -124,11 +124,12 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
       {orders.length === 0 ? (
         <Notice>No orders match the current filter (or the database is not connected).</Notice>
       ) : (
-        <div className="overflow-x-auto rounded border border-ink/10 bg-white">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-ink/10 bg-paper text-xs uppercase tracking-wide text-muted">
+            <thead className="border-b border-slate-200 bg-slate-100 text-xs font-bold uppercase tracking-wider text-slate-700">
               <tr>
-                <th className="px-4 py-3">Order</th>
+                <th className="px-4 py-3">Order ID</th>
+                <th className="px-4 py-3">Razorpay Payment ID</th>
                 <th className="px-4 py-3">Created</th>
                 <th className="px-4 py-3">Contact</th>
                 <th className="px-4 py-3">Total (₹)</th>
@@ -136,26 +137,42 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
                 <th className="px-4 py-3">Mark shipped</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-100 bg-white text-slate-900">
               {orders.map((o) => {
                 const canShip = o.status === 'PAID' || o.status === 'FULFILLING';
                 return (
-                  <tr key={o.id} className="border-b border-ink/5 align-top last:border-0">
-                    <td className="px-4 py-3 font-mono text-xs">{o.id}</td>
-                    <td className="px-4 py-3">{o.createdAt.toISOString().slice(0, 10)}</td>
-                    <td className="px-4 py-3">
-                      <div>{o.email ?? '—'}</div>
-                      <div className="text-xs text-muted">{o.phone ?? ''}</div>
+                  <tr key={o.id} className="align-top hover:bg-slate-50/80 transition-colors">
+                    <td className="px-4 py-3 font-mono text-xs font-semibold text-slate-900">
+                      {o.id}
                     </td>
-                    <td className="px-4 py-3">{formatInr(o.total)}</td>
+                    <td className="px-4 py-3 font-mono text-xs">
+                      {o.razorpayPaymentId ? (
+                        <div className="font-bold text-blue-700">{o.razorpayPaymentId}</div>
+                      ) : (
+                        <div className="text-slate-400 font-normal">Pending payment</div>
+                      )}
+                      {o.razorpayOrderId && (
+                        <div className="text-[10px] text-slate-500 mt-0.5">{o.razorpayOrderId}</div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-slate-700">
+                      {o.createdAt.toISOString().slice(0, 10)}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-slate-900">{o.email ?? '—'}</div>
+                      <div className="text-xs text-slate-500">{o.phone ?? ''}</div>
+                    </td>
+                    <td className="px-4 py-3 font-bold text-slate-900">
+                      ₹{formatInr(o.total)}
+                    </td>
                     <td className="px-4 py-3">
                       <span
-                        className={`inline-block rounded px-2 py-1 text-xs font-bold ${STATUS_STYLES[o.status] ?? ''}`}
+                        className={`inline-block rounded px-2.5 py-1 text-xs font-bold ${STATUS_STYLES[o.status] ?? 'bg-slate-100 text-slate-800'}`}
                       >
                         {o.status}
                       </span>
                       {o.trackingId !== null && (
-                        <div className="mt-1 text-xs text-muted">Tracking: {o.trackingId}</div>
+                        <div className="mt-1 text-xs text-slate-500">Tracking: {o.trackingId}</div>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -180,7 +197,7 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
                           </button>
                         </form>
                       ) : (
-                        <span className="text-xs text-muted">
+                        <span className="text-xs text-slate-400">
                           {o.status === 'SHIPPED' || o.status === 'DELIVERED'
                             ? 'Shipped'
                             : 'Not shippable'}

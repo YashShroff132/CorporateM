@@ -107,6 +107,8 @@ export interface AdminOrderRow {
   readonly createdAt: Date;
   readonly email: string | null;
   readonly phone: string | null;
+  readonly razorpayPaymentId: string | null;
+  readonly razorpayOrderId: string | null;
   readonly trackingId: string | null;
   readonly trackingUrl: string | null;
 }
@@ -165,6 +167,8 @@ export async function listOrdersForAdmin(
         total: true,
         createdAt: true,
         addressSnapshot: true,
+        razorpayPaymentId: true,
+        razorpayOrderId: true,
         trackingId: true,
         trackingUrl: true,
       },
@@ -179,6 +183,8 @@ export async function listOrdersForAdmin(
         createdAt: o.createdAt,
         email: contact.email,
         phone: contact.phone,
+        razorpayPaymentId: o.razorpayPaymentId,
+        razorpayOrderId: o.razorpayOrderId,
         trackingId: o.trackingId,
         trackingUrl: o.trackingUrl,
       };

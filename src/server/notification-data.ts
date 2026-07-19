@@ -393,7 +393,7 @@ export async function sendMerchantOrderAlert(orderId: string): Promise<void> {
       .filter((line) => line !== null)
       .join('\n');
 
-    const merchantEmail = (process.env.SUPPORT_EMAIL || process.env.FROM_EMAIL || 'support@oofo.tech').trim();
+    const merchantEmail = (process.env.MERCHANT_NOTIFICATION_EMAIL || process.env.SUPPORT_EMAIL || process.env.FROM_EMAIL || 'vishalmandhane12345@gmail.com').trim();
     await sendDirectEmail(merchantEmail, `[NEW PAID ORDER] #${order.id} — ${formatINR(order.total)}`, body);
   } catch {
     // Non-blocking
