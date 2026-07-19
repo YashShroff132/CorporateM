@@ -30,9 +30,12 @@ interface PostHogLike {
   capture: (event: string, properties?: AnalyticsProps) => void;
 }
 
+type Fbq = (command: string, eventName: string, params?: AnalyticsProps) => void;
+
 interface AnalyticsWindow {
   gtag?: Gtag;
   posthog?: PostHogLike;
+  fbq?: Fbq;
 }
 
 /** Resolve the browser window with the analytics globals, or `undefined`. */
@@ -64,6 +67,27 @@ function sendToPostHog(win: AnalyticsWindow, name: string, props: AnalyticsProps
   }
 }
 
+/** Send to Meta Pixel through `fbq` if present. Never throws. */
+function sendToMetaPixel(win: AnalyticsWindow, name: string, props: AnalyticsProps): void {
+  try {
+    if (typeof win.fbq === 'function') {
+      let metaEvent = '';
+      if (name === 'product_view') metaEvent = 'ViewContent';
+      else if (name === 'add_to_cart') metaEvent = 'AddToCart';
+      else if (name === 'begin_checkout') metaEvent = 'InitiateCheckout';
+      else if (name === 'payment_success') metaEvent = 'Purchase';
+
+      if (metaEvent.length > 0) {
+        win.fbq('track', metaEvent, props);
+      } else {
+        win.fbq('trackCustom', name, props);
+      }
+    }
+  } catch {
+    // Swallow: analytics must never affect user flow.
+  }
+}
+
 /**
  * Track a funnel event, dispatching to every configured provider. Fully
  * non-blocking and exception-safe: any failure (missing global, provider error,
@@ -77,6 +101,7 @@ export function trackEvent(name: AnalyticsEvent | string, props: AnalyticsProps 
     if (win === undefined) return; // Server / SSR: no-op.
     sendToGa4(win, name, props);
     sendToPostHog(win, name, props);
+    sendToMetaPixel(win, name, props);
   } catch {
     // Defense in depth — never let analytics surface an error to the caller.
   }

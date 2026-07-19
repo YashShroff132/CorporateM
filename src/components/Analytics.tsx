@@ -22,6 +22,7 @@ const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID?.trim() ?? '';
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim() ?? '';
 const POSTHOG_HOST =
   process.env.NEXT_PUBLIC_POSTHOG_HOST?.trim() ?? 'https://us.i.posthog.com';
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() ?? '';
 
 function Ga4Scripts({ id }: { id: string }) {
   return (
@@ -51,6 +52,23 @@ posthog.init('${apiKey}',{api_host:'${host}'});`}
   );
 }
 
+function MetaPixelScript({ id }: { id: string }) {
+  return (
+    <Script id="meta-pixel-init" strategy="afterInteractive">
+      {`!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '${id}');
+fbq('track', 'PageView');`}
+    </Script>
+  );
+}
+
 /**
  * Render whatever analytics bootstraps are configured. Returns `null` when no
  * provider keys are set so nothing is injected (Req 19.8, graceful degradation).
@@ -58,13 +76,15 @@ posthog.init('${apiKey}',{api_host:'${host}'});`}
 export function Analytics() {
   const hasGa4 = GA4_ID.length > 0;
   const hasPostHog = POSTHOG_KEY.length > 0;
+  const hasMetaPixel = META_PIXEL_ID.length > 0;
 
-  if (!hasGa4 && !hasPostHog) return null;
+  if (!hasGa4 && !hasPostHog && !hasMetaPixel) return null;
 
   return (
     <>
       {hasGa4 && <Ga4Scripts id={GA4_ID} />}
       {hasPostHog && <PostHogScript apiKey={POSTHOG_KEY} host={POSTHOG_HOST} />}
+      {hasMetaPixel && <MetaPixelScript id={META_PIXEL_ID} />}
     </>
   );
 }
