@@ -50,14 +50,14 @@ export function ShopView({
 
       {/* Hero Banner Image (Rendered only on main catalog views) */}
       {isHomepage && (
-        <div className="relative w-full h-[360px] md:h-[500px] overflow-hidden border-b border-ink/10 mb-6 bg-ink/5 -mt-[102px] md:-mt-[106px]">
+        <div className="relative w-full h-[480px] sm:h-[620px] md:h-[750px] overflow-hidden border-b border-ink/10 mb-6 bg-ink/5 -mt-[102px] md:-mt-[106px]">
           <img
             src="/hero-streetwear.png"
             alt="Out of Office Streetwear Collection"
             className="w-full h-full object-cover object-center opacity-95 transition-transform duration-10000 ease-out hover:scale-105"
           />
           {/* Minimalist Overlay banner text */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-10 z-20 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-10 pb-28 md:pb-32 z-20 pointer-events-none">
             <span className="text-[10px] font-mono uppercase tracking-widest text-white/90 mb-1.5 font-bold">
               Out of Office // Always On Style
             </span>
@@ -65,8 +65,8 @@ export function ShopView({
               Permanently out of office.
             </h2>
           </div>
-          {/* 3D Interactive Logo Capsule floating seamlessly over bottom right of image */}
-          <div className="absolute bottom-4 right-4 md:bottom-6 md:right-8 z-30">
+          {/* 3D Interactive Logo Capsule dead-centered over the bottom of the hero image */}
+          <div className="absolute bottom-5 sm:bottom-8 left-1/2 -translate-x-1/2 z-30">
             <DanglingLogo />
           </div>
         </div>
