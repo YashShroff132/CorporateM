@@ -13,6 +13,22 @@ export const dynamic = 'force-dynamic';
  *   3. Triggers the order state transition to SHIPPED.
  *   4. Automatically fires the shipment confirmation email to the customer.
  */
+interface QikinkPayload {
+  readonly order_id?: string;
+  readonly orderId?: string;
+  readonly receipt?: string;
+  readonly status?: string;
+  readonly awb?: string;
+  readonly awb_number?: string;
+  readonly tracking_number?: string;
+  readonly trackingId?: string;
+  readonly carrier?: string;
+  readonly shipping_partner?: string;
+  readonly tracking_url?: string;
+  readonly tracking_link?: string;
+  readonly trackingUrl?: string;
+}
+
 export async function POST(request: Request): Promise<NextResponse> {
   const webhookToken = (process.env.QIKINK_WEBHOOK_TOKEN ?? '').trim();
   if (webhookToken.length > 0) {
@@ -24,9 +40,9 @@ export async function POST(request: Request): Promise<NextResponse> {
     }
   }
 
-  let body: any;
+  let body: QikinkPayload;
   try {
-    body = await request.json();
+    body = (await request.json()) as QikinkPayload;
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }

@@ -255,7 +255,7 @@ async function loadNotifiableOrder(orderId: string): Promise<NotifiableOrder | n
     });
     if (order === null) return null;
 
-    const rawLines = (Array.isArray(order.lineSnapshots) ? order.lineSnapshots : []) as any[];
+    const rawLines = (Array.isArray(order.lineSnapshots) ? order.lineSnapshots : []) as Record<string, unknown>[];
     const items = rawLines.map((l) => ({
       slogan: typeof l.slogan === 'string' ? l.slogan : '',
       color: typeof l.color === 'string' ? l.color : '',
