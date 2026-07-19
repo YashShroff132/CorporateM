@@ -329,6 +329,7 @@ export async function sendMerchantOrderAlert(orderId: string): Promise<void> {
         addressSnapshot: true,
         lineSnapshots: true,
         paymentMethod: true,
+        razorpayPaymentId: true,
       },
     });
     if (!order) return;
@@ -338,7 +339,7 @@ export async function sendMerchantOrderAlert(orderId: string): Promise<void> {
     const email = typeof snapshot.email === 'string' ? snapshot.email : 'N/A';
     const phone = typeof snapshot.phone === 'string' ? snapshot.phone : 'N/A';
     const line1 = typeof snapshot.line1 === 'string' ? snapshot.line1 : '';
-    const line2 = typeof snapshot.line2 === 'string' ? snapshot.line2 : '';
+    const line2 = typeof snapshot.line2 === 'string' ? ` ${snapshot.line2}` : '';
     const city = typeof snapshot.city === 'string' ? snapshot.city : '';
     const state = typeof snapshot.state === 'string' ? snapshot.state : '';
     const pincode = typeof snapshot.pincode === 'string' ? snapshot.pincode : '';
@@ -347,54 +348,36 @@ export async function sendMerchantOrderAlert(orderId: string): Promise<void> {
     const itemsText = rawLines
       .map(
         (l, i) =>
-          `${i + 1}. "${l.slogan ?? ''}"\n   Color: ${l.color ?? ''}\n   Size: ${l.size ?? ''}\n   Fit: ${l.fit ?? ''}\n   Quantity: ${l.quantity ?? 1}\n   Price: ${formatINR(Number(l.lineTotal ?? 0))}`,
+          `Item ${i + 1}: "${l.slogan ?? 'Tee'}" | Color: ${String(l.color ?? '').toUpperCase()} | Size: ${l.size ?? ''} | Fit: ${l.fit ?? ''} | Qty: ${l.quantity ?? 1} | Line Total: ${formatINR(Number(l.lineTotal ?? 0))}`,
       )
-      .join('\n\n');
-
-    const body = [
-      '==================================================',
-      'NEW PAID ORDER RECEIVED (QIKINK MANUAL FULFILLMENT)',
-      '==================================================',
-      '',
-      `ORDER ID: ${order.id}`,
-      `TOTAL PAID: ${formatINR(order.total)}`,
-      `PAYMENT METHOD: ${order.paymentMethod ?? 'Razorpay Online'}`,
-      '',
-      '--------------------------------------------------',
-      '1. CUSTOMER & SHIPPING ADDRESS DETAILS',
-      '--------------------------------------------------',
-      `Customer Name:  ${name}`,
-      `Customer Email: ${email}`,
-      `Customer Phone: ${phone}`,
-      '',
-      'Delivery Address:',
-      `${name}`,
-      `${line1}`,
-      line2.length > 0 ? line2 : null,
-      `${city}, ${state} - ${pincode}`,
-      'India',
-      '',
-      '--------------------------------------------------',
-      '2. ITEMS TO FULFILL ON QIKINK',
-      '--------------------------------------------------',
-      itemsText,
-      '',
-      '--------------------------------------------------',
-      '3. FINANCIAL SUMMARY',
-      '--------------------------------------------------',
-      `Subtotal: ${formatINR(order.subtotal)}`,
-      `Discount: -${formatINR(order.discount)}`,
-      `Shipping: ${formatINR(order.shipping)}`,
-      `GST Tax: ${formatINR(order.tax)}`,
-      `Total Paid: ${formatINR(order.total)}`,
-      '',
-      '==================================================',
-    ]
-      .filter((line) => line !== null)
       .join('\n');
 
+    const body = [
+      `ORDER ID: ${order.id}`,
+      `PAYMENT ID: ${order.razorpayPaymentId || 'N/A'}`,
+      `TOTAL PAID: ${formatINR(order.total)}`,
+      `--------------------------------------------------`,
+      `CUSTOMER SHIPPING ADDRESS:`,
+      `Name: ${name}`,
+      `Address: ${line1}${line2}`,
+      `City/State/Pin: ${city}, ${state} - ${pincode}`,
+      `Phone: ${phone}`,
+      `Email: ${email}`,
+      `--------------------------------------------------`,
+      `ITEMS TO PRINT & SHIP:`,
+      itemsText,
+    ].join('\n');
+
+    const subject = `[NEW PAID ORDER] #${order.id} — ${formatINR(order.total)}`;
+
+    // 1. Send to Merchant (vishalmandhane12345@gmail.com)
     const merchantEmail = (process.env.MERCHANT_NOTIFICATION_EMAIL || process.env.SUPPORT_EMAIL || process.env.FROM_EMAIL || 'vishalmandhane12345@gmail.com').trim();
-    await sendDirectEmail(merchantEmail, `[NEW PAID ORDER] #${order.id} — ${formatINR(order.total)}`, body);
+    await sendDirectEmail(merchantEmail, subject, body);
+
+    // 2. Also send to Customer (if valid email present)
+    if (email.length > 0 && email !== 'N/A' && email !== merchantEmail) {
+      await sendDirectEmail(email, `Order Confirmation — #${order.id} | Out of Office`, `Thanks for your order!\n\n${body}\n\nWe will email you tracking details once your order ships.`);
+    }
   } catch {
     // Non-blocking
   }
