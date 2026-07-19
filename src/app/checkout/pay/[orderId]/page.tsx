@@ -105,6 +105,27 @@ export default async function PayPage({ params }: PayPageProps) {
           JavaScript is required to complete payment with Razorpay.
         </p>
       </noscript>
+
+      <div className="mt-4 border-t border-ink/10 dark:border-white/10 pt-6 flex flex-col gap-2 font-mono text-xs">
+        <p className="text-muted">
+          Need to make changes or looking to browse more?
+        </p>
+        <div className="flex gap-4">
+          <Link
+            href="/cart"
+            className="font-bold uppercase tracking-wider text-ink dark:text-white hover:text-stamp-red dark:hover:text-highlighter transition-colors"
+          >
+            ← Return to Cart
+          </Link>
+          <span className="text-muted/30">|</span>
+          <Link
+            href="/shop"
+            className="font-bold uppercase tracking-wider text-ink dark:text-white hover:text-stamp-red dark:hover:text-highlighter transition-colors"
+          >
+            Go to Shop
+          </Link>
+        </div>
+      </div>
     </main>
   );
 }

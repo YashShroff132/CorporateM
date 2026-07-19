@@ -66,11 +66,11 @@ describe('autofillPincode (Req 7.2, 7.10)', () => {
     }
   });
 
-  it('rejects a well-formed but non-serviceable pincode as unrecognized', () => {
+  it('accepts a well-formed but non-seeded pincode with empty city and state', () => {
     const result = autofillPincode('999999', directory);
-    expect(isErr(result)).toBe(true);
-    if (isErr(result)) {
-      expect(result.error.kind).toBe('UNRECOGNIZED_PINCODE');
+    expect(isOk(result)).toBe(true);
+    if (isOk(result)) {
+      expect(result.value).toEqual({ city: '', state: '' });
     }
   });
 

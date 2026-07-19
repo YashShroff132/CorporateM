@@ -18,7 +18,6 @@ import Link from 'next/link';
 import { toINRString, makePaise } from '@/lib/money';
 import { readCartSessionId } from '@/server/cart-session';
 import { priceGuestCheckout } from '@/server/checkout-data';
-import { SEED_PINCODES } from '@/server/pincode-directory';
 import type { RawSearchParams } from '@/server/search-params';
 import { TrackOnMount } from '@/components/TrackOnMount';
 import { submitCheckoutAction } from './actions';
@@ -70,8 +69,6 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
   const isInvalid = (f: string): boolean => invalidFields.includes(f);
 
   const { totals } = checkout;
-  // Sample serviceable pincodes to guide the shopper (launch directory).
-  const samplePincodes = Object.keys(SEED_PINCODES).slice(0, 5).join(', ');
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col gap-8 p-6">
@@ -173,6 +170,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 <span className="font-bold uppercase tracking-wide">City</span>
                 <input
                   name="city"
+                  required
                   defaultValue={val('city')}
                   className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
                 />
@@ -182,6 +180,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 <span className="font-bold uppercase tracking-wide">State</span>
                 <input
                   name="state"
+                  required
                   defaultValue={val('state')}
                   className="border border-ink/20 dark:border-white/20 bg-transparent text-ink px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-ink dark:focus:ring-white"
                 />
@@ -201,17 +200,14 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
               />
               {error === 'pincode' && (
                 <span className="text-xs text-stamp-red">
-                  This pincode is not recognized or not serviceable.
+                  Enter a valid 6-digit pincode.
                 </span>
               )}
-              <span className="text-xs text-muted">
-                Serviceable examples: {samplePincodes}
-              </span>
             </label>
 
             {error === 'address' && (
               <p role="alert" className="text-xs text-stamp-red">
-                Please provide your name and address line 1.
+                Please provide your name, address, city, and state.
               </p>
             )}
           </fieldset>

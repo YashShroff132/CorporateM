@@ -86,7 +86,7 @@ export async function submitCheckoutAction(formData: FormData): Promise<void> {
   }
 
   // Basic presence checks for the remaining address fields.
-  if (name.length === 0 || line1.length === 0) {
+  if (name.length === 0 || line1.length === 0 || city.length === 0 || state.length === 0) {
     backToCheckout({ ...retained, error: 'address' });
   }
 
@@ -125,8 +125,8 @@ export async function submitCheckoutAction(formData: FormData): Promise<void> {
   };
 
   // Persist the order (CREATED) with snapshots (Req 10.4, 7.7).
-  const resolvedCity = location.ok ? location.value.city : city;
-  const resolvedState = location.ok ? location.value.state : state;
+  const resolvedCity = location.ok && location.value.city ? location.value.city : city;
+  const resolvedState = location.ok && location.value.state ? location.value.state : state;
   const orderId = await createOrderForCheckout({
     contact: contact.ok ? contact.value : { email, phone },
     address: {

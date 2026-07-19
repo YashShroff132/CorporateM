@@ -119,10 +119,9 @@ export function autofillPincode(
 
   const location = directory.lookup(parsed.data);
   if (location === undefined) {
-    return err({
-      kind: 'UNRECOGNIZED_PINCODE',
-      message: 'This pincode is not recognized or not serviceable.',
-    });
+    // Make all validly formatted 6-digit Indian pincodes serviceable.
+    // Return empty city/state so the user can fill them in manually.
+    return ok({ city: '', state: '' });
   }
 
   return ok({ city: location.city, state: location.state });
