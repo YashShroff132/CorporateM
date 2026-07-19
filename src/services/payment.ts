@@ -71,6 +71,12 @@ export interface PayableOrder {
   readonly currency?: string;
 }
 
+export interface RazorpayPrefill {
+  readonly name?: string;
+  readonly email?: string;
+  readonly contact?: string;
+}
+
 /** A reference to a created Razorpay order (Req 8.1). */
 export interface RazorpayOrderRef {
   /** Razorpay's order id (e.g. `order_XXXXXXXX`). */
@@ -81,6 +87,7 @@ export interface RazorpayOrderRef {
   readonly currency: string;
   /** The local order id echoed back as the receipt for reconciliation. */
   readonly receipt: string;
+  readonly prefill?: RazorpayPrefill;
 }
 
 /**
@@ -117,6 +124,7 @@ export interface RazorpayCheckoutOptions {
   readonly receipt: string;
   /** UPI-first ordered list of enabled payment methods (Req 8.2). */
   readonly methodOrder: readonly PaymentMethodOption[];
+  readonly prefill?: RazorpayPrefill;
 }
 
 /** Discriminated error type for payment operations. */
@@ -390,6 +398,7 @@ export function createPaymentService(
       orderId: ref.razorpayOrderId,
       receipt: ref.receipt,
       methodOrder: PAYMENT_METHOD_ORDER,
+      prefill: ref.prefill,
     });
   }
 

@@ -25,6 +25,11 @@ export interface CheckoutButtonOptions {
   readonly currency: string;
   readonly orderId: string;
   readonly receipt: string;
+  readonly prefill?: {
+    readonly name?: string;
+    readonly email?: string;
+    readonly contact?: string;
+  };
 }
 
 interface RazorpaySuccess {
@@ -122,6 +127,11 @@ export function RazorpayCheckoutButton({
       order_id: options.orderId,
       name: 'Out of Office',
       description: `Order ${options.receipt}`,
+      prefill: options.prefill ? {
+        name: options.prefill.name,
+        email: options.prefill.email,
+        contact: options.prefill.contact,
+      } : undefined,
       handler: (response: RazorpaySuccess) => {
         void verify(response);
       },

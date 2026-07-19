@@ -285,6 +285,121 @@ async function loadNotifiableOrder(orderId: string): Promise<NotifiableOrder | n
   }
 }
 
+/** Direct email delivery helper for merchant alerts and transactional messages. */
+export async function sendDirectEmail(to: string, subject: string, text: string): Promise<boolean> {
+  const apiKey = (process.env.RESEND_API_KEY ?? '').trim();
+  const fromEmail = (process.env.FROM_EMAIL ?? '').trim();
+  if (apiKey.length === 0 || fromEmail.length === 0) {
+    // eslint-disable-next-line no-console
+    console.info(`[notification] (dev) Direct email to ${to}: ${subject}\n${text}`);
+    return true;
+  }
+  try {
+    const response = await fetch(RESEND_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ from: fromEmail, to, subject, text }),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Send a complete itemized new-order alert to the merchant/store owner with full
+ * customer details and shipping address so the merchant can place the order on Qikink.
+ */
+export async function sendMerchantOrderAlert(orderId: string): Promise<void> {
+  try {
+    const { getPrisma } = await import('@/lib/prisma');
+    const prisma = getPrisma();
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      select: {
+        id: true,
+        total: true,
+        subtotal: true,
+        discount: true,
+        shipping: true,
+        tax: true,
+        addressSnapshot: true,
+        lineSnapshots: true,
+        paymentMethod: true,
+      },
+    });
+    if (!order) return;
+
+    const snapshot = (order.addressSnapshot ?? {}) as Record<string, unknown>;
+    const name = typeof snapshot.name === 'string' ? snapshot.name : 'N/A';
+    const email = typeof snapshot.email === 'string' ? snapshot.email : 'N/A';
+    const phone = typeof snapshot.phone === 'string' ? snapshot.phone : 'N/A';
+    const line1 = typeof snapshot.line1 === 'string' ? snapshot.line1 : '';
+    const line2 = typeof snapshot.line2 === 'string' ? snapshot.line2 : '';
+    const city = typeof snapshot.city === 'string' ? snapshot.city : '';
+    const state = typeof snapshot.state === 'string' ? snapshot.state : '';
+    const pincode = typeof snapshot.pincode === 'string' ? snapshot.pincode : '';
+
+    const rawLines = (Array.isArray(order.lineSnapshots) ? order.lineSnapshots : []) as Record<string, unknown>[];
+    const itemsText = rawLines
+      .map(
+        (l, i) =>
+          `${i + 1}. "${l.slogan ?? ''}"\n   Color: ${l.color ?? ''}\n   Size: ${l.size ?? ''}\n   Fit: ${l.fit ?? ''}\n   Quantity: ${l.quantity ?? 1}\n   Price: ${formatINR(Number(l.lineTotal ?? 0))}`,
+      )
+      .join('\n\n');
+
+    const body = [
+      '==================================================',
+      'NEW PAID ORDER RECEIVED (QIKINK MANUAL FULFILLMENT)',
+      '==================================================',
+      '',
+      `ORDER ID: ${order.id}`,
+      `TOTAL PAID: ${formatINR(order.total)}`,
+      `PAYMENT METHOD: ${order.paymentMethod ?? 'Razorpay Online'}`,
+      '',
+      '--------------------------------------------------',
+      '1. CUSTOMER & SHIPPING ADDRESS DETAILS',
+      '--------------------------------------------------',
+      `Customer Name:  ${name}`,
+      `Customer Email: ${email}`,
+      `Customer Phone: ${phone}`,
+      '',
+      'Delivery Address:',
+      `${name}`,
+      `${line1}`,
+      line2.length > 0 ? line2 : null,
+      `${city}, ${state} - ${pincode}`,
+      'India',
+      '',
+      '--------------------------------------------------',
+      '2. ITEMS TO FULFILL ON QIKINK',
+      '--------------------------------------------------',
+      itemsText,
+      '',
+      '--------------------------------------------------',
+      '3. FINANCIAL SUMMARY',
+      '--------------------------------------------------',
+      `Subtotal: ${formatINR(order.subtotal)}`,
+      `Discount: -${formatINR(order.discount)}`,
+      `Shipping: ${formatINR(order.shipping)}`,
+      `GST Tax: ${formatINR(order.tax)}`,
+      `Total Paid: ${formatINR(order.total)}`,
+      '',
+      '==================================================',
+    ]
+      .filter((line) => line !== null)
+      .join('\n');
+
+    const merchantEmail = (process.env.SUPPORT_EMAIL || process.env.FROM_EMAIL || 'support@oofo.tech').trim();
+    await sendDirectEmail(merchantEmail, `[NEW PAID ORDER] #${order.id} — ${formatINR(order.total)}`, body);
+  } catch {
+    // Non-blocking
+  }
+}
+
 /**
  * Send the order confirmation for an order that has transitioned to PAID
  * (Req 18.1, 10.3). Loads the order, projects the recipient email from the
@@ -295,8 +410,11 @@ async function loadNotifiableOrder(orderId: string): Promise<NotifiableOrder | n
 export async function sendOrderConfirmationForOrder(orderId: string): Promise<void> {
   try {
     const order = await loadNotifiableOrder(orderId);
-    if (order === null) return;
-    await notificationService.sendOrderConfirmation(order);
+    if (order !== null) {
+      await notificationService.sendOrderConfirmation(order);
+    }
+    // Send full merchant order notification email for manual Qikink fulfillment
+    await sendMerchantOrderAlert(orderId);
   } catch {
     // Notifications must never disturb the order flow.
   }

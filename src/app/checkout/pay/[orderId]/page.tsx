@@ -98,6 +98,7 @@ export default async function PayPage({ params }: PayPageProps) {
           currency: options.currency,
           orderId: options.orderId,
           receipt: options.receipt,
+          prefill: options.prefill,
         }}
       />
       <noscript>

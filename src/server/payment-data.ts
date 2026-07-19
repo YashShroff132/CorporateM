@@ -127,18 +127,25 @@ export async function checkoutOptionsForOrder(
     const prisma = getPrisma();
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      select: { id: true, total: true, currency: true, razorpayOrderId: true },
+      select: { id: true, total: true, currency: true, razorpayOrderId: true, addressSnapshot: true },
     });
     if (order === null || order.razorpayOrderId === null) return null;
 
     const total = makePaise(order.total);
     if (isErr(total)) return null;
 
+    const snapshot = (order.addressSnapshot ?? {}) as Record<string, unknown>;
+
     const options = paymentService.checkoutOptions({
       razorpayOrderId: order.razorpayOrderId,
       amount: total.value,
       currency: order.currency,
       receipt: order.id,
+      prefill: {
+        name: typeof snapshot.name === 'string' ? snapshot.name : '',
+        email: typeof snapshot.email === 'string' ? snapshot.email : '',
+        contact: typeof snapshot.phone === 'string' ? snapshot.phone : '',
+      },
     });
     return options.ok ? options.value : null;
   } catch {
