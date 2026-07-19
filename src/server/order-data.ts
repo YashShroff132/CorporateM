@@ -99,6 +99,26 @@ export const ORDER_STATUS_VALUES: readonly OrderStatus[] = [
   'REFUNDED',
 ];
 
+export interface AdminOrderItem {
+  readonly slogan: string;
+  readonly color: string;
+  readonly size: string;
+  readonly fit: string;
+  readonly quantity: number;
+  readonly lineTotal: number;
+}
+
+export interface AdminAddress {
+  readonly name: string;
+  readonly line1: string;
+  readonly line2?: string;
+  readonly city: string;
+  readonly state: string;
+  readonly pincode: string;
+  readonly email?: string;
+  readonly phone?: string;
+}
+
 /** A single admin order row for the list / CSV export (Req 10.5, 10.6). */
 export interface AdminOrderRow {
   readonly id: string;
@@ -111,6 +131,8 @@ export interface AdminOrderRow {
   readonly razorpayOrderId: string | null;
   readonly trackingId: string | null;
   readonly trackingUrl: string | null;
+  readonly address: AdminAddress | null;
+  readonly items: readonly AdminOrderItem[];
 }
 
 /** Filter criteria for the admin order list (Req 10.5). */
@@ -167,6 +189,7 @@ export async function listOrdersForAdmin(
         total: true,
         createdAt: true,
         addressSnapshot: true,
+        lineSnapshots: true,
         razorpayPaymentId: true,
         razorpayOrderId: true,
         trackingId: true,
@@ -176,6 +199,17 @@ export async function listOrdersForAdmin(
 
     return rows.map((o) => {
       const contact = contactFromSnapshot(o.addressSnapshot);
+      const address = (o.addressSnapshot ?? null) as unknown as AdminAddress | null;
+      const rawLines = (Array.isArray(o.lineSnapshots) ? o.lineSnapshots : []) as Record<string, unknown>[];
+      const items: AdminOrderItem[] = rawLines.map((l) => ({
+        slogan: typeof l.slogan === 'string' ? l.slogan : '',
+        color: typeof l.color === 'string' ? l.color : '',
+        size: typeof l.size === 'string' ? l.size : '',
+        fit: typeof l.fit === 'string' ? l.fit : '',
+        quantity: typeof l.quantity === 'number' ? l.quantity : 1,
+        lineTotal: typeof l.lineTotal === 'number' ? l.lineTotal : 0,
+      }));
+
       return {
         id: o.id,
         status: o.status,
@@ -187,6 +221,8 @@ export async function listOrdersForAdmin(
         razorpayOrderId: o.razorpayOrderId,
         trackingId: o.trackingId,
         trackingUrl: o.trackingUrl,
+        address,
+        items,
       };
     });
   } catch {
