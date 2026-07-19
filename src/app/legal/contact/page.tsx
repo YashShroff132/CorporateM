@@ -8,7 +8,7 @@
 
 import type { Metadata } from 'next';
 
-import { PolicyPage, PolicySection, Placeholder } from '@/components/legal/PolicyPage';
+import { PolicyPage, PolicySection } from '@/components/legal/PolicyPage';
 import { absoluteUrl } from '@/lib/site';
 import { config } from '@/services/config';
 
@@ -20,67 +20,35 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   const brand = config.brand().name || 'Out of Office';
-  const entity = config.legalEntityName();
-  const supportEmail = process.env.SUPPORT_EMAIL ?? '';
-  const businessAddress =
-    process.env.BUSINESS_ADDRESS ?? config.legalEntityAddress();
-  const grievanceOfficer = process.env.GRIEVANCE_OFFICER_NAME ?? '';
-  const ackWindow = process.env.GRIEVANCE_ACK_HOURS ?? '';
 
   return (
     <PolicyPage title="Contact Us">
       <p>
-        We&rsquo;d love to hear from you. Reach the {brand} team using the details
-        below and we&rsquo;ll get back to you as soon as we can.
+        Have a question about your order, delivery, or custom inquiry? Reach the {brand} team using the details below and we&rsquo;ll get back to you within 24–48 hours.
       </p>
 
-      <PolicySection heading="Customer support">
-        <ul className="list-none flex flex-col gap-1">
+      <PolicySection heading="Customer Support">
+        <ul className="list-none flex flex-col gap-2">
           <li>
-            <span className="font-semibold">Business:</span>{' '}
-            <Placeholder value={entity} label="LEGAL_ENTITY_NAME" />
+            <span className="font-semibold">Brand:</span> {brand} (OOFO)
           </li>
           <li>
-            <span className="font-semibold">Email:</span>{' '}
-            <Placeholder value={supportEmail} label="SUPPORT_EMAIL" />
+            <span className="font-semibold">Email Support:</span>{' '}
+            <a className="underline font-bold" href="mailto:support@oofo.tech">support@oofo.tech</a>
           </li>
           <li>
-            <span className="font-semibold">Address:</span>{' '}
-            <Placeholder value={businessAddress} label="BUSINESS_ADDRESS" />
+            <span className="font-semibold">Response Time:</span> Monday to Saturday, 10:00 AM – 7:00 PM IST (within 24–48 hours)
           </li>
         </ul>
       </PolicySection>
 
-      <PolicySection heading="Grievance officer">
+      <PolicySection heading="Grievances & Order Assistance">
         <p>
-          In line with applicable Indian law, including the Consumer Protection
-          (E-Commerce) Rules and the DPDP Act, you may contact our Grievance
-          Officer for any complaint regarding our services or the handling of your
-          personal data.
+          For any specific order complaint, wrong item received, or privacy request, email our support officer directly at <a className="underline font-bold" href="mailto:support@oofo.tech">support@oofo.tech</a> with your Order ID. All tickets are acknowledged within 24 hours.
         </p>
-        <ul className="list-none flex flex-col gap-1">
-          <li>
-            <span className="font-semibold">Name:</span>{' '}
-            <Placeholder value={grievanceOfficer} label="GRIEVANCE_OFFICER_NAME" />
-          </li>
-          <li>
-            <span className="font-semibold">Email:</span>{' '}
-            <Placeholder value={supportEmail} label="SUPPORT_EMAIL" />
-          </li>
-          <li>
-            <span className="font-semibold">Address:</span>{' '}
-            <Placeholder value={businessAddress} label="BUSINESS_ADDRESS" />
-          </li>
-          <li>
-            <span className="font-semibold">Acknowledgement window:</span> We aim
-            to acknowledge grievances within{' '}
-            <Placeholder value={ackWindow} label="GRIEVANCE_ACK_HOURS" /> hours and
-            resolve them within a reasonable time as required by law.
-          </li>
-        </ul>
       </PolicySection>
 
-      <PolicySection heading="Policies">
+      <PolicySection heading="Store Policies">
         <p>
           Please also review our{' '}
           <a className="underline" href="/legal/privacy">

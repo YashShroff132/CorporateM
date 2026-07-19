@@ -8,7 +8,7 @@
 
 import type { Metadata } from 'next';
 
-import { PolicyPage, PolicySection, Placeholder } from '@/components/legal/PolicyPage';
+import { PolicyPage, PolicySection } from '@/components/legal/PolicyPage';
 import { absoluteUrl } from '@/lib/site';
 import { config } from '@/services/config';
 
@@ -20,17 +20,13 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   const brand = config.brand().name || 'Out of Office';
-  const entity = config.legalEntityName();
-  const entityAddress = config.legalEntityAddress();
 
   return (
     <PolicyPage title="Terms & Conditions">
       <p>
         These Terms &amp; Conditions govern your access to and use of the {brand}{' '}
-        website and your purchase of products from us. By using this site or
-        placing an order, you agree to these terms. The store is operated by{' '}
-        <Placeholder value={entity} label="LEGAL_ENTITY_NAME" />,{' '}
-        <Placeholder value={entityAddress} label="LEGAL_ENTITY_ADDRESS" />.
+        website (oofo.tech) and your purchase of products from us. By browsing this site or
+        placing an order, you agree to be bound by these terms.
       </p>
 
       <PolicySection heading="1. Eligibility">
@@ -102,9 +98,7 @@ export default function TermsPage() {
 
       <PolicySection heading="8. Governing law">
         <p>
-          These terms are governed by the laws of India, and the courts at{' '}
-          <Placeholder value={config.sellerState()} label="SELLER_STATE" /> shall
-          have jurisdiction, subject to applicable law.
+          These terms are governed by the laws of India, and any legal matters or disputes shall be subject to the exclusive jurisdiction of the competent courts in India.
         </p>
       </PolicySection>
 

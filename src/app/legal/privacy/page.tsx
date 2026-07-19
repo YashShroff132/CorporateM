@@ -8,7 +8,7 @@
 
 import type { Metadata } from 'next';
 
-import { PolicyPage, PolicySection, Placeholder } from '@/components/legal/PolicyPage';
+import { PolicyPage, PolicySection } from '@/components/legal/PolicyPage';
 import { absoluteUrl } from '@/lib/site';
 import { config } from '@/services/config';
 
@@ -20,19 +20,11 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   const brand = config.brand().name || 'Out of Office';
-  const entity = config.legalEntityName();
-  const supportEmail = process.env.SUPPORT_EMAIL ?? '';
-  const grievanceOfficer = process.env.GRIEVANCE_OFFICER_NAME ?? '';
 
   return (
     <PolicyPage title="Privacy Policy">
       <p>
-        This Privacy Policy explains how{' '}
-        <Placeholder value={entity} label="LEGAL_ENTITY_NAME" /> (&ldquo;{brand}
-        &rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) collects, uses, stores, and
-        protects your personal data when you visit our website or place an order.
-        We aim to align with India&rsquo;s Digital Personal Data Protection Act,
-        2023 (DPDP Act).
+        This Privacy Policy explains how {brand} (&ldquo;OOFO&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) collects, uses, stores, and protects your personal data when you visit our website (oofo.tech) or place an order. We aim to align with India&rsquo;s Digital Personal Data Protection Act, 2023 (DPDP Act).
       </p>
 
       <PolicySection heading="1. Data we collect">
@@ -95,17 +87,15 @@ export default function PrivacyPolicyPage() {
           Subject to applicable law, you may request access to, correction of, or
           erasure of your personal data, and you may withdraw consent. To make a
           request, contact us at{' '}
-          <Placeholder value={supportEmail} label="SUPPORT_EMAIL" />.
+          <a className="underline font-bold" href="mailto:support@oofo.tech">support@oofo.tech</a>.
         </p>
       </PolicySection>
 
-      <PolicySection heading="7. Grievance officer">
+      <PolicySection heading="7. Grievance officer & Support">
         <p>
           In accordance with applicable law, you may address any concern about the
-          processing of your personal data to our Grievance Officer,{' '}
-          <Placeholder value={grievanceOfficer} label="GRIEVANCE_OFFICER_NAME" />,
-          at <Placeholder value={supportEmail} label="SUPPORT_EMAIL" />. Full
-          contact details are on our{' '}
+          processing of your personal data to our support team at{' '}
+          <a className="underline font-bold" href="mailto:support@oofo.tech">support@oofo.tech</a>. Full details are on our{' '}
           <a className="underline" href="/legal/contact">
             Contact Us
           </a>{' '}
