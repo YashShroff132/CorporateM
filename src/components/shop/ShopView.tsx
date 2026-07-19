@@ -66,7 +66,7 @@ export function ShopView({
             </h2>
           </div>
           {/* 3D Interactive Logo Capsule dead-centered over the bottom of the hero image */}
-          <div className="absolute bottom-5 sm:bottom-8 left-1/2 -translate-x-1/2 z-30">
+          <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 z-30">
             <DanglingLogo />
           </div>
         </div>
