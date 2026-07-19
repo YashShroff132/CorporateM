@@ -216,9 +216,51 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
             )}
           </fieldset>
 
+          {/* Blinkit/Zepto-style Priority Delivery Choice */}
+          <div className="border border-stamp-red/20 bg-stamp-red/5 dark:bg-stamp-red/10 p-4 rounded-lg flex flex-col gap-3">
+            <div className="flex items-start gap-2.5">
+              <span className="text-stamp-red text-base leading-none">🔥</span>
+              <div>
+                <h3 className="text-xs font-black text-ink dark:text-white uppercase tracking-wider">High Order Demand</h3>
+                <p className="text-xs text-muted mt-0.5">Due to high order volume, standard printing & delivery is currently experiencing delays.</p>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-2.5 mt-1 border-t border-ink/10 dark:border-white/10 pt-3 font-mono text-xs">
+              <label className="flex items-center justify-between cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="radio" 
+                    name="shipping_upgrade" 
+                    value="standard" 
+                    defaultChecked 
+                    className="text-ink dark:text-white focus:ring-ink"
+                  />
+                  <span>Standard Delivery (Free, Delayed)</span>
+                </div>
+                <span className="font-bold">₹0.00</span>
+              </label>
+
+              <label className="flex items-center justify-between cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="radio" 
+                    name="shipping_upgrade" 
+                    value="priority" 
+                    className="text-ink dark:text-white focus:ring-ink"
+                  />
+                  <span className="flex items-center gap-1 font-bold text-stamp-red dark:text-highlighter">
+                    ⚡ Priority Express Dispatch
+                  </span>
+                </div>
+                <span className="font-bold">₹200.00</span>
+              </label>
+            </div>
+          </div>
+
           <button
             type="submit"
-            className="bg-highlighter px-6 py-3 text-sm font-black uppercase tracking-wide text-ink"
+            className="bg-highlighter px-6 py-3 text-sm font-black uppercase tracking-wide text-ink hover:opacity-90 transition-opacity"
           >
             Continue to payment
           </button>
@@ -248,7 +290,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
             </div>
             <div className="flex justify-between">
               <dt>Shipping</dt>
-              <dd>{inr(totals.shipping as number)}</dd>
+              <dd id="summary-shipping">{inr(totals.shipping as number)}</dd>
             </div>
             <div className="flex justify-between">
               <dt>Tax (GST)</dt>
@@ -262,11 +304,42 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
             )}
             <div className="flex justify-between border-t border-ink pt-2 text-base font-black">
               <dt>Total</dt>
-              <dd>{inr(totals.total as number)}</dd>
+              <dd id="summary-total" data-base-total={totals.total as number}>{inr(totals.total as number)}</dd>
             </div>
           </dl>
         </section>
       </div>
+
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              const radios = document.querySelectorAll('input[name="shipping_upgrade"]');
+              const shippingEl = document.getElementById('summary-shipping');
+              const totalEl = document.getElementById('summary-total');
+              if (!totalEl || !shippingEl) return;
+              
+              const baseTotal = parseInt(totalEl.getAttribute('data-base-total') || '0', 10);
+              
+              function formatINR(paise) {
+                return '₹' + (paise / 100).toFixed(2);
+              }
+              
+              radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                  if (this.value === 'priority') {
+                    shippingEl.textContent = formatINR(20000);
+                    totalEl.textContent = formatINR(baseTotal + 20000);
+                  } else {
+                    shippingEl.textContent = formatINR(0);
+                    totalEl.textContent = formatINR(baseTotal);
+                  }
+                });
+              });
+            })();
+          `
+        }}
+      />
     </main>
   );
 }

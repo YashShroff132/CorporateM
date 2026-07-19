@@ -34,6 +34,7 @@ import { priceGuestCheckout } from '@/server/checkout-data';
 import { createOrderForCheckout } from '@/server/order-data';
 import { createRazorpayOrderForOrder } from '@/server/payment-data';
 import { checkoutContactSchema } from '@/server/security/schemas';
+import { makePaise } from '@/lib/money';
 
 function s(formData: FormData, key: string): string {
   const v = formData.get(key);
@@ -102,6 +103,27 @@ export async function submitCheckoutAction(formData: FormData): Promise<void> {
     redirect('/cart');
   }
 
+  // Add priority shipping surcharge if selected
+  const isPriority = s(formData, 'shipping_upgrade') === 'priority';
+  let finalTotals = checkout.totals;
+  if (isPriority) {
+    const extraShipping = 20000; // ₹200.00 extra (20,000 paise)
+    const newShipping = makePaise(Number(checkout.totals.shipping) + extraShipping);
+    const newTotal = makePaise(Number(checkout.totals.total) + extraShipping);
+    if (newShipping.ok && newTotal.ok) {
+      finalTotals = {
+        ...checkout.totals,
+        shipping: newShipping.value,
+        total: newTotal.value,
+      };
+    }
+  }
+
+  const modifiedCheckout = {
+    ...checkout,
+    totals: finalTotals,
+  };
+
   // Persist the order (CREATED) with snapshots (Req 10.4, 7.7).
   const resolvedCity = location.ok ? location.value.city : city;
   const resolvedState = location.ok ? location.value.state : state;
@@ -117,7 +139,7 @@ export async function submitCheckoutAction(formData: FormData): Promise<void> {
       phone,
       email,
     },
-    checkout,
+    checkout: modifiedCheckout,
   });
 
   if (orderId === null) {
