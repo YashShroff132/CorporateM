@@ -54,12 +54,8 @@ export function ShopView({
           <img
             src="/hero-streetwear.png"
             alt="Out of Office Streetwear Collection"
-            className="w-full h-full object-cover object-center opacity-70 dark:opacity-50 transition-transform duration-10000 ease-out hover:scale-105"
+            className="w-full h-full object-cover object-center opacity-95 transition-transform duration-10000 ease-out hover:scale-105"
           />
-          {/* Transparent 3D Interactive Logo as background overlay */}
-          <div className="absolute inset-0 z-10 w-full h-full pointer-events-auto">
-            <DanglingLogo className="w-full h-full" />
-          </div>
           {/* Minimalist Overlay banner text */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 md:p-10 z-20 pointer-events-none">
             <span className="text-[10px] font-mono uppercase tracking-widest text-white/90 mb-1.5 font-bold">
@@ -68,6 +64,10 @@ export function ShopView({
             <h2 className="text-2xl md:text-4xl font-black uppercase text-white tracking-tight max-w-xl drop-shadow">
               Permanently out of office.
             </h2>
+          </div>
+          {/* 3D Interactive Logo Capsule floating seamlessly over bottom right of image */}
+          <div className="absolute bottom-4 right-4 md:bottom-6 md:right-8 z-30">
+            <DanglingLogo />
           </div>
         </div>
       )}

@@ -277,7 +277,7 @@ export function DanglingLogo({ className = 'relative w-full h-full' }: { classNa
   return (
     <div
       ref={containerRef}
-      className={`${className} flex flex-col items-center justify-center overflow-hidden select-none bg-transparent`}
+      className={`relative w-[160px] sm:w-[200px] md:w-[250px] h-[100px] sm:h-[125px] md:h-[150px] flex flex-col items-center justify-center overflow-hidden select-none bg-black/40 backdrop-blur-md border border-white/15 rounded-2xl shadow-2xl p-1 pb-3 ${className}`}
       aria-label="3D Interactive OOO Logo"
     >
       {/* 3D Canvas rendering region */}
@@ -285,6 +285,9 @@ export function DanglingLogo({ className = 'relative w-full h-full' }: { classNa
         ref={canvasRef}
         className="w-full h-full cursor-grab active:cursor-grabbing outline-none touch-none"
       />
+      <span className="absolute bottom-1.5 text-[6px] sm:text-[8px] font-mono uppercase tracking-widest text-white/60 pointer-events-none select-none">
+        DRAG LOGO TO SPIN
+      </span>
     </div>
   );
 }
