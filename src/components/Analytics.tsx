@@ -22,7 +22,7 @@ const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID?.trim() ?? '';
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim() ?? '';
 const POSTHOG_HOST =
   process.env.NEXT_PUBLIC_POSTHOG_HOST?.trim() ?? 'https://us.i.posthog.com';
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() ?? '';
+const META_PIXEL_ID = (process.env.NEXT_PUBLIC_META_PIXEL_ID?.trim() || '1394483172629856');
 
 function Ga4Scripts({ id }: { id: string }) {
   return (
