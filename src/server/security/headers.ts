@@ -42,6 +42,10 @@ const GA_CONNECT =
 /** PostHog analytics origins (Req 23.4). */
 const POSTHOG = 'https://*.posthog.com';
 
+/** Meta (Facebook / Instagram Pixel) origins. */
+const META_SCRIPT = 'https://connect.facebook.net';
+const META_CONNECT = 'https://www.facebook.com https://connect.facebook.net';
+
 /**
  * Sentry error-ingest origins (Req 24.6). Client-side error reports POST to the
  * project's ingest host; allow the Sentry SaaS ingest domains in connect-src.
@@ -61,11 +65,11 @@ export function buildContentSecurityPolicy(dev: boolean): string {
   const scriptExtra = dev ? " 'unsafe-eval'" : '';
   const directives: string[] = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${scriptExtra} ${RAZORPAY_SCRIPT} ${GA_SCRIPT} ${POSTHOG}`,
+    `script-src 'self' 'unsafe-inline'${scriptExtra} ${RAZORPAY_SCRIPT} ${GA_SCRIPT} ${POSTHOG} ${META_SCRIPT}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
-    `connect-src 'self' ${RAZORPAY_API} ${GA_CONNECT} ${POSTHOG} ${SENTRY_CONNECT}`,
+    `connect-src 'self' ${RAZORPAY_API} ${GA_CONNECT} ${POSTHOG} ${SENTRY_CONNECT} ${META_CONNECT}`,
     `frame-src 'self' ${RAZORPAY_FRAME}`,
     "object-src 'none'",
     "base-uri 'self'",
