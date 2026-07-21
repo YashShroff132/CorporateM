@@ -20,10 +20,9 @@ import { getProductBySlug, type ProductDetail } from '@/server/shop-data';
 import { config } from '@/services/config';
 import type { RawSearchParams } from '@/server/search-params';
 import { addToCartAction } from '@/app/cart/actions';
-import { ProductImage } from '@/components/ProductImage';
 import { AddToCartButton } from '@/components/AddToCartButton';
 import { TrackOnMount } from '@/components/TrackOnMount';
-import { OOOLogo } from '@/components/OOOLogo';
+import { ProductImageGallery } from '@/components/shop/ProductImageGallery';
 import { VariantSelector } from '@/components/VariantSelector';
 import {
   VARIANT_DIMENSIONS,
@@ -181,50 +180,12 @@ export default async function ProductPage({
         props={{ slug: detail.product.slug, slogan: detail.product.slogan }}
       />
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {/* Product mockups — front & back views */}
-        <div className="flex flex-col gap-3">
-          <div className="relative aspect-square w-full">
-            {detail.product.mockupUrl?.startsWith('data:') ? (
-              <>
-                <ProductImage
-                  src={detail.product.mockupBgUrl || (detail.variants.some(v => v.color.toLowerCase().includes('white')) ? '/blank-white-tee.png' : '/blank-black-tee.png')}
-                  alt={detail.product.slogan}
-                  priority
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className={`absolute inset-0 pointer-events-none select-none ${
-                  detail.variants.some(v => v.color.toLowerCase().includes('white')) ? 'mix-blend-multiply opacity-90' : 'mix-blend-screen opacity-90'
-                }`}>
-                  <img
-                    src={detail.product.mockupUrl}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </>
-            ) : (
-              <ProductImage
-                src={detail.product.mockupUrl}
-                alt={detail.product.slogan}
-                priority
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            )}
-          </div>
-
-          {detail.product.mockupBackUrl && (
-            <div className="relative aspect-square w-full flex flex-col justify-between p-12 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none rounded-lg shadow-sm text-center">
-              <div className="flex flex-col items-center justify-center my-auto">
-                <OOOLogo className="h-12 w-auto mb-2 text-paper dark:text-ink" />
-                <span className="text-xs uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
-              </div>
-              
-              <div className="border-t border-paper/10 dark:border-ink/10 pt-6">
-                <span className="text-sm font-bold uppercase tracking-wide leading-relaxed block">{detail.product.slogan}</span>
-              </div>
-            </div>
-          )}
-        </div>
+        {/* Product Image Gallery — Front & Back View Gallery */}
+        <ProductImageGallery
+          frontUrl={detail.product.mockupUrl ?? '/blank-black-tee.png'}
+          backUrl={detail.product.mockupBackUrl}
+          slogan={detail.product.slogan}
+        />
 
         <div className="flex flex-col gap-5">
           <div className="flex flex-wrap items-center gap-2">

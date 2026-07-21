@@ -53,16 +53,17 @@ interface ProductSeed {
   slogan: string;
   tier: Tier;
   collectionSlug: string;
-  /** Base price in integer paise (1 INR = 100 paise). */
   basePrice: number;
   seoTitle: string;
   seoDescription: string;
+  mockupUrl?: string;
+  mockupBackUrl?: string;
   variants: readonly VariantSeed[];
 }
 
 /** A small, reusable size/fit spread for a given colour. */
 function sizeSpread(color: string, fit: string, stock: number): VariantSeed[] {
-  return (['S', 'M', 'L', 'XL'] as const).map((size) => ({
+  return (['S', 'M', 'L', 'XL', 'XXL'] as const).map((size) => ({
     color,
     size,
     fit,
@@ -71,113 +72,117 @@ function sizeSpread(color: string, fit: string, stock: number): VariantSeed[] {
 }
 
 const PRODUCTS: readonly ProductSeed[] = [
-  // --- Compliance Approved (operator) ---
   {
-    slug: 'unavailable-team-dinner',
-    slogan: 'EOD Status: Currently Unavailable for Team Dinner',
+    slug: 'employee-resigns',
+    slogan: 'An employee who does not give up resigns.',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
-    seoTitle: 'Currently Unavailable for Team Dinner Tee',
-    seoDescription: 'Let the team know where you stand. Comfortable premium cotton.',
+    mockupUrl: '/products/employee-resign-front.jpg',
+    mockupBackUrl: '/products/employee-resign-back.jpg',
+    seoTitle: 'An Employee Who Does Not Give Up Resigns Tee',
+    seoDescription: 'Heavyweight oversized cotton tee with high-contrast back graphic print.',
     variants: [
-      ...sizeSpread('Black', 'Regular', 25),
-      ...sizeSpread('White', 'Regular', 20),
+      ...sizeSpread('Black', 'Oversized', 30),
     ],
   },
   {
-    slug: 'stop-hallucinating',
-    slogan: 'Stop Hallucinating My Performance',
-    tier: Tier.SAFE,
-    collectionSlug: 'operator',
-    basePrice: 74900, // ₹749
-    seoTitle: 'Stop Hallucinating My Performance Tee',
-    seoDescription: 'For when the metrics get creative. Heavyweight cotton tee.',
-    variants: [
-      ...sizeSpread('Charcoal', 'Regular', 18),
-      ...sizeSpread('Grey', 'Oversized', 15),
-    ],
-  },
-  {
-    slug: 'revert-back',
-    slogan: 'Please Revert Back',
+    slug: 'like-a-family-here',
+    slogan: 'LIKE A FAMILY HERE *layoffs excluded.',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
-    seoTitle: 'Please Revert Back Tee',
-    seoDescription: 'The classic deferral. Stencil font styling.',
-    variants: [...sizeSpread('White', 'Oversized', 22)],
-  },
-  // --- Performance Managed (believer) ---
-  {
-    slug: 'couldve-been-email',
-    slogan: "This Could've Been an Email",
-    tier: Tier.DIRECT,
-    collectionSlug: 'believer',
-    basePrice: 89900, // ₹899
-    seoTitle: "This Could've Been an Email Tee",
-    seoDescription: 'Save everyone some time. Heavyweight combed cotton.',
+    mockupUrl: '/products/like-a-family-front.jpg',
+    mockupBackUrl: '/products/like-a-family-back.jpg',
+    seoTitle: 'Like a Family Here Layoffs Excluded Tee',
+    seoDescription: 'Corporate culture satire graphic tee in heavyweight black cotton.',
     variants: [
-      ...sizeSpread('Black', 'Regular', 30),
-      ...sizeSpread('Olive', 'Oversized', 12),
+      ...sizeSpread('Black', 'Oversized', 25),
     ],
   },
   {
-    slug: 'do-not-disturb',
-    slogan: 'Do not disturb, serving notice.',
+    slug: 'hybrid-mandatory',
+    slogan: 'HYBRID 3 days mandatory',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
     basePrice: 84900, // ₹849
-    seoTitle: 'Do Not Disturb Serving Notice Tee',
-    seoDescription: 'Serving notice in style. Distressed stamp font print.',
+    mockupUrl: '/products/hybrid-mandatory-front.jpg',
+    mockupBackUrl: '/products/hybrid-mandatory-back.jpg',
+    seoTitle: 'Hybrid 3 Days Mandatory Tee',
+    seoDescription: 'Bold typographic back print about office mandates.',
     variants: [
-      ...sizeSpread('Grey', 'Regular', 26),
-      ...sizeSpread('Black', 'Oversized', 14),
+      ...sizeSpread('Black', 'Oversized', 20),
     ],
   },
   {
-    slug: 'team-bonding',
-    slogan: 'Team Bonding nahi Permanent WFH chaiye.',
+    slug: 'manager-goat',
+    slogan: 'MANAGER',
+    tier: Tier.VERY_DIRECT,
+    collectionSlug: 'heretic',
+    basePrice: 99900, // ₹999
+    mockupUrl: '/products/manager-goat-front.jpg',
+    mockupBackUrl: '/products/manager-goat-back.jpg',
+    seoTitle: 'Manager Goat Graphic Heavyweight Tee',
+    seoDescription: 'Gold ram graphic back print tee for leadership satire.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 15),
+    ],
+  },
+  {
+    slug: 'wfh-over-wfo',
+    slogan: 'WFH over WFO',
+    tier: Tier.SAFE,
+    collectionSlug: 'operator',
+    basePrice: 74900, // ₹749
+    mockupUrl: '/products/wfh-over-wfo-front.jpg',
+    mockupBackUrl: '/products/wfh-over-wfo-back.jpg',
+    seoTitle: 'WFH Over WFO Graphic Tee',
+    seoDescription: 'Work from home preference bold back print tee.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 28),
+    ],
+  },
+  {
+    slug: '9am-standups-toxic',
+    slogan: '9 AM STANDUPS GIVE TOXIC RELATIONSHIP VIBES',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
     basePrice: 89900, // ₹899
-    seoTitle: 'Permanent WFH Chaiye Tee',
-    seoDescription: 'Bonding is over, work from home is now. Soft everyday cotton.',
-    variants: [...sizeSpread('Cream', 'Oversized', 19)],
-  },
-  // --- Immediate Escalation (heretic) ---
-  {
-    slug: 'resume-gap',
-    slogan: 'I am just here to avoid a gap in my resume',
-    tier: Tier.VERY_DIRECT,
-    collectionSlug: 'heretic',
-    basePrice: 99900, // ₹999
-    seoTitle: 'Avoid a Gap in My Resume Tee',
-    seoDescription: 'Honest survivalist apparel. Minimalist label design.',
+    mockupUrl: '/products/9am-standups-front.jpg',
+    mockupBackUrl: '/products/9am-standups-back.jpg',
+    seoTitle: '9 AM Standups Give Toxic Relationship Vibes Tee',
+    seoDescription: 'Morning standup commentary in glitch typography.',
     variants: [
-      ...sizeSpread('White', 'Oversized', 16),
-      ...sizeSpread('Black', 'Regular', 10),
+      ...sizeSpread('Black', 'Oversized', 22),
     ],
   },
   {
-    slug: 'immediate-quitter',
-    slogan: 'Immediate joiner? No, immediate quitter.',
-    tier: Tier.VERY_DIRECT,
-    collectionSlug: 'heretic',
-    basePrice: 104900, // ₹1049
-    seoTitle: 'Immediate Quitter Tee',
-    seoDescription: 'Record attrition speeds. High-contrast impact print.',
-    variants: [...sizeSpread('Black', 'Oversized', 13)],
+    slug: 'chai-coffee-break',
+    slogan: 'CHAI COFFEE BREAK',
+    tier: Tier.SAFE,
+    collectionSlug: 'operator',
+    basePrice: 79900, // ₹799
+    mockupUrl: '/products/chai-coffee-break-front.jpg',
+    mockupBackUrl: '/products/chai-coffee-break-back.jpg',
+    seoTitle: 'Chai Coffee Break Graphic Tee',
+    seoDescription: 'Iced coffee and chai break illustration back print tee.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 25),
+    ],
   },
   {
-    slug: 'chai-breaks',
-    slogan: 'Chai breaks are the only milestones I actually care about achieving',
-    tier: Tier.VERY_DIRECT,
-    collectionSlug: 'heretic',
-    basePrice: 99900, // ₹999
-    seoTitle: 'Chai Breaks Are the Only Milestones Tee',
-    seoDescription: 'The ultimate tea breaks celebration. Groovy modern font print.',
-    variants: [...sizeSpread('Olive', 'Oversized', 15)],
+    slug: 'quick-call',
+    slogan: 'QUICK CALL',
+    tier: Tier.DIRECT,
+    collectionSlug: 'believer',
+    basePrice: 84900, // ₹849
+    mockupUrl: '/products/quick-call-front.jpg',
+    mockupBackUrl: '/products/quick-call-back.jpg',
+    seoTitle: 'Quick Call Exhaustion Graphic Tee',
+    seoDescription: 'Repeated quick call graphic back print tee.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 18),
+    ],
   },
 ];
 
@@ -187,15 +192,14 @@ interface SloganSeed {
 }
 
 const SLOGANS: readonly SloganSeed[] = [
-  { text: 'EOD Status: Currently Unavailable for Team Dinner', tier: Tier.SAFE },
-  { text: 'Stop Hallucinating My Performance', tier: Tier.SAFE },
-  { text: 'Please Revert Back', tier: Tier.SAFE },
-  { text: "This Could've Been an Email", tier: Tier.DIRECT },
-  { text: 'Do not disturb, serving notice.', tier: Tier.DIRECT },
-  { text: 'Team Bonding nahi Permanent WFH chaiye.', tier: Tier.DIRECT },
-  { text: 'I am just here to avoid a gap in my resume', tier: Tier.VERY_DIRECT },
-  { text: 'Immediate joiner? No, immediate quitter.', tier: Tier.VERY_DIRECT },
-  { text: 'Chai breaks are the only milestones I actually care about achieving', tier: Tier.VERY_DIRECT },
+  { text: 'An employee who does not give up resigns.', tier: Tier.SAFE },
+  { text: 'LIKE A FAMILY HERE *layoffs excluded.', tier: Tier.SAFE },
+  { text: 'HYBRID 3 days mandatory', tier: Tier.DIRECT },
+  { text: 'MANAGER', tier: Tier.VERY_DIRECT },
+  { text: 'WFH over WFO', tier: Tier.SAFE },
+  { text: '9 AM STANDUPS GIVE TOXIC RELATIONSHIP VIBES', tier: Tier.DIRECT },
+  { text: 'CHAI COFFEE BREAK', tier: Tier.SAFE },
+  { text: 'QUICK CALL', tier: Tier.DIRECT },
 ];
 
 interface BlankTemplateSeed {
@@ -274,6 +278,8 @@ async function main(): Promise<void> {
         basePrice: p.basePrice,
         seoTitle: p.seoTitle,
         seoDescription: p.seoDescription,
+        mockupUrl: p.mockupUrl ?? null,
+        mockupBackUrl: p.mockupBackUrl ?? null,
       },
       create: {
         slug: p.slug,
@@ -284,6 +290,8 @@ async function main(): Promise<void> {
         basePrice: p.basePrice,
         seoTitle: p.seoTitle,
         seoDescription: p.seoDescription,
+        mockupUrl: p.mockupUrl ?? null,
+        mockupBackUrl: p.mockupBackUrl ?? null,
       },
     });
 

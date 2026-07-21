@@ -90,16 +90,28 @@ export function ProductGrid({
                       />
                     )}
                   </div>
-                  {/* BACK face — Typographic Minimalist Design (No human model) */}
-                  <div className="product-flip-face product-flip-back absolute inset-0 w-full h-full flex flex-col justify-between p-8 bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25 font-mono select-none text-center">
-                    <div className="flex flex-col items-center justify-center my-auto">
-                      <OOOLogo className="h-9 w-auto mb-2 text-paper dark:text-ink" />
-                      <span className="text-[10px] uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
-                    </div>
-                    
-                    <div className="border-t border-paper/10 dark:border-ink/10 pt-4">
-                      <span className="text-xs font-bold uppercase tracking-wide leading-relaxed block">{product.slogan}</span>
-                    </div>
+                  {/* BACK face — Back photo with design artwork or fallback typography */}
+                  <div className="product-flip-face product-flip-back absolute inset-0 w-full h-full overflow-hidden bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25">
+                    {product.mockupBackUrl && !product.mockupBackUrl.startsWith('data:') ? (
+                      <ProductImage
+                        src={product.mockupBackUrl}
+                        alt={`${product.slogan} Back`}
+                        width={320}
+                        height={320}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex flex-col justify-between p-8 font-mono select-none text-center h-full my-auto">
+                        <div className="flex flex-col items-center justify-center my-auto">
+                          <OOOLogo className="h-9 w-auto mb-2 text-paper dark:text-ink" />
+                          <span className="text-[10px] uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
+                        </div>
+                        
+                        <div className="border-t border-paper/10 dark:border-ink/10 pt-4">
+                          <span className="text-xs font-bold uppercase tracking-wide leading-relaxed block">{product.slogan}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
