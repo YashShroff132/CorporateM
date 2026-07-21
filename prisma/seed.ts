@@ -78,8 +78,8 @@ const PRODUCTS: readonly ProductSeed[] = [
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
-    mockupUrl: '/products/employee-resign-front.jpg',
-    mockupBackUrl: '/products/employee-resign-back.jpg',
+    mockupUrl: '/products/employee-resign-full.jpg',
+    mockupBackUrl: '/products/employee-resign-mannequin-full.jpg',
     seoTitle: 'An Employee Who Does Not Give Up Resigns Tee',
     seoDescription: 'Heavyweight oversized cotton tee with high-contrast back graphic print.',
     variants: [
@@ -92,8 +92,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
-    mockupUrl: '/products/like-a-family-front.jpg',
-    mockupBackUrl: '/products/like-a-family-back.jpg',
+    mockupUrl: '/products/like-a-family-full.jpg',
     seoTitle: 'Like a Family Here Layoffs Excluded Tee',
     seoDescription: 'Corporate culture satire graphic tee in heavyweight black cotton.',
     variants: [
@@ -106,8 +105,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
     basePrice: 84900, // ₹849
-    mockupUrl: '/products/hybrid-mandatory-front.jpg',
-    mockupBackUrl: '/products/hybrid-mandatory-back.jpg',
+    mockupUrl: '/products/hybrid-mandatory-full.jpg',
     seoTitle: 'Hybrid 3 Days Mandatory Tee',
     seoDescription: 'Bold typographic back print about office mandates.',
     variants: [
@@ -120,8 +118,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     tier: Tier.VERY_DIRECT,
     collectionSlug: 'heretic',
     basePrice: 99900, // ₹999
-    mockupUrl: '/products/manager-goat-front.jpg',
-    mockupBackUrl: '/products/manager-goat-back.jpg',
+    mockupUrl: '/products/manager-goat-full.jpg',
     seoTitle: 'Manager Goat Graphic Heavyweight Tee',
     seoDescription: 'Gold ram graphic back print tee for leadership satire.',
     variants: [
@@ -134,8 +131,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 74900, // ₹749
-    mockupUrl: '/products/wfh-over-wfo-front.jpg',
-    mockupBackUrl: '/products/wfh-over-wfo-back.jpg',
+    mockupUrl: '/products/wfh-over-wfo-full.jpg',
     seoTitle: 'WFH Over WFO Graphic Tee',
     seoDescription: 'Work from home preference bold back print tee.',
     variants: [
@@ -148,8 +144,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
     basePrice: 89900, // ₹899
-    mockupUrl: '/products/9am-standups-front.jpg',
-    mockupBackUrl: '/products/9am-standups-back.jpg',
+    mockupUrl: '/products/9am-standups-full.jpg',
     seoTitle: '9 AM Standups Give Toxic Relationship Vibes Tee',
     seoDescription: 'Morning standup commentary in glitch typography.',
     variants: [
@@ -162,8 +157,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
-    mockupUrl: '/products/chai-coffee-break-front.jpg',
-    mockupBackUrl: '/products/chai-coffee-break-back.jpg',
+    mockupUrl: '/products/chai-coffee-break-full.jpg',
     seoTitle: 'Chai Coffee Break Graphic Tee',
     seoDescription: 'Iced coffee and chai break illustration back print tee.',
     variants: [
@@ -176,8 +170,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
     basePrice: 84900, // ₹849
-    mockupUrl: '/products/quick-call-front.jpg',
-    mockupBackUrl: '/products/quick-call-back.jpg',
+    mockupUrl: '/products/quick-call-full.jpg',
     seoTitle: 'Quick Call Exhaustion Graphic Tee',
     seoDescription: 'Repeated quick call graphic back print tee.',
     variants: [

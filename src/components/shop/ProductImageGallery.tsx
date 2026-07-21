@@ -13,6 +13,7 @@ interface ProductImageGalleryProps {
   frontUrl: string;
   backUrl?: string | null;
   fullUrl?: string | null;
+  extraImages?: string[];
   slogan: string;
 }
 
@@ -20,15 +21,28 @@ export function ProductImageGallery({
   frontUrl,
   backUrl,
   fullUrl,
+  extraImages = [],
   slogan,
 }: ProductImageGalleryProps) {
   const images: GalleryImage[] = [
-    { id: 'front', label: 'Front View', url: frontUrl },
+    { id: 'front', label: 'Front (Model)', url: frontUrl },
   ];
 
   if (backUrl && !backUrl.startsWith('data:')) {
-    images.push({ id: 'back', label: 'Back View (Design)', url: backUrl });
+    images.push({ id: 'back', label: 'Back (Design)', url: backUrl });
   }
+
+  extraImages.forEach((imgUrl, idx) => {
+    if (imgUrl && !imgUrl.startsWith('data:')) {
+      const isBack = imgUrl.includes('back');
+      images.push({
+        id: `extra-${idx}`,
+        label: isBack ? 'Back (Mannequin)' : 'Front (Mannequin)',
+        url: imgUrl,
+      });
+    }
+  });
+
   if (fullUrl) {
     images.push({ id: 'full', label: 'Full View', url: fullUrl });
   }
