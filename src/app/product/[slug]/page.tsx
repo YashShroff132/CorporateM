@@ -77,11 +77,7 @@ export async function generateMetadata({
       `${product.slogan}. Shop this design from Out of Office.`,
     160,
   );
-  const images = product.mockupUrl
-    ? [product.mockupUrl.startsWith('http') ? product.mockupUrl : absoluteUrl(product.mockupUrl)]
-    : [absoluteUrl('/blank-black-tee.png')];
-  const priceRupees = (product.basePrice / 100).toFixed(2);
-
+  const images = product.mockupUrl !== undefined ? [product.mockupUrl] : [];
   return {
     title,
     description,
@@ -98,14 +94,6 @@ export async function generateMetadata({
       title,
       description,
       images,
-    },
-    other: {
-      'product:price:amount': priceRupees,
-      'product:price:currency': 'INR',
-      'product:availability': 'in stock',
-      'product:retailer_item_id': product.slug,
-      'product:brand': 'Out of Office',
-      'product:condition': 'new',
     },
   };
 }
@@ -130,9 +118,6 @@ function buildProductJsonLd(detail: ProductDetail): Record<string, unknown> {
     product.basePrice,
   );
   const priceRupees = (lowestPaise / 100).toFixed(2);
-  const imageUrl = product.mockupUrl
-    ? (product.mockupUrl.startsWith('http') ? product.mockupUrl : absoluteUrl(product.mockupUrl))
-    : absoluteUrl('/blank-black-tee.png');
 
   return {
     '@context': 'https://schema.org',
@@ -141,27 +126,16 @@ function buildProductJsonLd(detail: ProductDetail): Record<string, unknown> {
     description:
       product.seoDescription ??
       `${product.slogan}. Shop this design from Out of Office.`,
-    image: [imageUrl],
+    ...(product.mockupUrl !== undefined ? { image: product.mockupUrl } : {}),
     sku: product.slug,
-    mpn: product.slug,
-    brand: {
-      '@type': 'Brand',
-      name: 'Out of Office',
-    },
     offers: {
       '@type': 'Offer',
       url: absoluteUrl(`/product/${product.slug}`),
       priceCurrency: 'INR',
       price: priceRupees,
-      priceValidUntil: '2027-12-31',
-      itemCondition: 'https://schema.org/NewCondition',
       availability: inStock
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
-      seller: {
-        '@type': 'Organization',
-        name: 'Out of Office',
-      },
     },
   };
 }
@@ -191,7 +165,6 @@ export default async function ProductPage({
 
   const { addToCart } = vm.actions;
   const jsonLd = buildProductJsonLd(detail);
-  const priceRupees = (detail.product.basePrice / 100).toFixed(2);
 
   return (
     <main className="mx-auto flex max-w-4xl flex-col gap-8 p-6">
@@ -204,7 +177,7 @@ export default async function ProductPage({
       {/* Emit the product_view funnel event on the client (Req 19.5). */}
       <TrackOnMount
         event="product_view"
-        props={{ slug: detail.product.slug, slogan: detail.product.slogan, price: priceRupees }}
+        props={{ slug: detail.product.slug, slogan: detail.product.slogan }}
       />
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         {/* Product Image Gallery — Front & Back View Gallery */}
