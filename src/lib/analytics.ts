@@ -72,13 +72,58 @@ function sendToMetaPixel(win: AnalyticsWindow, name: string, props: AnalyticsPro
   try {
     if (typeof win.fbq === 'function') {
       let metaEvent = '';
-      if (name === 'product_view') metaEvent = 'ViewContent';
-      else if (name === 'add_to_cart') metaEvent = 'AddToCart';
-      else if (name === 'begin_checkout') metaEvent = 'InitiateCheckout';
-      else if (name === 'payment_success') metaEvent = 'Purchase';
+      let metaPayload: Record<string, unknown> = { ...props };
+
+      if (name === 'product_view') {
+        metaEvent = 'ViewContent';
+        const contentId = props.slug || props.id || props.sku;
+        metaPayload = {
+          content_type: 'product',
+          content_ids: contentId ? [String(contentId)] : [],
+          content_name: props.slogan || props.name || props.title,
+          value: props.price ? Number(props.price) : undefined,
+          currency: 'INR',
+          ...props,
+        };
+      } else if (name === 'add_to_cart') {
+        metaEvent = 'AddToCart';
+        const contentId = props.slug || props.id || props.sku;
+        metaPayload = {
+          content_type: 'product',
+          content_ids: contentId ? [String(contentId)] : [],
+          content_name: props.slogan || props.name,
+          value: props.price ? Number(props.price) : undefined,
+          currency: 'INR',
+          ...props,
+        };
+      } else if (name === 'begin_checkout') {
+        metaEvent = 'InitiateCheckout';
+        const items = Array.isArray(props.items) ? props.items : [];
+        const contentIds = items.map((i: any) => String(i.slug || i.id || i.sku)).filter(Boolean);
+        metaPayload = {
+          content_type: 'product',
+          content_ids: contentIds.length > 0 ? contentIds : (props.slug ? [String(props.slug)] : []),
+          num_items: props.item_count || (items.length > 0 ? items.length : 1),
+          value: props.total_price ? Number(props.total_price) : undefined,
+          currency: 'INR',
+          ...props,
+        };
+      } else if (name === 'payment_success') {
+        metaEvent = 'Purchase';
+        const items = Array.isArray(props.items) ? props.items : [];
+        const contentIds = items.map((i: any) => String(i.slug || i.id || i.sku)).filter(Boolean);
+        metaPayload = {
+          content_type: 'product',
+          content_ids: contentIds,
+          num_items: props.item_count || (items.length > 0 ? items.length : 1),
+          value: props.total_amount ? Number(props.total_amount) : undefined,
+          currency: 'INR',
+          ...props,
+        };
+      }
 
       if (metaEvent.length > 0) {
-        win.fbq('track', metaEvent, props);
+        win.fbq('track', metaEvent, metaPayload);
       } else {
         win.fbq('trackCustom', name, props);
       }
