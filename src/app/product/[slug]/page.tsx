@@ -126,7 +126,9 @@ function buildProductJsonLd(detail: ProductDetail): Record<string, unknown> {
     description:
       product.seoDescription ??
       `${product.slogan}. Shop this design from Out of Office.`,
-    ...(product.mockupUrl !== undefined ? { image: product.mockupUrl } : {}),
+    ...(product.mockupUrl !== undefined
+      ? { image: product.mockupUrl.startsWith('http') ? product.mockupUrl : absoluteUrl(product.mockupUrl) }
+      : {}),
     sku: product.slug,
     offers: {
       '@type': 'Offer',
