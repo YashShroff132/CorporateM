@@ -177,6 +177,45 @@ const PRODUCTS: readonly ProductSeed[] = [
       ...sizeSpread('Black', 'Oversized', 18),
     ],
   },
+  {
+    slug: 'snake-coworkers',
+    slogan: 'BE AWARE OF SNAKE CO-WORKERS',
+    tier: Tier.DIRECT,
+    collectionSlug: 'believer',
+    basePrice: 89900, // ₹899
+    mockupUrl: '/products/snake-coworkers-full.jpg',
+    seoTitle: 'Be Aware of Snake Co-Workers Tee',
+    seoDescription: 'Heavyweight black cotton graphic tee with snake back print.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 25),
+    ],
+  },
+  {
+    slug: 'sorry-late-claude',
+    slogan: "I'm sorry I was late. I had a meeting.* (*I was talking to claude.)",
+    tier: Tier.SAFE,
+    collectionSlug: 'operator',
+    basePrice: 79900, // ₹799
+    mockupUrl: '/products/sorry-late-claude-full.jpg',
+    seoTitle: "I'm Sorry I Was Late I Was Talking to Claude Tee",
+    seoDescription: 'AI meeting excuse typography heavyweight black tee.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 30),
+    ],
+  },
+  {
+    slug: 'am-i-audible',
+    slogan: 'AM I AUDIBLE AM I AUDIBLE AM I AUDIBLE',
+    tier: Tier.DIRECT,
+    collectionSlug: 'believer',
+    basePrice: 84900, // ₹849
+    mockupUrl: '/products/am-i-audible-full.jpg',
+    seoTitle: 'Am I Audible Graphic White Tee',
+    seoDescription: 'Modern graphic white tee celebrating remote meeting mic checks.',
+    variants: [
+      ...sizeSpread('White', 'Oversized', 28),
+    ],
+  },
 ];
 
 interface SloganSeed {
@@ -193,6 +232,9 @@ const SLOGANS: readonly SloganSeed[] = [
   { text: '9 AM STANDUPS GIVE TOXIC RELATIONSHIP VIBES', tier: Tier.DIRECT },
   { text: 'CHAI COFFEE BREAK', tier: Tier.SAFE },
   { text: 'QUICK CALL', tier: Tier.DIRECT },
+  { text: 'BE AWARE OF SNAKE CO-WORKERS', tier: Tier.DIRECT },
+  { text: "I'm sorry I was late. I had a meeting.* (*I was talking to claude.)", tier: Tier.SAFE },
+  { text: 'AM I AUDIBLE AM I AUDIBLE AM I AUDIBLE', tier: Tier.DIRECT },
 ];
 
 interface BlankTemplateSeed {
