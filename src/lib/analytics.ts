@@ -99,7 +99,9 @@ function sendToMetaPixel(win: AnalyticsWindow, name: string, props: AnalyticsPro
       } else if (name === 'begin_checkout') {
         metaEvent = 'InitiateCheckout';
         const items = Array.isArray(props.items) ? props.items : [];
-        const contentIds = items.map((i: any) => String(i.slug || i.id || i.sku)).filter(Boolean);
+        const contentIds = items
+          .map((i) => (typeof i === 'object' && i !== null ? String((i as Record<string, unknown>).slug || (i as Record<string, unknown>).id || (i as Record<string, unknown>).sku) : ''))
+          .filter(Boolean);
         metaPayload = {
           content_type: 'product',
           content_ids: contentIds.length > 0 ? contentIds : (props.slug ? [String(props.slug)] : []),
@@ -111,7 +113,9 @@ function sendToMetaPixel(win: AnalyticsWindow, name: string, props: AnalyticsPro
       } else if (name === 'payment_success') {
         metaEvent = 'Purchase';
         const items = Array.isArray(props.items) ? props.items : [];
-        const contentIds = items.map((i: any) => String(i.slug || i.id || i.sku)).filter(Boolean);
+        const contentIds = items
+          .map((i) => (typeof i === 'object' && i !== null ? String((i as Record<string, unknown>).slug || (i as Record<string, unknown>).id || (i as Record<string, unknown>).sku) : ''))
+          .filter(Boolean);
         metaPayload = {
           content_type: 'product',
           content_ids: contentIds,
