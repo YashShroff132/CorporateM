@@ -179,7 +179,15 @@ export default async function ProductPage({
       {/* Emit the product_view funnel event on the client (Req 19.5). */}
       <TrackOnMount
         event="product_view"
-        props={{ slug: detail.product.slug, slogan: detail.product.slogan }}
+        props={{
+          slug: detail.product.slug,
+          slogan: detail.product.slogan,
+          // Meta Catalog matching fields (required for dynamic ads)
+          content_ids: [detail.product.slug],
+          content_type: 'product',
+          value: (detail.product.basePrice / 100).toFixed(2),
+          currency: 'INR',
+        }}
       />
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         {/* Product Image Gallery — Front & Back View Gallery */}
@@ -258,6 +266,11 @@ export default async function ProductPage({
               eventProps={{
                 slug: detail.product.slug,
                 variantId: vm.selectedVariant?.id,
+                // Meta Catalog matching fields (required for dynamic ads)
+                content_ids: [detail.product.slug],
+                content_type: 'product',
+                value: (detail.product.basePrice / 100).toFixed(2),
+                currency: 'INR',
               }}
             />
             {addToCart.prompt !== undefined && (
