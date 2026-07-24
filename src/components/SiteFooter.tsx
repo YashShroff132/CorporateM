@@ -1,10 +1,8 @@
 /**
  * SiteFooter — site-wide footer with navigation to the storefront and all legal
- * / policy pages (Requirement 21.1: policy pages reachable from the footer on
- * every page). Razorpay's live-account review checks that Terms, Privacy,
- * Refund, Shipping, and Contact pages are reachable — these links satisfy that.
+ * / policy pages.
  *
- * Server-rendered plain anchors; no client JS required.
+ * Includes mandatory Indian e-commerce seller disclosure (Consumer Protection E-Commerce Rules 2020).
  */
 
 import Link from 'next/link';
@@ -26,7 +24,6 @@ const LEGAL_LINKS: ReadonlyArray<{ href: string; label: string }> = [
 ];
 
 export function SiteFooter() {
-  const brand = process.env.BRAND_NAME?.trim() || 'Out of Office';
   const year = new Date().getFullYear();
 
   return (
@@ -72,9 +69,17 @@ export function SiteFooter() {
           <NewsletterSignup />
         </div>
 
-        <p className="text-xs text-muted">
-          © {year} {brand}. All rights reserved.
-        </p>
+        <div className="border-t border-ink/5 pt-6 flex flex-col gap-2 text-xs text-muted">
+          <p className="font-semibold text-ink/80">
+            Out of Office (oofo.tech) &middot; Operated by Vishal Sharad Mandhane, Mumbai, Maharashtra
+          </p>
+          <p>
+            Contact: <a href="mailto:daisybusinessin@gmail.com" className="underline hover:text-ink">daisybusinessin@gmail.com</a> &middot; <a href="tel:+918291530745" className="underline hover:text-ink">+91 8291530745</a>
+          </p>
+          <p className="mt-1 text-[11px]">
+            &copy; {year} Out of Office. All rights reserved. Prices inclusive of all applicable taxes.
+          </p>
+        </div>
       </div>
     </footer>
   );

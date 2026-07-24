@@ -1,16 +1,11 @@
 /**
- * Terms & Conditions (Requirement 21.1/21.2/21.6).
- *
- * Generic-but-real template for an Indian D2C apparel store. Brand and legal
- * entity values are sourced from configuration/env; unknown values render as
- * clearly identifiable placeholders (Req 21.6).
+ * Terms & Conditions — Out of Office (oofo.tech).
  */
 
 import type { Metadata } from 'next';
 
 import { PolicyPage, PolicySection } from '@/components/legal/PolicyPage';
 import { absoluteUrl } from '@/lib/site';
-import { config } from '@/services/config';
 
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
@@ -19,96 +14,120 @@ export const metadata: Metadata = {
 };
 
 export default function TermsPage() {
-  const brand = config.brand().name || 'Out of Office';
-
   return (
     <PolicyPage title="Terms & Conditions">
+      <p className="text-xs font-bold text-muted">Last updated: 24 July 2026</p>
+
       <p>
-        These Terms &amp; Conditions govern your access to and use of the {brand}{' '}
-        website (oofo.tech) and your purchase of products from us. By browsing this site or
-        placing an order, you agree to be bound by these terms.
+        Welcome to Out of Office. These Terms &amp; Conditions (&ldquo;Terms&rdquo;) are a legally binding agreement between you and Vishal Sharad Mandhane, a sole proprietor trading as &ldquo;Out of Office&rdquo; (&ldquo;Out of Office&rdquo;, &ldquo;OOFO&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;), governing your use of oofo.tech and your purchase of products from us. By browsing this website or placing an order, you accept these Terms. If you do not agree, please do not use the site.
       </p>
 
-      <PolicySection heading="1. Eligibility">
-        <p>
-          You must be capable of entering into a legally binding contract under
-          the Indian Contract Act, 1872 to place an order. If you are a minor, you
-          may use the site only with the involvement of a parent or guardian.
+      <PolicySection heading="1. Who you are buying from">
+        <ul className="list-disc pl-6 space-y-1">
+          <li><strong>Legal name:</strong> Vishal Sharad Mandhane (an individual / sole proprietor — Out of Office is a brand name, not a registered company)</li>
+          <li><strong>Trading name:</strong> Out of Office</li>
+          <li><strong>Place of business:</strong> Mumbai, Maharashtra</li>
+          <li><strong>Email:</strong> <a className="underline font-bold" href="mailto:daisybusinessin@gmail.com">daisybusinessin@gmail.com</a></li>
+          <li><strong>Phone:</strong> <a className="underline font-bold" href="tel:+918291530745">+91 8291530745</a></li>
+        </ul>
+        <p className="mt-2">
+          <strong>Registration status:</strong> Out of Office is currently operated by an individual as a sole proprietorship. It is not a company registered under the Companies Act, and it is not registered under GST. Prices are inclusive of all applicable taxes, and no GST is separately charged or collected.
         </p>
       </PolicySection>
 
-      <PolicySection heading="2. Products and pricing">
+      <PolicySection heading="2. Eligibility">
         <p>
-          All prices are listed in Indian Rupees (INR) and are inclusive of
-          applicable taxes unless stated otherwise. We make reasonable efforts to
-          describe products accurately, but colours and finishes may vary slightly
-          due to display and manufacturing differences. We reserve the right to
-          correct pricing or listing errors and to limit order quantities.
+          You must be at least 18 years old and capable of entering into a legally binding contract under the Indian Contract Act, 1872. By ordering, you confirm that you meet these requirements and that the information you provide is accurate.
         </p>
       </PolicySection>
 
-      <PolicySection heading="3. Orders and payment">
+      <PolicySection heading="3. No account needed">
         <p>
-          An order is confirmed only after successful payment is verified. Payments
-          are processed by our third-party payment gateway; we do not store your
-          payment credentials. We may cancel an order in cases of suspected fraud,
-          pricing errors, or stock unavailability, in which case any amount paid
-          will be refunded.
+          You do not need to create an account to shop with us. You browse, add items to your cart, and check out directly. We do not maintain user accounts or store login credentials.
         </p>
       </PolicySection>
 
-      <PolicySection heading="4. Shipping, returns and refunds">
+      <PolicySection heading="4. Products, descriptions and pricing">
         <p>
-          Delivery timelines, returns, and refunds are governed by our{' '}
-          <a className="underline" href="/legal/shipping">
-            Shipping Policy
-          </a>{' '}
-          and{' '}
-          <a className="underline" href="/legal/refunds">
-            Returns &amp; Refund Policy
-          </a>
-          .
+          All products are apparel sold under the Out of Office brand. We describe them as accurately as we can, but colours and print finishes may vary slightly because of screen settings and normal manufacturing variation.
+        </p>
+        <p>
+          All prices are shown in Indian Rupees (INR) and are inclusive of applicable taxes. The total payable, including any delivery charge, is shown at checkout before you pay.
+        </p>
+        <p>
+          We may correct genuine pricing or listing errors, update prices, and limit order quantities at any time before an order is confirmed.
         </p>
       </PolicySection>
 
-      <PolicySection heading="5. Intellectual property">
+      <PolicySection heading="5. How ordering and payment work">
         <p>
-          All content on this site — including designs, slogans, artwork, logos,
-          and text — is owned by or licensed to {brand} and is protected by
-          applicable intellectual property laws. You may not reproduce or use it
-          without prior written permission.
+          To buy, you place your order on this website and are then taken to our payment partner, Razorpay, to complete payment.
+        </p>
+        <p>
+          You enter your payment and delivery details on Razorpay&rsquo;s secure checkout, not on our website. We do not see, collect, or store your card, UPI, netbanking, or wallet credentials at any point.
+        </p>
+        <p>
+          After payment, we receive from Razorpay only what we need to serve you: confirmation that payment succeeded, an order/payment reference, and the name, contact details, and shipping address you provided so we can deliver your order.
+        </p>
+        <p>
+          Your order is confirmed only once payment is successfully verified. Until then, no contract of sale is formed.
+        </p>
+        <p>
+          If we cannot fulfil a confirmed order (for example, due to a stock issue, a pricing error, or suspected fraud), we may cancel it and refund any amount you paid. We will not levy a cancellation charge on you unless we ourselves have to bear an equivalent charge.
         </p>
       </PolicySection>
 
-      <PolicySection heading="6. Acceptable use">
+      <PolicySection heading="6. Shipping, returns and refunds">
         <p>
-          You agree not to misuse the site, attempt unauthorised access, or use it
-          for any unlawful purpose. We may suspend access where we reasonably
-          believe these terms have been breached.
+          Delivery timelines, returns, exchanges, and refunds are governed by our{' '}
+          <a className="underline font-bold" href="/legal/shipping">Shipping Policy</a>{' '}
+          and our{' '}
+          <a className="underline font-bold" href="/legal/refunds">Returns &amp; Refund Policy</a>
+          , which form part of these Terms. In line with your rights under the Consumer Protection Act, 2019, we will not refuse to take back or refund a product that is defective, not as described, or delivered late.
         </p>
       </PolicySection>
 
-      <PolicySection heading="7. Limitation of liability">
+      <PolicySection heading="7. Intellectual property">
         <p>
-          To the extent permitted by law, our liability arising out of any order is
-          limited to the amount paid for that order. Nothing in these terms
-          excludes liability that cannot be excluded under applicable law.
+          All content on this site — including the designs, slogans, artwork, logos, product photography, and text — belongs to Vishal Sharad Mandhane / Out of Office or is used under licence, and is protected by law. You may not copy, reproduce, resell, or reuse any of it without our prior written permission.
         </p>
       </PolicySection>
 
-      <PolicySection heading="8. Governing law">
+      <PolicySection heading="8. Acceptable use">
         <p>
-          These terms are governed by the laws of India, and any legal matters or disputes shall be subject to the exclusive jurisdiction of the competent courts in India.
+          You agree to use the site lawfully and not to attempt unauthorised access, interfere with its operation, scrape it, or use it for any fraudulent or unlawful purpose. We may restrict or withdraw access where we reasonably believe these Terms have been breached.
         </p>
       </PolicySection>
 
-      <PolicySection heading="9. Contact">
+      <PolicySection heading="9. Limitation of liability">
         <p>
-          Questions about these terms can be sent via our{' '}
-          <a className="underline" href="/legal/contact">
-            Contact Us
-          </a>{' '}
-          page.
+          The site and products are provided on a reasonable-efforts basis. To the maximum extent permitted by law, our total liability arising out of or in connection with any order is limited to the amount you actually paid for that order. Nothing in these Terms limits any liability that cannot be limited under Indian law, including your statutory consumer rights.
+        </p>
+      </PolicySection>
+
+      <PolicySection heading="10. Complaints and grievance redressal">
+        <p>
+          We want problems fixed quickly. For any complaint about a product, an order, or these Terms, contact:
+        </p>
+        <div className="mt-2 border-l-2 border-ink pl-4 space-y-1">
+          <p><strong>Grievance contact:</strong> Vishal Sharad Mandhane</p>
+          <p><strong>Email:</strong> <a className="underline font-bold" href="mailto:daisybusinessin@gmail.com">daisybusinessin@gmail.com</a></p>
+          <p><strong>Phone:</strong> <a className="underline font-bold" href="tel:+918291530745">+91 8291530745</a></p>
+        </div>
+        <p className="mt-2">
+          We will acknowledge your complaint within 48 hours and aim to resolve it within one month of receipt, consistent with the Consumer Protection (E-Commerce) Rules, 2020.
+        </p>
+      </PolicySection>
+
+      <PolicySection heading="11. Changes to these Terms">
+        <p>
+          We may update these Terms from time to time. The version posted on this page at the time of your order applies to that order.
+        </p>
+      </PolicySection>
+
+      <PolicySection heading="12. Governing law and jurisdiction">
+        <p>
+          These Terms are governed by the laws of India. Any dispute is subject to the exclusive jurisdiction of the competent courts in Mumbai, Maharashtra.
         </p>
       </PolicySection>
     </PolicyPage>
