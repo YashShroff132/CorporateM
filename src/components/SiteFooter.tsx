@@ -11,8 +11,8 @@ import { NewsletterSignup } from './NewsletterSignup';
 
 const SHOP_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: '/', label: 'Home' },
-  { href: '/shop', label: 'Shop' },
-  { href: '/collections', label: 'Collections' },
+  { href: '/shop#catalog', label: 'Shop' },
+  { href: '/collections', label: 'Drops' },
 ];
 
 const LEGAL_LINKS: ReadonlyArray<{ href: string; label: string }> = [

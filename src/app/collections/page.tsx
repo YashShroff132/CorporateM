@@ -14,8 +14,8 @@ export const dynamic = 'force-dynamic';
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Collections',
-    description: 'Explore Out of Office collections and find your next favourite tee.',
+    title: 'Drops',
+    description: 'Explore Out of Office drops and find your next favourite tee.',
     alternates: { canonical: absoluteUrl('/collections') },
   };
 }
@@ -26,7 +26,7 @@ export default async function CollectionsPage() {
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 p-6">
       <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-black tracking-tight">Collections</h1>
+        <h1 className="text-3xl font-black tracking-tight">Drops</h1>
         <p className="text-muted">Curated drops for every level of workplace honesty.</p>
       </header>
 

@@ -49,7 +49,7 @@ export function NewsletterSignup() {
           <button
             type="submit"
             disabled={pending}
-            className="inline-flex items-center justify-center rounded bg-corporate px-4 py-2 text-sm font-bold uppercase tracking-wide text-white hover:bg-ink disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded bg-corporate px-4 py-2 text-sm font-bold uppercase tracking-wide text-white hover:bg-stamp-red dark:hover:bg-stamp-red transition-colors disabled:opacity-60"
           >
             {pending ? 'Subscribing…' : 'Subscribe'}
           </button>

@@ -51,7 +51,6 @@ export function PolicyPage({
     <main className="mx-auto flex max-w-3xl flex-col gap-6 px-6 py-12">
       <header className="flex flex-col gap-3">
         <h1 className="text-3xl font-black tracking-tight text-ink">{title}</h1>
-        <PendingLegalReviewNotice />
       </header>
       <div className="prose-policy flex flex-col gap-5 text-ink/90">{children}</div>
     </main>
