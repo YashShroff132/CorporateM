@@ -80,7 +80,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/employee-resign-full.jpg',
-    mockupBackUrl: '/products/employee-resign-mannequin-full.jpg',
+    galleryUrls: ['/products/employee-resign-ad.jpg'],
     seoTitle: 'An Employee Who Does Not Give Up Resigns Tee',
     seoDescription: 'Heavyweight oversized cotton tee — the corporate anthem for anyone who has ever rage-quit in style.',
     variants: [
