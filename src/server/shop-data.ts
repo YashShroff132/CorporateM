@@ -94,12 +94,12 @@ export const CUSTOM_PRODUCT_PRESETS: Record<string, LayoutPreset> = {
 };
 
 export const EXTRA_PRODUCT_IMAGES: Record<string, string[]> = {
-  'employee-resigns': ['/products/employee-resign-ad.jpg'],
+  'employee-resigns': [],
   'manager-eyes': ['/products/manager-eyes-ad.jpg'],
   'hybrid-mandatory': ['/products/hybrid-mandatory-ad.jpg'],
   'snake-coworkers': ['/products/snake-coworkers-ad.jpg'],
   'happy-friday': ['/products/happy-friday-ad.jpg'],
-  'boyfriend-wfh': ['/products/boyfriend-wfh-ad.jpg'],
+  'boyfriend-wfh': ['/products/girlfriend-wfh-full.png', '/products/boyfriend-wfh-ad.jpg'],
   'chai-sutta-break': ['/products/chai-sutta-break-ad.jpg'],
 };
 

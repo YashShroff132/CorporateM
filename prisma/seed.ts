@@ -81,7 +81,6 @@ const PRODUCTS: readonly ProductSeed[] = [
     basePrice: 79900, // ₹799
     mockupUrl: '/products/employee-resign-full.jpg',
     mockupBackUrl: '/products/employee-resign-mannequin-full.jpg',
-    galleryUrls: ['/products/employee-resign-ad.jpg'],
     seoTitle: 'An Employee Who Does Not Give Up Resigns Tee',
     seoDescription: 'Heavyweight oversized cotton tee — the corporate anthem for anyone who has ever rage-quit in style.',
     variants: [
@@ -216,7 +215,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/boyfriend-wfh-full.jpg',
-    galleryUrls: ['/products/boyfriend-wfh-ad.jpg'],
+    galleryUrls: ['/products/girlfriend-wfh-full.png', '/products/boyfriend-wfh-ad.jpg'],
     seoTitle: 'My Boyfriend Is Doing WFH Graphic White Tee',
     seoDescription: 'Chili pepper graphic white tee — because your boyfriend working from home hits different.',
     variants: [
