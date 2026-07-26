@@ -63,7 +63,6 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const hoverIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const touchStartX = useRef<number | null>(null);
 
   // Cleanup interval on unmount
   useEffect(() => {
@@ -86,7 +85,7 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
     if (slides.length > 1 && !isPaused) {
       hoverIntervalRef.current = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % slides.length);
-      }, 2500); // Slower, relaxed 2.5s slide interval ONLY on hover
+      }, 2500); // 2.5s relaxed slide interval ONLY on desktop hover
     }
   };
 
@@ -102,36 +101,13 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
     setCurrentIndex(0);
   };
 
-  // Touch Swipe Handlers for Mobile Devices
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (e.touches && e.touches[0]) {
-      touchStartX.current = e.touches[0].clientX;
-    }
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || !e.changedTouches || !e.changedTouches[0]) return;
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX.current - touchEndX;
-    if (Math.abs(diff) > 30) {
-      if (diff > 0) {
-        // Swipe left -> next image
-        setCurrentIndex((prev) => (prev + 1) % slides.length);
-      } else {
-        // Swipe right -> prev image
-        setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-      }
-    }
-    touchStartX.current = null;
-  };
-
-  const handlePrev = (e: React.MouseEvent) => {
+  const handlePrev = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
-  const handleNext = (e: React.MouseEvent) => {
+  const handleNext = (e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setCurrentIndex((prev) => (prev + 1) % slides.length);
@@ -142,15 +118,13 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
       href={`/product/${product.slug}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
       className="product-card group relative block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:shadow-xl hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-1.5"
     >
       {/* --- Metallic Silver Top Sheen Accent Line on Hover --- */}
       <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-slate-300 via-white to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none" />
 
-      {/* --- Preloaded Image / OOO Back Container --- */}
-      <div className="aspect-square relative border-b border-ink/5 overflow-hidden bg-paper select-none">
+      {/* --- Product Image Container (OG Break style silver sheen applied ONLY to photo) --- */}
+      <div className="product-image-wrap aspect-square relative border-b border-ink/5 overflow-hidden bg-paper select-none">
         {slides.map((slide, idx) => (
           <div
             key={slide.id}
@@ -181,16 +155,20 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
           </div>
         ))}
 
-        {/* Hover Arrow Overlay & Controls */}
-        {isHovered && slides.length > 1 && (
+        {/* Navigation Arrow Controls: Always visible on Mobile, Visible on Hover on Desktop */}
+        {slides.length > 1 && (
           <>
             <button
               type="button"
               onClick={handlePrev}
+              onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              onTouchEnd={handlePrev}
               onMouseEnter={() => { setIsPaused(true); stopAutoSlide(); }}
               onMouseLeave={() => { setIsPaused(false); startAutoSlide(); }}
               aria-label="Previous photo"
-              className="absolute left-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white"
+              className={`absolute left-1.5 top-1/2 -translate-y-1/2 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white ${
+                isHovered ? 'flex' : 'flex md:hidden'
+              }`}
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -199,10 +177,14 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
             <button
               type="button"
               onClick={handleNext}
+              onTouchStart={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              onTouchEnd={handleNext}
               onMouseEnter={() => { setIsPaused(true); stopAutoSlide(); }}
               onMouseLeave={() => { setIsPaused(false); startAutoSlide(); }}
               aria-label="Next photo"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white"
+              className={`absolute right-1.5 top-1/2 -translate-y-1/2 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white ${
+                isHovered ? 'flex' : 'flex md:hidden'
+              }`}
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
@@ -223,7 +205,7 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
         )}
       </div>
 
-      {/* --- Product Info --- */}
+      {/* --- Product Info (Price & Slogan below photo - NO silver sheen overlap) --- */}
       <div className="flex flex-col gap-1 p-3.5">
         <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-bold">
           {COLLECTION_TITLES[product.collectionSlug] || product.collectionSlug}
