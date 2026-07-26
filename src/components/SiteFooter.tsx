@@ -71,7 +71,7 @@ export function SiteFooter() {
 
         <div className="border-t border-ink/5 pt-6 flex flex-col gap-2 text-xs text-muted">
           <p className="font-semibold text-ink/80">
-            Out of Office (oofo.tech) &middot; Operated by Vishal Sharad Mandhane, Mumbai, Maharashtra
+            Out of Office (oofo.tech)
           </p>
           <p>
             Contact: <a href="mailto:daisybusinessin@gmail.com" className="underline hover:text-ink">daisybusinessin@gmail.com</a> &middot; <a href="tel:+918291530745" className="underline hover:text-ink">+91 8291530745</a>

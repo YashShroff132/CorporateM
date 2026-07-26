@@ -144,6 +144,17 @@
   transition: none;
 }
 
+.dark .product-image-wrap::after {
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 35%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 65%,
+    transparent 100%
+  );
+}
+
 @media (hover: hover) and (pointer: fine) {
   .product-card:hover .product-image-wrap::after {
     transform: translateX(120%);

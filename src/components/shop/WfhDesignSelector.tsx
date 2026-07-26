@@ -37,8 +37,8 @@ export function WfhDesignSelector({
           onClick={() => handleSelect('boyfriend')}
           className={`w-full flex items-center justify-center gap-2 rounded border px-4 py-3 text-xs sm:text-sm font-bold transition-all duration-100 text-center ${
             selectedOption === 'boyfriend'
-              ? 'border-ink bg-ink text-paper dark:border-paper dark:bg-paper dark:text-ink shadow-sm'
-              : 'border-ink/20 bg-paper text-ink hover:border-ink dark:border-white/20 dark:bg-transparent dark:text-white dark:hover:border-white'
+              ? 'border-ink bg-ink text-paper shadow-sm'
+              : 'border-ink/20 bg-paper text-ink hover:border-ink'
           }`}
           aria-pressed={selectedOption === 'boyfriend'}
         >
@@ -50,8 +50,8 @@ export function WfhDesignSelector({
           onClick={() => handleSelect('girlfriend')}
           className={`w-full flex items-center justify-center gap-2 rounded border px-4 py-3 text-xs sm:text-sm font-bold transition-all duration-100 text-center ${
             selectedOption === 'girlfriend'
-              ? 'border-ink bg-ink text-paper dark:border-paper dark:bg-paper dark:text-ink shadow-sm'
-              : 'border-ink/20 bg-paper text-ink hover:border-ink dark:border-white/20 dark:bg-transparent dark:text-white dark:hover:border-white'
+              ? 'border-ink bg-ink text-paper shadow-sm'
+              : 'border-ink/20 bg-paper text-ink hover:border-ink'
           }`}
           aria-pressed={selectedOption === 'girlfriend'}
         >
