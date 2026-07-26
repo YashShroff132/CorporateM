@@ -121,7 +121,13 @@ export function ProductGrid({
                 <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-bold">
                   {COLLECTION_TITLES[product.collectionSlug] || product.collectionSlug}
                 </span>
-                <span className="text-sm font-bold text-ink leading-tight line-clamp-2 min-h-[2.5rem]">
+                <span
+                  className={`font-bold text-ink leading-tight min-h-[2.5rem] ${
+                    product.slogan.length > 30
+                      ? 'text-xs line-clamp-3'
+                      : 'text-sm line-clamp-2'
+                  }`}
+                >
                   {product.slogan}
                 </span>
                 <div className="flex items-baseline gap-1.5 mt-1 font-mono">

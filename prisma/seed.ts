@@ -81,20 +81,20 @@ const PRODUCTS: readonly ProductSeed[] = [
     mockupUrl: '/products/employee-resign-full.jpg',
     mockupBackUrl: '/products/employee-resign-mannequin-full.jpg',
     seoTitle: 'An Employee Who Does Not Give Up Resigns Tee',
-    seoDescription: 'Heavyweight oversized cotton tee with high-contrast back graphic print.',
+    seoDescription: 'Heavyweight oversized cotton tee — the corporate anthem for anyone who has ever rage-quit in style.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 30),
     ],
   },
   {
     slug: 'like-a-family-here',
-    slogan: 'LIKE A FAMILY HERE *layoffs excluded.',
+    slogan: 'LIKE A FAMILY HERE* *LAYOFFS EXCLUDED.',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/like-a-family-full.jpg',
     seoTitle: 'Like a Family Here Layoffs Excluded Tee',
-    seoDescription: 'Corporate culture satire graphic tee in heavyweight black cotton.',
+    seoDescription: 'Corporate culture satire graphic tee — because every town hall promises family until Q3 cuts.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 25),
     ],
@@ -113,14 +113,14 @@ const PRODUCTS: readonly ProductSeed[] = [
     ],
   },
   {
-    slug: 'manager-goat',
-    slogan: 'MANAGER',
+    slug: 'delegator',
+    slogan: 'DELEGATOR',
     tier: Tier.VERY_DIRECT,
     collectionSlug: 'heretic',
     basePrice: 99900, // ₹999
-    mockupUrl: '/products/manager-goat-full.jpg',
-    seoTitle: 'Manager Goat Graphic Heavyweight Tee',
-    seoDescription: 'Gold ram graphic back print tee for leadership satire.',
+    mockupUrl: '/products/delegator-full.jpg',
+    seoTitle: 'Delegator Ram Graphic Heavyweight Tee',
+    seoDescription: 'Gold ram graphic back print — for every manager who delegates like a GOAT.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 15),
     ],
@@ -146,20 +146,20 @@ const PRODUCTS: readonly ProductSeed[] = [
     basePrice: 89900, // ₹899
     mockupUrl: '/products/9am-standups-full.jpg',
     seoTitle: '9 AM Standups Give Toxic Relationship Vibes Tee',
-    seoDescription: 'Morning standup commentary in glitch typography.',
+    seoDescription: 'Morning standup culture called out in bold glitch typography on heavyweight black cotton.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 22),
     ],
   },
   {
-    slug: 'chai-coffee-break',
-    slogan: 'CHAI COFFEE BREAK',
+    slug: 'chai-sutta-break',
+    slogan: 'CHAI SUTTA BREAK',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
-    mockupUrl: '/products/chai-coffee-break-full.jpg',
-    seoTitle: 'Chai Coffee Break Graphic Tee',
-    seoDescription: 'Iced coffee and chai break illustration back print tee.',
+    mockupUrl: '/products/chai-sutta-break-full.jpg',
+    seoTitle: 'Chai Sutta Break Graphic Tee',
+    seoDescription: 'The sacred office ritual — chai, sutta, and pretending the deadline is tomorrow.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 25),
     ],
@@ -172,7 +172,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     basePrice: 84900, // ₹849
     mockupUrl: '/products/quick-call-full.jpg',
     seoTitle: 'Quick Call Exhaustion Graphic Tee',
-    seoDescription: 'Repeated quick call graphic back print tee.',
+    seoDescription: 'The meeting that should have been an email — repeated until insanity.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 18),
     ],
@@ -216,6 +216,85 @@ const PRODUCTS: readonly ProductSeed[] = [
       ...sizeSpread('White', 'Oversized', 28),
     ],
   },
+  // ---- NEW PRODUCTS ----
+  {
+    slug: 'boyfriend-wfh',
+    slogan: 'MY BOYFRIEND IS DOING WFH',
+    tier: Tier.SAFE,
+    collectionSlug: 'operator',
+    basePrice: 79900, // ₹799
+    mockupUrl: '/products/boyfriend-wfh-full.jpg',
+    seoTitle: 'My Boyfriend Is Doing WFH Graphic White Tee',
+    seoDescription: 'Chili pepper graphic white tee — because your boyfriend working from home hits different.',
+    variants: [
+      ...sizeSpread('White', 'Oversized', 25),
+    ],
+  },
+  {
+    slug: 'good-team-manager',
+    slogan: 'GOOD TEAM MANAGER',
+    tier: Tier.DIRECT,
+    collectionSlug: 'believer',
+    basePrice: 89900, // ₹899
+    mockupUrl: '/products/good-team-manager-full.jpg',
+    seoTitle: 'Good Team Manager Moth Graphic Tee',
+    seoDescription: 'Unread emails & pending approvals — the moth of management on heavyweight black cotton.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 20),
+    ],
+  },
+  {
+    slug: 'happy-friday',
+    slogan: 'HAPPY FRIDAY',
+    tier: Tier.SAFE,
+    collectionSlug: 'operator',
+    basePrice: 79900, // ₹799
+    mockupUrl: '/products/happy-friday-full.jpg',
+    seoTitle: 'Happy Friday Bold Graphic Tee',
+    seoDescription: 'The only day that matters — bold Friday typography on heavyweight black cotton.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 25),
+    ],
+  },
+  {
+    slug: 'manager-eyes',
+    slogan: 'MANAGER',
+    tier: Tier.VERY_DIRECT,
+    collectionSlug: 'heretic',
+    basePrice: 99900, // ₹999
+    mockupUrl: '/products/manager-eyes-full.jpg',
+    seoTitle: 'Manager Gold Eyes Graphic Heavyweight Tee',
+    seoDescription: 'Gold eyes watching — the manager sees everything, on heavyweight black cotton.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 15),
+    ],
+  },
+  {
+    slug: 'notice-period-energy',
+    slogan: 'NOTICE PERIOD ENERGY',
+    tier: Tier.DIRECT,
+    collectionSlug: 'believer',
+    basePrice: 84900, // ₹849
+    mockupUrl: '/products/notice-period-energy-full.jpg',
+    seoTitle: 'Notice Period Energy Graphic Tee',
+    seoDescription: 'Girl on couch vibes — notice period energy in bold red on heavyweight black cotton.',
+    variants: [
+      ...sizeSpread('Black', 'Oversized', 22),
+    ],
+  },
+  {
+    slug: 'mute-is-my-crown',
+    slogan: 'MUTE IS MY CROWN',
+    tier: Tier.SAFE,
+    collectionSlug: 'operator',
+    basePrice: 84900, // ₹849
+    mockupUrl: '/products/mute-is-my-crown-full.jpg',
+    seoTitle: 'Mute Is My Crown Queen Card White Tee',
+    seoDescription: 'Queen of hearts playing card — mute is my crown, on premium white cotton.',
+    variants: [
+      ...sizeSpread('White', 'Oversized', 25),
+    ],
+  },
 ];
 
 interface SloganSeed {
@@ -227,14 +306,20 @@ const SLOGANS: readonly SloganSeed[] = [
   { text: 'An employee who does not give up resigns.', tier: Tier.SAFE },
   { text: 'LIKE A FAMILY HERE *layoffs excluded.', tier: Tier.SAFE },
   { text: 'HYBRID 3 days mandatory', tier: Tier.DIRECT },
-  { text: 'MANAGER', tier: Tier.VERY_DIRECT },
+  { text: 'DELEGATOR', tier: Tier.VERY_DIRECT },
   { text: 'WFH over WFO', tier: Tier.SAFE },
   { text: '9 AM STANDUPS GIVE TOXIC RELATIONSHIP VIBES', tier: Tier.DIRECT },
-  { text: 'CHAI COFFEE BREAK', tier: Tier.SAFE },
+  { text: 'CHAI SUTTA BREAK', tier: Tier.SAFE },
   { text: 'QUICK CALL', tier: Tier.DIRECT },
   { text: 'BE AWARE OF SNAKE CO-WORKERS', tier: Tier.DIRECT },
   { text: "I'm sorry I was late. I had a meeting.* (*I was talking to claude.)", tier: Tier.SAFE },
   { text: 'AM I AUDIBLE AM I AUDIBLE AM I AUDIBLE', tier: Tier.DIRECT },
+  { text: 'MY BOYFRIEND IS DOING WFH', tier: Tier.SAFE },
+  { text: 'GOOD TEAM MANAGER', tier: Tier.DIRECT },
+  { text: 'HAPPY FRIDAY', tier: Tier.SAFE },
+  { text: 'MANAGER', tier: Tier.VERY_DIRECT },
+  { text: 'NOTICE PERIOD ENERGY', tier: Tier.DIRECT },
+  { text: 'MUTE IS MY CROWN', tier: Tier.SAFE },
 ];
 
 interface BlankTemplateSeed {
