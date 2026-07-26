@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { ShopProductView } from '@/services/shop';
 import { ProductImage } from '@/components/ProductImage';
 import { OOOLogo } from '../OOOLogo';
@@ -37,6 +37,15 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const hoverIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup interval on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverIntervalRef.current) {
+        clearInterval(hoverIntervalRef.current);
+      }
+    };
+  }, []);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
