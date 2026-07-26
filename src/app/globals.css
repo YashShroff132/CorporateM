@@ -147,7 +147,7 @@
 @media (hover: hover) and (pointer: fine) {
   .product-card:hover .product-image-wrap::after {
     transform: translateX(120%);
-    transition: transform 1.3s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: transform 3.9s cubic-bezier(0.25, 1, 0.5, 1);
   }
 }
 
