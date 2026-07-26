@@ -16,18 +16,6 @@ export interface ProductGridProps {
 const DEFAULT_EMPTY_MESSAGE =
   'No matching products. Try adjusting or clearing your filters.';
 
-/** Round a raw MRP to a clean ₹X99 price point (e.g. ₹1499, ₹1999, ₹2499). */
-function cleanMrp(salePrice: number): number {
-  const raw = salePrice / 0.6;
-  return Math.ceil(raw / 100) * 100 - 1;
-}
-
-const COLLECTION_TITLES: Record<string, string> = {
-  operator: 'Intern',
-  believer: 'Associate',
-  heretic: 'Manager',
-};
-
 export function ProductGrid({
   items,
   emptyMessage = DEFAULT_EMPTY_MESSAGE,
@@ -49,11 +37,7 @@ export function ProductGrid({
       {items.map((product, index) => (
         <li key={product.id} className="list-none">
           <ScrollReveal delay={(index % 4) * 100}>
-            <ProductCardItem
-              product={product}
-              cleanMrp={cleanMrp}
-              collectionTitles={COLLECTION_TITLES}
-            />
+            <ProductCardItem product={product} />
           </ScrollReveal>
         </li>
       ))}

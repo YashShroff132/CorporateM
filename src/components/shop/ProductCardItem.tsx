@@ -5,17 +5,23 @@ import type { ShopProductView } from '@/services/shop';
 import { ProductImage } from '@/components/ProductImage';
 import { OOOLogo } from '../OOOLogo';
 
-interface ProductCardItemProps {
-  product: ShopProductView;
-  cleanMrp: (price: number) => number;
-  collectionTitles: Record<string, string>;
+/** Round a raw MRP to a clean ₹X99 price point (e.g. ₹1499, ₹1999, ₹2499). */
+function cleanMrp(salePrice: number): number {
+  const raw = salePrice / 0.6;
+  return Math.ceil(raw / 100) * 100 - 1;
 }
 
-export function ProductCardItem({
-  product,
-  cleanMrp,
-  collectionTitles,
-}: ProductCardItemProps) {
+const COLLECTION_TITLES: Record<string, string> = {
+  operator: 'Intern',
+  believer: 'Associate',
+  heretic: 'Manager',
+};
+
+interface ProductCardItemProps {
+  product: ShopProductView;
+}
+
+export function ProductCardItem({ product }: ProductCardItemProps) {
   // Build array of available image URLs
   const allImages: string[] = [];
   if (product.mockupUrl) allImages.push(product.mockupUrl);
@@ -143,7 +149,7 @@ export function ProductCardItem({
       {/* --- Product Info --- */}
       <div className="flex flex-col gap-1 p-3.5">
         <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-bold">
-          {collectionTitles[product.collectionSlug] || product.collectionSlug}
+          {COLLECTION_TITLES[product.collectionSlug] || product.collectionSlug}
         </span>
         <span
           className={`font-bold text-ink leading-tight min-h-[2.5rem] ${
