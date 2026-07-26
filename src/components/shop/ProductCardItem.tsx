@@ -22,7 +22,7 @@ interface ProductCardItemProps {
 }
 
 export function ProductCardItem({ product }: ProductCardItemProps) {
-  // Build array of available image URLs
+  // Build deduplicated array of available image URLs
   const allImages: string[] = [];
   if (product.mockupUrl) allImages.push(product.mockupUrl);
   if (product.galleryUrls && product.galleryUrls.length > 0) {
@@ -36,6 +36,7 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
   const hoverIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Cleanup interval on unmount
@@ -47,21 +48,31 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
     };
   }, []);
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    if (allImages.length > 1) {
-      hoverIntervalRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % allImages.length);
-      }, 1300);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
+  const stopAutoSlide = () => {
     if (hoverIntervalRef.current) {
       clearInterval(hoverIntervalRef.current);
       hoverIntervalRef.current = null;
     }
+  };
+
+  const startAutoSlide = () => {
+    stopAutoSlide();
+    if (allImages.length > 1 && !isPaused) {
+      hoverIntervalRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % allImages.length);
+      }, 2200); // 2.2s comfortable slide interval
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    startAutoSlide();
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setIsPaused(false);
+    stopAutoSlide();
     setCurrentIndex(0);
   };
 
@@ -77,28 +88,45 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
     setCurrentIndex((prev) => (prev + 1) % allImages.length);
   };
 
-  const activeSrc = allImages[currentIndex] || product.mockupUrl;
-  const isBackView = product.mockupBackUrl && activeSrc === product.mockupBackUrl;
-
   return (
     <a
       href={`/product/${product.slug}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="product-card block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:shadow-xl hover:border-ink/25 hover:-translate-y-1.5"
+      className="product-card group relative block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:shadow-xl hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-1.5"
     >
-      {/* --- Image Container with Hover Slide --- */}
-      <div className="aspect-square relative border-b border-ink/5 overflow-hidden bg-paper">
-        {activeSrc && !activeSrc.startsWith('data:') ? (
-          <ProductImage
-            key={activeSrc}
-            src={activeSrc}
-            alt={product.slogan}
-            width={320}
-            height={320}
-            className="w-full h-full object-cover transition-opacity duration-300"
-          />
-        ) : isBackView ? (
+      {/* --- Metallic Silver Top Sheen Accent Line on Hover --- */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-slate-400 dark:via-slate-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none" />
+
+      {/* --- Preloaded Image Container (Zero Black Screen Flicker) --- */}
+      <div className="aspect-square relative border-b border-ink/5 overflow-hidden bg-paper select-none">
+        {allImages.length > 0 ? (
+          allImages.map((src, idx) => (
+            <div
+              key={src}
+              className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
+                idx === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+              }`}
+            >
+              {src.startsWith('data:') ? (
+                <ProductImage
+                  src={product.mockupBgUrl || (product.colors.includes('white') ? '/blank-white-tee.png' : '/blank-black-tee.png')}
+                  alt={product.slogan}
+                  width={320}
+                  height={320}
+                />
+              ) : (
+                <ProductImage
+                  src={src}
+                  alt={`${product.slogan} view ${idx + 1}`}
+                  width={320}
+                  height={320}
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
+          ))
+        ) : (
           <div className="flex flex-col justify-between p-8 font-mono select-none text-center h-full my-auto bg-ink text-paper dark:bg-paper dark:text-ink">
             <div className="flex flex-col items-center justify-center my-auto">
               <OOOLogo className="h-9 w-auto mb-2 text-paper dark:text-ink" />
@@ -108,23 +136,18 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
               <span className="text-xs font-bold uppercase tracking-wide leading-relaxed block">{product.slogan}</span>
             </div>
           </div>
-        ) : (
-          <ProductImage
-            src={product.mockupBgUrl || (product.colors.includes('white') ? '/blank-white-tee.png' : '/blank-black-tee.png')}
-            alt={product.slogan}
-            width={320}
-            height={320}
-          />
         )}
 
-        {/* Hover Arrow Overlay (Myntra Style) */}
+        {/* Hover Arrow Overlay & Pause Control */}
         {isHovered && allImages.length > 1 && (
           <>
             <button
               type="button"
               onClick={handlePrev}
+              onMouseEnter={() => { setIsPaused(true); stopAutoSlide(); }}
+              onMouseLeave={() => { setIsPaused(false); startAutoSlide(); }}
               aria-label="Previous photo"
-              className="absolute left-1.5 top-1/2 -translate-y-1/2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white hover:scale-110 active:scale-95 dark:bg-black/90 dark:text-white"
+              className="absolute left-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white hover:scale-110 active:scale-95 dark:bg-black/90 dark:text-white"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -133,15 +156,17 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
             <button
               type="button"
               onClick={handleNext}
+              onMouseEnter={() => { setIsPaused(true); stopAutoSlide(); }}
+              onMouseLeave={() => { setIsPaused(false); startAutoSlide(); }}
               aria-label="Next photo"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white hover:scale-110 active:scale-95 dark:bg-black/90 dark:text-white"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white hover:scale-110 active:scale-95 dark:bg-black/90 dark:text-white"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             </button>
             {/* Pagination Indicator Dots */}
-            <div className="absolute bottom-2 left-0 right-0 z-10 flex justify-center gap-1.5 pointer-events-none">
+            <div className="absolute bottom-2 left-0 right-0 z-20 flex justify-center gap-1.5 pointer-events-none">
               {allImages.map((_, idx) => (
                 <span
                   key={idx}

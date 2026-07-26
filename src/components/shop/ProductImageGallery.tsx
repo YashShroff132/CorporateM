@@ -49,8 +49,6 @@ export function ProductImageGallery({
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const touchStartX = useRef<number | null>(null);
 
-  const activeImage: GalleryImage = images[activeIndex] || images[0] || { id: 'front', label: 'Front View', url: frontUrl };
-
   const handlePrev = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -90,24 +88,32 @@ export function ProductImageGallery({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {activeImage.url.startsWith('data:') ? (
-          <ProductImage
-            src={frontUrl}
-            alt={slogan}
-            priority
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <ProductImage
-            key={activeImage.url}
-            src={activeImage.url}
-            alt={`${slogan} - ${activeImage.label}`}
-            priority
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="h-full w-full object-cover transition-opacity duration-300"
-          />
-        )}
+        {images.map((img, idx) => (
+          <div
+            key={img.id}
+            className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
+              idx === activeIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+            }`}
+          >
+            {img.url.startsWith('data:') ? (
+              <ProductImage
+                src={frontUrl}
+                alt={slogan}
+                priority={idx === 0}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <ProductImage
+                src={img.url}
+                alt={`${slogan} - ${img.label}`}
+                priority={idx === 0}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="h-full w-full object-cover"
+              />
+            )}
+          </div>
+        ))}
 
         {/* Counter Badge (Myntra Style: 1 / 3) */}
         {images.length > 1 && (
