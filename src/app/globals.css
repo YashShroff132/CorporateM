@@ -118,30 +118,30 @@
  * A translucent white gradient sweeps left-to-right across
  * the card image on hover, giving a premium glass sheen.
  * ------------------------------------------------------- */
-.product-card .product-flip-container::after {
+.product-card::after {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 10;
+  z-index: 30;
   pointer-events: none;
   background: linear-gradient(
     120deg,
     transparent 0%,
-    transparent 30%,
-    rgba(255, 255, 255, 0.25) 45%,
-    rgba(255, 255, 255, 0.45) 50%,
-    rgba(255, 255, 255, 0.25) 55%,
-    transparent 70%,
+    transparent 25%,
+    rgba(255, 255, 255, 0.4) 45%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 255, 255, 0.4) 55%,
+    transparent 75%,
     transparent 100%
   );
-  transform: translateX(-110%);
+  transform: translateX(-130%);
   transition: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .product-card:hover .product-flip-container::after {
-    transform: translateX(110%);
-    transition: transform 2.2s ease-in-out;
+  .product-card:hover::after {
+    transform: translateX(130%);
+    transition: transform 1.2s ease-in-out;
   }
 }
 

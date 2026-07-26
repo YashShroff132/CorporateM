@@ -23,6 +23,7 @@ import { addToCartAction } from '@/app/cart/actions';
 import { AddToCartButton } from '@/components/AddToCartButton';
 import { TrackOnMount } from '@/components/TrackOnMount';
 import { ProductImageGallery } from '@/components/shop/ProductImageGallery';
+import { ProductTitleWithSelector } from '@/components/shop/ProductTitleWithSelector';
 import { VariantSelector } from '@/components/VariantSelector';
 import {
   VARIANT_DIMENSIONS,
@@ -213,7 +214,7 @@ export default async function ProductPage({
             )}
           </div>
 
-          <h1 className="text-3xl font-black tracking-tight">{vm.slogan}</h1>
+          <ProductTitleWithSelector slug={detail.product.slug} initialSlogan={vm.slogan} />
 
           {vm.priceInr !== undefined && (
             <div className="flex items-baseline gap-2.5">

@@ -20,6 +20,8 @@ import { readCartSessionId } from '@/server/cart-session';
 import { priceGuestCheckout } from '@/server/checkout-data';
 import type { RawSearchParams } from '@/server/search-params';
 import { TrackOnMount } from '@/components/TrackOnMount';
+import { ProductImage } from '@/components/ProductImage';
+import { OOOLogo } from '@/components/OOOLogo';
 import { submitCheckoutAction } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -267,14 +269,32 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
           <h2 className="text-lg font-bold">Order summary</h2>
           <ul className="flex flex-col divide-y divide-ink/10 border-y border-ink/10">
             {checkout.lines.map((line) => (
-              <li key={line.variantId} className="flex flex-col gap-1 py-3 text-sm">
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="font-bold">{line.slogan}</span>
-                  <span>{inr(line.lineTotal)}</span>
+              <li key={line.variantId} className="flex gap-3 py-3 text-sm">
+                <div className="h-16 w-14 shrink-0 overflow-hidden rounded border border-ink/10 bg-paper relative">
+                  {line.imageUrl && !line.imageUrl.startsWith('data:') ? (
+                    <ProductImage
+                      src={line.imageUrl}
+                      alt={line.slogan}
+                      width={56}
+                      height={64}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex flex-col justify-between p-1.5 text-center h-full w-full bg-ink text-paper dark:bg-paper dark:text-ink font-mono text-[7px]">
+                      <OOOLogo className="h-2.5 w-auto mx-auto mt-0.5" />
+                      <span className="font-bold uppercase tracking-tighter truncate">{line.slogan}</span>
+                    </div>
+                  )}
                 </div>
-                <span className="text-muted">
-                  {line.color} · {line.size} · {line.fit} · Qty {line.qty}
-                </span>
+                <div className="flex flex-col flex-1 gap-0.5 justify-center">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="font-bold">{line.slogan}</span>
+                    <span className="font-semibold">{inr(line.lineTotal)}</span>
+                  </div>
+                  <span className="text-xs text-muted font-mono">
+                    {line.color} · {line.size} · {line.fit} · Qty {line.qty}
+                  </span>
+                </div>
               </li>
             ))}
           </ul>

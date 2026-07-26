@@ -35,6 +35,8 @@ export interface EnrichedCartLine {
   readonly lineTotal: number;
   /** Live available stock for the variant. */
   readonly stock: number;
+  /** Product mockup/display image URL. */
+  readonly imageUrl?: string | null;
 }
 
 /** A fully loaded cart for display: enriched lines plus the subtotal in paise. */
@@ -116,6 +118,7 @@ export async function loadGuestCart(sessionId: string): Promise<LoadedCart> {
         unitPrice,
         lineTotal,
         stock: variant.stock,
+        imageUrl: variant.product.mockupUrl ?? null,
       });
     }
 

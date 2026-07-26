@@ -41,6 +41,7 @@ export interface CheckoutLine {
   readonly qty: number;
   readonly unitPrice: number;
   readonly lineTotal: number;
+  readonly imageUrl?: string | null;
 }
 
 /** The fully priced checkout state used by the checkout page + submit action. */
@@ -139,6 +140,7 @@ export async function priceGuestCheckout(
       qty: pl.qty,
       unitPrice: pl.unitPrice as number,
       lineTotal: pl.lineTotal as number,
+      imageUrl: src?.imageUrl ?? null,
     };
   });
 
