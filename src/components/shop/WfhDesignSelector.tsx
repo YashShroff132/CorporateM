@@ -35,10 +35,10 @@ export function WfhDesignSelector({
         <button
           type="button"
           onClick={() => handleSelect('boyfriend')}
-          className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 rounded border px-4 py-2 text-xs font-bold transition-colors duration-100 ${
             selectedOption === 'boyfriend'
-              ? 'border-ink bg-ink text-paper dark:bg-paper dark:text-ink shadow-sm'
-              : 'border-ink/20 bg-paper text-ink hover:border-ink/50'
+              ? 'border-ink bg-ink text-paper dark:border-paper dark:bg-paper dark:text-ink shadow-sm'
+              : 'border-ink/20 bg-paper text-ink hover:border-ink dark:border-white/20 dark:bg-transparent dark:text-white dark:hover:border-white'
           }`}
           aria-pressed={selectedOption === 'boyfriend'}
         >
@@ -48,10 +48,10 @@ export function WfhDesignSelector({
         <button
           type="button"
           onClick={() => handleSelect('girlfriend')}
-          className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 rounded border px-4 py-2 text-xs font-bold transition-colors duration-100 ${
             selectedOption === 'girlfriend'
-              ? 'border-ink bg-ink text-paper dark:bg-paper dark:text-ink shadow-sm'
-              : 'border-ink/20 bg-paper text-ink hover:border-ink/50'
+              ? 'border-ink bg-ink text-paper dark:border-paper dark:bg-paper dark:text-ink shadow-sm'
+              : 'border-ink/20 bg-paper text-ink hover:border-ink dark:border-white/20 dark:bg-transparent dark:text-white dark:hover:border-white'
           }`}
           aria-pressed={selectedOption === 'girlfriend'}
         >

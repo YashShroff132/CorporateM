@@ -118,17 +118,17 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
       href={`/product/${product.slug}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="product-card group relative block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:shadow-xl hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-1.5"
+      className="product-card group relative block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-150 hover:shadow-xl hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-1"
     >
       {/* --- Metallic Silver Top Sheen Accent Line on Hover --- */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-slate-400 dark:via-slate-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-slate-300 via-white to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-30 pointer-events-none" />
 
       {/* --- Preloaded Image / OOO Back Container --- */}
       <div className="aspect-square relative border-b border-ink/5 overflow-hidden bg-paper select-none">
         {slides.map((slide, idx) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
+            className={`absolute inset-0 transition-opacity duration-150 ease-out ${
               idx === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
             }`}
           >
