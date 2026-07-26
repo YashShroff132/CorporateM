@@ -66,6 +66,7 @@ export interface Product {
   mockupBackUrl?: string;
   mockupBgUrl?: string;
   mockupBackBgUrl?: string;
+  galleryUrls?: string[];
   createdAt: Date;
 }
 

@@ -58,6 +58,7 @@ interface ProductSeed {
   seoDescription: string;
   mockupUrl?: string;
   mockupBackUrl?: string;
+  galleryUrls?: readonly string[];
   variants: readonly VariantSeed[];
 }
 
@@ -80,6 +81,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     basePrice: 79900, // ₹799
     mockupUrl: '/products/employee-resign-full.jpg',
     mockupBackUrl: '/products/employee-resign-mannequin-full.jpg',
+    galleryUrls: ['/products/employee-resign-ad.jpg'],
     seoTitle: 'An Employee Who Does Not Give Up Resigns Tee',
     seoDescription: 'Heavyweight oversized cotton tee — the corporate anthem for anyone who has ever rage-quit in style.',
     variants: [
@@ -106,6 +108,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 84900, // ₹849
     mockupUrl: '/products/hybrid-mandatory-full.jpg',
+    galleryUrls: ['/products/hybrid-mandatory-ad.jpg'],
     seoTitle: 'Hybrid 3 Days Mandatory Tee',
     seoDescription: 'Bold typographic back print about office mandates.',
     variants: [
@@ -158,6 +161,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/chai-sutta-break-full.jpg',
+    galleryUrls: ['/products/chai-sutta-break-ad.jpg'],
     seoTitle: 'Chai Sutta Break Graphic Tee',
     seoDescription: 'The sacred office ritual — chai, sutta, and pretending the deadline is tomorrow.',
     variants: [
@@ -184,6 +188,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 89900, // ₹899
     mockupUrl: '/products/snake-coworkers-full.jpg',
+    galleryUrls: ['/products/snake-coworkers-ad.jpg'],
     seoTitle: 'Be Aware of Snake Co-Workers Tee',
     seoDescription: 'Heavyweight black cotton graphic tee with snake back print.',
     variants: [
@@ -203,19 +208,6 @@ const PRODUCTS: readonly ProductSeed[] = [
       ...sizeSpread('Black', 'Oversized', 30),
     ],
   },
-  {
-    slug: 'am-i-audible',
-    slogan: 'AM I AUDIBLE AM I AUDIBLE AM I AUDIBLE',
-    tier: Tier.DIRECT,
-    collectionSlug: 'believer',
-    basePrice: 84900, // ₹849
-    mockupUrl: '/products/am-i-audible-full.jpg',
-    seoTitle: 'Am I Audible Graphic White Tee',
-    seoDescription: 'Modern graphic white tee celebrating remote meeting mic checks.',
-    variants: [
-      ...sizeSpread('White', 'Oversized', 28),
-    ],
-  },
   // ---- NEW PRODUCTS ----
   {
     slug: 'boyfriend-wfh',
@@ -224,6 +216,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/boyfriend-wfh-full.jpg',
+    galleryUrls: ['/products/boyfriend-wfh-ad.jpg'],
     seoTitle: 'My Boyfriend Is Doing WFH Graphic White Tee',
     seoDescription: 'Chili pepper graphic white tee — because your boyfriend working from home hits different.',
     variants: [
@@ -250,6 +243,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/happy-friday-full.jpg',
+    galleryUrls: ['/products/happy-friday-ad.jpg'],
     seoTitle: 'Happy Friday Bold Graphic Tee',
     seoDescription: 'The only day that matters — bold Friday typography on heavyweight black cotton.',
     variants: [
@@ -263,6 +257,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'heretic',
     basePrice: 99900, // ₹999
     mockupUrl: '/products/manager-eyes-full.jpg',
+    galleryUrls: ['/products/manager-eyes-ad.jpg'],
     seoTitle: 'Manager Gold Eyes Graphic Heavyweight Tee',
     seoDescription: 'Gold eyes watching — the manager sees everything, on heavyweight black cotton.',
     variants: [
@@ -313,7 +308,6 @@ const SLOGANS: readonly SloganSeed[] = [
   { text: 'QUICK CALL', tier: Tier.DIRECT },
   { text: 'BE AWARE OF SNAKE CO-WORKERS', tier: Tier.DIRECT },
   { text: "I'm sorry I was late. I had a meeting.* (*I was talking to claude.)", tier: Tier.SAFE },
-  { text: 'AM I AUDIBLE AM I AUDIBLE AM I AUDIBLE', tier: Tier.DIRECT },
   { text: 'MY BOYFRIEND IS DOING WFH', tier: Tier.SAFE },
   { text: 'GOOD TEAM MANAGER', tier: Tier.DIRECT },
   { text: 'HAPPY FRIDAY', tier: Tier.SAFE },

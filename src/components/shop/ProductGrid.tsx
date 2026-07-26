@@ -1,16 +1,11 @@
 /**
  * ProductGrid — server-rendered grid of the current page of PUBLISHED products
- * with a 3D backflip hover animation showing front/back t-shirt views.
- *
- * The flip is built into the card itself: any product with a `mockupBackUrl`
- * gets the 3D rotation on hover. Products without a back image degrade
- * gracefully to the existing scale/lift effect.
+ * with hover multi-image sliding and Myntra-style arrow controls.
  */
 
 import type { ShopProductView } from '@/services/shop';
-import { ProductImage } from '@/components/ProductImage';
 import { ScrollReveal } from './ScrollReveal';
-import { OOOLogo } from '../OOOLogo';
+import { ProductCardItem } from './ProductCardItem';
 
 export interface ProductGridProps {
   items: ShopProductView[];
@@ -54,92 +49,11 @@ export function ProductGrid({
       {items.map((product, index) => (
         <li key={product.id} className="list-none">
           <ScrollReveal delay={(index % 4) * 100}>
-            <a
-              href={`/product/${product.slug}`}
-              className="product-card block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:shadow-xl hover:border-ink/25 hover:-translate-y-2"
-            >
-              {/* --- 3D Flip Image Container --- */}
-              <div className="product-flip-container aspect-square relative border-b border-ink/5">
-                <div className="product-flip-inner">
-                  {/* FRONT face */}
-                  <div className="product-flip-face product-flip-front relative">
-                    {product.mockupUrl?.startsWith('data:') ? (
-                      <>
-                        <ProductImage
-                          src={product.mockupBgUrl || (product.colors.includes('white') ? '/blank-white-tee.png' : '/blank-black-tee.png')}
-                          alt={product.slogan}
-                          width={320}
-                          height={320}
-                        />
-                        <div className={`absolute inset-0 pointer-events-none select-none ${
-                          product.colors.some(c => c.toLowerCase().includes('white')) ? 'mix-blend-multiply opacity-90' : 'mix-blend-screen opacity-90'
-                        }`}>
-                          <img
-                            src={product.mockupUrl}
-                            alt=""
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </>
-                    ) : (
-                      <ProductImage
-                        src={product.mockupUrl}
-                        alt={product.slogan}
-                        width={320}
-                        height={320}
-                      />
-                    )}
-                  </div>
-                  {/* BACK face — Back photo with design artwork or fallback typography */}
-                  <div className="product-flip-face product-flip-back absolute inset-0 w-full h-full overflow-hidden bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/25">
-                    {product.mockupBackUrl && !product.mockupBackUrl.startsWith('data:') ? (
-                      <ProductImage
-                        src={product.mockupBackUrl}
-                        alt={`${product.slogan} Back`}
-                        width={320}
-                        height={320}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex flex-col justify-between p-8 font-mono select-none text-center h-full my-auto">
-                        <div className="flex flex-col items-center justify-center my-auto">
-                          <OOOLogo className="h-9 w-auto mb-2 text-paper dark:text-ink" />
-                          <span className="text-[10px] uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
-                        </div>
-                        
-                        <div className="border-t border-paper/10 dark:border-ink/10 pt-4">
-                          <span className="text-xs font-bold uppercase tracking-wide leading-relaxed block">{product.slogan}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* --- Product Info --- */}
-              <div className="flex flex-col gap-1 p-3.5">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-bold">
-                  {COLLECTION_TITLES[product.collectionSlug] || product.collectionSlug}
-                </span>
-                <span
-                  className={`font-bold text-ink leading-tight min-h-[2.5rem] ${
-                    product.slogan.length > 30
-                      ? 'text-xs line-clamp-3'
-                      : 'text-sm line-clamp-2'
-                  }`}
-                >
-                  {product.slogan}
-                </span>
-                <div className="flex items-baseline gap-1.5 mt-1 font-mono">
-                  <span className="text-sm font-extrabold text-stamp-red">
-                    ₹{product.priceInr}
-                  </span>
-                  <span className="line-through text-[11px] text-muted font-normal">
-                    ₹{cleanMrp(product.priceInr)}
-                  </span>
-                </div>
-              </div>
-            </a>
+            <ProductCardItem
+              product={product}
+              cleanMrp={cleanMrp}
+              collectionTitles={COLLECTION_TITLES}
+            />
           </ScrollReveal>
         </li>
       ))}

@@ -93,6 +93,16 @@ export const CUSTOM_PRODUCT_PRESETS: Record<string, LayoutPreset> = {
   },
 };
 
+export const EXTRA_PRODUCT_IMAGES: Record<string, string[]> = {
+  'employee-resigns': ['/products/employee-resign-ad.jpg'],
+  'manager-eyes': ['/products/manager-eyes-ad.jpg'],
+  'hybrid-mandatory': ['/products/hybrid-mandatory-ad.jpg'],
+  'snake-coworkers': ['/products/snake-coworkers-ad.jpg'],
+  'happy-friday': ['/products/happy-friday-ad.jpg'],
+  'boyfriend-wfh': ['/products/boyfriend-wfh-ad.jpg'],
+  'chai-sutta-break': ['/products/chai-sutta-break-ad.jpg'],
+};
+
 export interface CollectionSummary {
   slug: string;
   title: string;
@@ -164,6 +174,7 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
         mockupBackUrl,
         mockupBgUrl,
         mockupBackBgUrl,
+        galleryUrls: EXTRA_PRODUCT_IMAGES[p.slug] || [],
       } satisfies ShopProductView;
     });
   } catch {
@@ -274,6 +285,7 @@ export async function getProductBySlug(
       mockupBackUrl,
       mockupBgUrl,
       mockupBackBgUrl,
+      galleryUrls: EXTRA_PRODUCT_IMAGES[row.slug] || [],
       createdAt: row.createdAt,
     };
 

@@ -114,6 +114,8 @@ export interface ShopProductView extends ShopProduct {
   mockupBgUrl?: string;
   /** Optional back background template image (e.g. /model-back-white.png). */
   mockupBackBgUrl?: string;
+  /** Optional extra gallery images for multi-photo carousel & hover sliding. */
+  galleryUrls?: string[];
 }
 
 /** A single page of results plus the metadata needed for pagination links. */

@@ -194,6 +194,7 @@ export default async function ProductPage({
         <ProductImageGallery
           frontUrl={detail.product.mockupUrl ?? '/blank-black-tee.png'}
           backUrl={detail.product.mockupBackUrl}
+          extraImages={detail.product.galleryUrls}
           slogan={detail.product.slogan}
         />
 
