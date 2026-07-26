@@ -62,43 +62,56 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const hoverIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartX = useRef<number | null>(null);
 
-  // Cleanup interval on unmount
+  // Automatic slide loop (works on both mobile & desktop automatically)
   useEffect(() => {
-    return () => {
-      if (hoverIntervalRef.current) {
-        clearInterval(hoverIntervalRef.current);
-      }
-    };
-  }, []);
+    if (slides.length <= 1) return;
 
-  const stopAutoSlide = () => {
-    if (hoverIntervalRef.current) {
-      clearInterval(hoverIntervalRef.current);
-      hoverIntervalRef.current = null;
-    }
-  };
-
-  const startAutoSlide = () => {
-    stopAutoSlide();
-    if (slides.length > 1 && !isPaused) {
-      hoverIntervalRef.current = setInterval(() => {
+    const interval = setInterval(() => {
+      if (!isPaused) {
         setCurrentIndex((prev) => (prev + 1) % slides.length);
-      }, 1600); // Set slide interval to 1.6s
-    }
-  };
+      }
+    }, 2000); // 2.0s smooth auto-scroll interval for multi-image cards
+
+    return () => clearInterval(interval);
+  }, [slides.length, isPaused]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-    startAutoSlide();
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
     setIsPaused(false);
-    stopAutoSlide();
-    setCurrentIndex(0);
+  };
+
+  // Touch Swipe Handlers for Mobile Devices
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsPaused(true); // Pause auto-scroll when user touches the card
+    if (e.touches && e.touches[0]) {
+      touchStartX.current = e.touches[0].clientX;
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || !e.changedTouches || !e.changedTouches[0]) {
+      setIsPaused(false);
+      return;
+    }
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+    if (Math.abs(diff) > 30) {
+      if (diff > 0) {
+        // Swipe left -> next image
+        setCurrentIndex((prev) => (prev + 1) % slides.length);
+      } else {
+        // Swipe right -> prev image
+        setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+      }
+    }
+    touchStartX.current = null;
+    setIsPaused(false);
   };
 
   const handlePrev = (e: React.MouseEvent) => {
@@ -118,6 +131,8 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
       href={`/product/${product.slug}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       className="product-card group relative block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-150 hover:shadow-xl hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-1"
     >
       {/* --- Metallic Silver Top Sheen Accent Line on Hover --- */}
@@ -155,16 +170,18 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
           </div>
         ))}
 
-        {/* Hover Arrow Overlay & Pause Control */}
-        {isHovered && slides.length > 1 && (
+        {/* Navigation Arrow Controls (Visible on desktop hover & touch screens) */}
+        {slides.length > 1 && (
           <>
             <button
               type="button"
               onClick={handlePrev}
-              onMouseEnter={() => { setIsPaused(true); stopAutoSlide(); }}
-              onMouseLeave={() => { setIsPaused(false); startAutoSlide(); }}
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
               aria-label="Previous photo"
-              className="absolute left-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white hover:scale-110 active:scale-95 dark:bg-black/90 dark:text-white"
+              className={`absolute left-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white ${
+                isHovered ? 'flex' : 'flex md:hidden'
+              }`}
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -173,10 +190,12 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
             <button
               type="button"
               onClick={handleNext}
-              onMouseEnter={() => { setIsPaused(true); stopAutoSlide(); }}
-              onMouseLeave={() => { setIsPaused(false); startAutoSlide(); }}
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
               aria-label="Next photo"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white hover:scale-110 active:scale-95 dark:bg-black/90 dark:text-white"
+              className={`absolute right-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white ${
+                isHovered ? 'flex' : 'flex md:hidden'
+              }`}
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
