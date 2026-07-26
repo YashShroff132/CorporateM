@@ -62,43 +62,55 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
+  const hoverIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartX = useRef<number | null>(null);
 
-  // Automatic slide loop (works on both mobile & desktop automatically)
+  // Cleanup interval on unmount
   useEffect(() => {
-    if (slides.length <= 1) return;
-
-    const interval = setInterval(() => {
-      if (!isPaused) {
-        setCurrentIndex((prev) => (prev + 1) % slides.length);
+    return () => {
+      if (hoverIntervalRef.current) {
+        clearInterval(hoverIntervalRef.current);
       }
-    }, 2000); // 2.0s smooth auto-scroll interval for multi-image cards
+    };
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [slides.length, isPaused]);
+  const stopAutoSlide = () => {
+    if (hoverIntervalRef.current) {
+      clearInterval(hoverIntervalRef.current);
+      hoverIntervalRef.current = null;
+    }
+  };
+
+  const startAutoSlide = () => {
+    stopAutoSlide();
+    if (slides.length > 1 && !isPaused) {
+      hoverIntervalRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % slides.length);
+      }, 2500); // Slower, relaxed 2.5s slide interval ONLY on hover
+    }
+  };
 
   const handleMouseEnter = () => {
     setIsHovered(true);
+    startAutoSlide();
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
     setIsPaused(false);
+    stopAutoSlide();
+    setCurrentIndex(0);
   };
 
   // Touch Swipe Handlers for Mobile Devices
   const handleTouchStart = (e: React.TouchEvent) => {
-    setIsPaused(true); // Pause auto-scroll when user touches the card
     if (e.touches && e.touches[0]) {
       touchStartX.current = e.touches[0].clientX;
     }
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || !e.changedTouches || !e.changedTouches[0]) {
-      setIsPaused(false);
-      return;
-    }
+    if (touchStartX.current === null || !e.changedTouches || !e.changedTouches[0]) return;
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartX.current - touchEndX;
     if (Math.abs(diff) > 30) {
@@ -111,7 +123,6 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
       }
     }
     touchStartX.current = null;
-    setIsPaused(false);
   };
 
   const handlePrev = (e: React.MouseEvent) => {
@@ -133,17 +144,17 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
       onMouseLeave={handleMouseLeave}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="product-card group relative block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-150 hover:shadow-xl hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-1"
+      className="product-card group relative block border border-ink/10 rounded-lg overflow-hidden bg-paper transition-all duration-300 hover:shadow-xl hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-1.5"
     >
       {/* --- Metallic Silver Top Sheen Accent Line on Hover --- */}
-      <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-slate-300 via-white to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-30 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-transparent via-slate-300 via-white to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none" />
 
       {/* --- Preloaded Image / OOO Back Container --- */}
       <div className="aspect-square relative border-b border-ink/5 overflow-hidden bg-paper select-none">
         {slides.map((slide, idx) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-150 ease-out ${
+            className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
               idx === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
             }`}
           >
@@ -170,18 +181,16 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
           </div>
         ))}
 
-        {/* Navigation Arrow Controls (Visible on desktop hover & touch screens) */}
-        {slides.length > 1 && (
+        {/* Hover Arrow Overlay & Controls */}
+        {isHovered && slides.length > 1 && (
           <>
             <button
               type="button"
               onClick={handlePrev}
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
+              onMouseEnter={() => { setIsPaused(true); stopAutoSlide(); }}
+              onMouseLeave={() => { setIsPaused(false); startAutoSlide(); }}
               aria-label="Previous photo"
-              className={`absolute left-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white ${
-                isHovered ? 'flex' : 'flex md:hidden'
-              }`}
+              className="absolute left-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
@@ -190,12 +199,10 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
             <button
               type="button"
               onClick={handleNext}
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
+              onMouseEnter={() => { setIsPaused(true); stopAutoSlide(); }}
+              onMouseLeave={() => { setIsPaused(false); startAutoSlide(); }}
               aria-label="Next photo"
-              className={`absolute right-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white ${
-                isHovered ? 'flex' : 'flex md:hidden'
-              }`}
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-black shadow-md transition-all hover:bg-white active:scale-95 dark:bg-black/90 dark:text-white"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />

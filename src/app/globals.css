@@ -141,7 +141,7 @@
 @media (hover: hover) and (pointer: fine) {
   .product-card:hover::after {
     transform: translateX(130%);
-    transition: transform 0.45s ease-out;
+    transition: transform 1.8s ease-in-out;
   }
 }
 
