@@ -48,9 +48,9 @@ export function PdpProductSection({
       <div className="flex items-center justify-between">
         <Link
           href="/shop#catalog"
-          className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink/70 dark:text-white/70 hover:text-stamp-red dark:hover:text-highlighter transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-lg border border-ink/15 dark:border-white/20 bg-paper dark:bg-black text-ink dark:text-white shadow-sm hover:border-ink hover:bg-ink hover:text-paper dark:hover:bg-white dark:hover:text-black hover:shadow transition-all duration-150 cursor-pointer"
         >
-          <span className="text-sm">←</span>
+          <span className="text-base leading-none">←</span>
           <span>Back to Shop</span>
         </Link>
       </div>
