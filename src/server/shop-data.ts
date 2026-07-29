@@ -95,12 +95,21 @@ export const CUSTOM_PRODUCT_PRESETS: Record<string, LayoutPreset> = {
 
 export const EXTRA_PRODUCT_IMAGES: Record<string, string[]> = {
   'employee-resigns': ['/products/employee-resign-ad.jpg'],
-  'manager-eyes': ['/products/manager-eyes-ad.jpg'],
+  'like-a-family-here': ['/products/like-a-family-here-ad.jpg'],
   'hybrid-mandatory': ['/products/hybrid-mandatory-ad.jpg'],
-  'snake-coworkers': ['/products/snake-coworkers-ad.jpg'],
-  'happy-friday': ['/products/happy-friday-ad.jpg'],
-  'boyfriend-wfh': ['/products/girlfriend-wfh-full.png', '/products/boyfriend-wfh-ad.jpg'],
+  'delegator': ['/products/delegator-ad-1.png', '/products/delegator-ad-2.png', '/products/delegator-ad-3.png'],
+  'wfh-over-wfo': ['/products/wfh-over-wfo-ad.png'],
+  '9am-standups-toxic': ['/products/9am-standups-toxic-ad.png'],
   'chai-sutta-break': ['/products/chai-sutta-break-ad.jpg'],
+  'quick-call': ['/products/quick-call-ad.png'],
+  'snake-coworkers': ['/products/snake-coworkers-ad.jpg'],
+  'sorry-late-claude': ['/products/sorry-late-claude-ad.png'],
+  'boyfriend-wfh': ['/products/girlfriend-wfh-full.png', '/products/boyfriend-wfh-ad.jpg'],
+  'good-team-manager': ['/products/good-team-manager-ad.png'],
+  'happy-friday': ['/products/happy-friday-ad.jpg', '/products/happy-friday-white-ad.png'],
+  'manager-eyes': ['/products/manager-eyes-ad.jpg'],
+  'notice-period-energy': ['/products/notice-period-energy-ad-1.png', '/products/notice-period-energy-ad-2.png', '/products/notice-period-energy-ad-3.png'],
+  'mute-is-my-crown': ['/products/mute-is-my-crown-ad.png'],
 };
 
 export interface CollectionSummary {

@@ -94,6 +94,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/like-a-family-full.jpg',
+    galleryUrls: ['/products/like-a-family-here-ad.jpg'],
     seoTitle: 'Like a Family Here Layoffs Excluded Tee',
     seoDescription: 'Corporate culture satire graphic tee — because every town hall promises family until Q3 cuts.',
     variants: [
@@ -121,6 +122,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'heretic',
     basePrice: 99900, // ₹999
     mockupUrl: '/products/delegator-full.jpg',
+    galleryUrls: ['/products/delegator-ad-1.png', '/products/delegator-ad-2.png', '/products/delegator-ad-3.png'],
     seoTitle: 'Delegator Ram Graphic Heavyweight Tee',
     seoDescription: 'Gold ram graphic back print — for every manager who delegates like a GOAT.',
     variants: [
@@ -134,6 +136,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 74900, // ₹749
     mockupUrl: '/products/wfh-over-wfo-full.jpg',
+    galleryUrls: ['/products/wfh-over-wfo-ad.png'],
     seoTitle: 'WFH Over WFO Graphic Tee',
     seoDescription: 'Work from home preference bold back print tee.',
     variants: [
@@ -147,6 +150,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 89900, // ₹899
     mockupUrl: '/products/9am-standups-full.jpg',
+    galleryUrls: ['/products/9am-standups-toxic-ad.png'],
     seoTitle: '9 AM Standups Give Toxic Relationship Vibes Tee',
     seoDescription: 'Morning standup culture called out in bold glitch typography on heavyweight black cotton.',
     variants: [
@@ -174,6 +178,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 84900, // ₹849
     mockupUrl: '/products/quick-call-full.jpg',
+    galleryUrls: ['/products/quick-call-ad.png'],
     seoTitle: 'Quick Call Exhaustion Graphic Tee',
     seoDescription: 'The meeting that should have been an email — repeated until insanity.',
     variants: [
@@ -201,6 +206,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/sorry-late-claude-full.jpg',
+    galleryUrls: ['/products/sorry-late-claude-ad.png'],
     seoTitle: "I'm Sorry I Was Late I Was Talking to Claude Tee",
     seoDescription: 'AI meeting excuse typography heavyweight black tee.',
     variants: [
@@ -229,6 +235,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 89900, // ₹899
     mockupUrl: '/products/good-team-manager-full.jpg',
+    galleryUrls: ['/products/good-team-manager-ad.png'],
     seoTitle: 'Good Team Manager Moth Graphic Tee',
     seoDescription: 'Unread emails & pending approvals — the moth of management on heavyweight black cotton.',
     variants: [
@@ -242,7 +249,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/happy-friday-full.jpg',
-    galleryUrls: ['/products/happy-friday-ad.jpg'],
+    galleryUrls: ['/products/happy-friday-ad.jpg', '/products/happy-friday-white-ad.png'],
     seoTitle: 'Happy Friday Bold Graphic Tee',
     seoDescription: 'The only day that matters — bold Friday typography on heavyweight black cotton.',
     variants: [
@@ -270,6 +277,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 84900, // ₹849
     mockupUrl: '/products/notice-period-energy-full.jpg',
+    galleryUrls: ['/products/notice-period-energy-ad-1.png', '/products/notice-period-energy-ad-2.png', '/products/notice-period-energy-ad-3.png'],
     seoTitle: 'Notice Period Energy Graphic Tee',
     seoDescription: 'Girl on couch vibes — notice period energy in bold red on heavyweight black cotton.',
     variants: [
@@ -283,6 +291,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 84900, // ₹849
     mockupUrl: '/products/mute-is-my-crown-full.jpg',
+    galleryUrls: ['/products/mute-is-my-crown-ad.png'],
     seoTitle: 'Mute Is My Crown Queen Card White Tee',
     seoDescription: 'Queen of hearts playing card — mute is my crown, on premium white cotton.',
     variants: [
