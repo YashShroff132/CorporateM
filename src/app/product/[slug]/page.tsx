@@ -20,11 +20,8 @@ import { getProductBySlug, type ProductDetail } from '@/server/shop-data';
 import { config } from '@/services/config';
 import type { RawSearchParams } from '@/server/search-params';
 import { addToCartAction } from '@/app/cart/actions';
-import { AddToCartButton } from '@/components/AddToCartButton';
 import { TrackOnMount } from '@/components/TrackOnMount';
-import { ProductImageGallery } from '@/components/shop/ProductImageGallery';
-import { ProductTitleWithSelector } from '@/components/shop/ProductTitleWithSelector';
-import { VariantSelector } from '@/components/VariantSelector';
+import { PdpProductSection } from '@/components/shop/PdpProductSection';
 import {
   VARIANT_DIMENSIONS,
   buildPdpViewModel,
@@ -190,99 +187,17 @@ export default async function ProductPage({
           currency: 'INR',
         }}
       />
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {/* Product Image Gallery — Front & Back View Gallery */}
-        <ProductImageGallery
-          frontUrl={detail.product.mockupUrl ?? '/blank-black-tee.png'}
-          backUrl={detail.product.mockupBackUrl}
-          extraImages={detail.product.galleryUrls}
-          slogan={detail.product.slogan}
-        />
-
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="bg-ink px-2 py-1 text-xs font-bold uppercase tracking-wide text-paper">
-              {vm.tierBadge.label}
-            </span>
-            <span className="text-xs uppercase tracking-wide text-muted">
-              {vm.collectionTag}
-            </span>
-            {vm.spicyIndicator && (
-              <span className="bg-stamp-red px-2 py-1 text-xs font-bold uppercase tracking-wide text-paper">
-                Spicy
-              </span>
-            )}
-          </div>
-
-          <ProductTitleWithSelector slug={detail.product.slug} initialSlogan={vm.slogan} />
-
-          {vm.priceInr !== undefined && (
-            <div className="flex items-baseline gap-2.5">
-              <span className="text-2xl font-bold text-ink">₹{vm.priceInr}</span>
-              <span className="line-through text-base text-muted font-normal">
-                ₹{(Math.ceil(Number(vm.priceInr!.replace(/,/g, '')) / 0.6 / 100) * 100 - 1)}
-              </span>
-              <span className="bg-stamp-red/10 text-stamp-red px-2 py-0.5 text-xs font-bold rounded">
-                40% OFF
-              </span>
-            </div>
-          )}
-
-          {/* Variant selectors — automatically re-renders on selection change. */}
-          <form method="get" className="flex flex-col gap-4" aria-label="Choose options">
-            <VariantSelector
-              options={vm.options}
-              selection={selection}
-              dimensionLabels={DIMENSION_LABELS}
-              variantDimensions={VARIANT_DIMENSIONS}
-            />
-          </form>
-
-          {/* Story — collapsible accordion */}
-          <details className="pdp-story-accordion group border-t border-ink/10">
-            <summary className="pdp-story-summary">
-              <span className="pdp-story-label">Story</span>
-              <span className="pdp-story-chevron" aria-hidden="true">›</span>
-            </summary>
-            <div className="pdp-story-body">
-              <p>
-                Every office has that one Slack message that aged poorly. This design was born in a Monday standup that could have been an email, and honestly, should have been silence.
-              </p>
-              <p>
-                Out of Office isn&apos;t just a status. It&apos;s a philosophy. A quiet rebellion stitched into 100% cotton. Wear it to the all-hands. Wear it to your exit interview. Wear it while doing absolutely nothing productive (which, let&apos;s face it, is the most honest work you&apos;ll ever do).
-              </p>
-              <p className="pdp-story-footer">
-                More to come. Stay tuned or don&apos;t. We respect your boundaries.
-              </p>
-            </div>
-          </details>
-
-          {/* Add to cart — gated on a complete, in-stock selection. */}
-          <form action={addToCartAction} className="flex flex-col gap-2">
-            {vm.selectedVariant !== undefined && (
-              <input type="hidden" name="variantId" value={vm.selectedVariant.id} />
-            )}
-            <AddToCartButton
-              enabled={addToCart.enabled}
-              outOfStock={addToCart.reason === 'OUT_OF_STOCK'}
-              eventProps={{
-                slug: detail.product.slug,
-                variantId: vm.selectedVariant?.id,
-                // Meta Catalog matching fields (required for dynamic ads)
-                content_ids: [detail.product.slug],
-                content_type: 'product',
-                value: (detail.product.basePrice / 100).toFixed(2),
-                currency: 'INR',
-              }}
-            />
-            {addToCart.prompt !== undefined && (
-              <p role="status" className="text-sm text-stamp-red">
-                {addToCart.prompt}
-              </p>
-            )}
-          </form>
-        </div>
-      </div>
+      <PdpProductSection
+        detail={detail}
+        vm={vm}
+        selection={selection}
+        dimensionLabels={DIMENSION_LABELS}
+        variantDimensions={VARIANT_DIMENSIONS}
+        addToCartEnabled={addToCart.enabled}
+        addToCartReason={addToCart.reason}
+        addToCartPrompt={addToCart.prompt}
+        addToCartAction={addToCartAction}
+      />
 
       {/* Size guide (Req 3.5) */}
       {vm.sizeGuide.length > 0 && (

@@ -163,9 +163,11 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
       const mockupUrl = p.mockupUrl || svgToDataUrl(
         composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
       );
-      const mockupBackUrl = p.mockupBackUrl || svgToDataUrl(
-        composeBackSvg({ garment: 'Classic Tee', color: garmentColor })
-      );
+      const mockupBackUrl = p.slug === 'employee-resigns'
+        ? undefined
+        : p.mockupBackUrl || svgToDataUrl(
+            composeBackSvg({ garment: 'Classic Tee', color: garmentColor })
+          );
 
       return {
         id: p.id,

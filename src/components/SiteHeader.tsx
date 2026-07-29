@@ -70,22 +70,30 @@ export function SiteHeader() {
       }`}
     >
       {/* Announcement Bar Ticker */}
-      <div className="bg-black text-white py-1.5 px-4 text-[9px] font-mono tracking-widest flex items-center justify-between border-b border-white/10 select-none">
-        <button
-          onClick={prevAnnouncement}
-          className="hover:text-highlighter transition-colors p-1"
-          aria-label="Previous announcement"
-        >
-          &lt;
-        </button>
-        <span className="text-center font-bold truncate px-4">{ANNOUNCEMENT_MESSAGES[announcementIdx]}</span>
-        <button
-          onClick={nextAnnouncement}
-          className="hover:text-highlighter transition-colors p-1"
-          aria-label="Next announcement"
-        >
-          &gt;
-        </button>
+      <div className="bg-black text-white py-1.5 px-4 text-[9px] font-mono tracking-widest flex items-center justify-center gap-2 border-b border-white/10 select-none">
+        <span className="hidden sm:inline-block bg-white/10 text-white/70 px-1.5 py-0.5 rounded text-[8px] uppercase tracking-wider">
+          UPDATE
+        </span>
+        <span className="text-center font-bold truncate max-w-md">{ANNOUNCEMENT_MESSAGES[announcementIdx]}</span>
+        <div className="flex items-center gap-1.5 text-white/50 text-[10px]">
+          <button
+            onClick={prevAnnouncement}
+            className="hover:text-highlighter transition-colors px-1 py-0.5"
+            aria-label="Previous announcement"
+          >
+            ▲
+          </button>
+          <span className="font-sans font-medium text-[9px] text-white/70">
+            {announcementIdx + 1}/{ANNOUNCEMENT_MESSAGES.length}
+          </span>
+          <button
+            onClick={nextAnnouncement}
+            className="hover:text-highlighter transition-colors px-1 py-0.5"
+            aria-label="Next announcement"
+          >
+            ▼
+          </button>
+        </div>
       </div>
 
       <nav

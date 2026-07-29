@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ProductImage } from '@/components/ProductImage';
 
 interface GalleryImage {
@@ -15,6 +15,7 @@ interface ProductImageGalleryProps {
   fullUrl?: string | null;
   extraImages?: string[];
   slogan: string;
+  selectedIndex?: number;
 }
 
 export function ProductImageGallery({
@@ -23,6 +24,7 @@ export function ProductImageGallery({
   fullUrl,
   extraImages = [],
   slogan,
+  selectedIndex,
 }: ProductImageGalleryProps) {
   const images: GalleryImage[] = [
     { id: 'front', label: 'Front View', url: frontUrl },
@@ -47,6 +49,12 @@ export function ProductImageGallery({
   }
 
   const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (typeof selectedIndex === 'number' && selectedIndex >= 0 && selectedIndex < images.length) {
+      setActiveIndex(selectedIndex);
+    }
+  }, [selectedIndex, images.length]);
   const touchStartX = useRef<number | null>(null);
 
   const handlePrev = (e?: React.MouseEvent) => {

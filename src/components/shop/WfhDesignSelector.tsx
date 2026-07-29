@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 interface WfhDesignSelectorProps {
   initialSlogan: string;
-  onSloganChange?: (newSlogan: string, optionName: string) => void;
+  onSloganChange?: (newSlogan: string, optionName: string, slideIndex: number) => void;
 }
 
 export function WfhDesignSelector({
@@ -21,7 +21,8 @@ export function WfhDesignSelector({
       ? 'MY BOYFRIEND IS DOING WFH' 
       : 'MY GIRLFRIEND IS DOING WFH';
     const label = option === 'boyfriend' ? 'My Boyfriend' : 'My Girlfriend';
-    onSloganChange?.(newSlogan, label);
+    const slideIndex = option === 'boyfriend' ? 0 : 1;
+    onSloganChange?.(newSlogan, label, slideIndex);
   };
 
   return (
