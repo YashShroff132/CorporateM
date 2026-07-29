@@ -94,7 +94,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 79900, // ₹799
     mockupUrl: '/products/like-a-family-full.jpg',
-    galleryUrls: ['/products/like-a-family-here-ad.jpg'],
+    galleryUrls: ['/products/like-a-family-here-ad.png'],
     seoTitle: 'Like a Family Here Layoffs Excluded Tee',
     seoDescription: 'Corporate culture satire graphic tee — because every town hall promises family until Q3 cuts.',
     variants: [

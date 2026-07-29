@@ -50,7 +50,7 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
     if (!slides.some((s) => s.url === product.mockupBackUrl)) {
       slides.push({ id: 'back', type: 'image', url: product.mockupBackUrl });
     }
-  } else {
+  } else if (product.slug !== 'employee-resigns') {
     slides.push({ id: 'ooo-back', type: 'ooo-back' });
   }
 

@@ -95,7 +95,7 @@ export const CUSTOM_PRODUCT_PRESETS: Record<string, LayoutPreset> = {
 
 export const EXTRA_PRODUCT_IMAGES: Record<string, string[]> = {
   'employee-resigns': ['/products/employee-resign-ad.jpg'],
-  'like-a-family-here': ['/products/like-a-family-here-ad.jpg'],
+  'like-a-family-here': ['/products/like-a-family-here-ad.png'],
   'hybrid-mandatory': ['/products/hybrid-mandatory-ad.jpg'],
   'delegator': ['/products/delegator-ad-1.png', '/products/delegator-ad-2.png', '/products/delegator-ad-3.png'],
   'wfh-over-wfo': ['/products/wfh-over-wfo-ad.png'],
