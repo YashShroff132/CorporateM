@@ -45,10 +45,10 @@ export function PdpProductSection({
   return (
     <div className="flex flex-col gap-4">
       {/* Top Back Navigation Bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-start w-full relative z-10 mb-2 mt-0">
         <Link
           href="/shop#catalog"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider px-3.5 py-2 rounded-lg border border-ink/15 dark:border-white/20 bg-paper dark:bg-black text-ink dark:text-white shadow-sm hover:border-ink hover:bg-ink hover:text-paper dark:hover:bg-white dark:hover:text-black hover:shadow transition-all duration-150 cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-lg border border-ink/15 dark:border-white/20 bg-paper dark:bg-black text-ink dark:text-white shadow-sm hover:bg-ink hover:text-paper dark:hover:bg-white dark:hover:text-black transition-colors duration-200 cursor-pointer"
         >
           <span className="text-base leading-none">←</span>
           <span>Back to Shop</span>

@@ -63,25 +63,27 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-30 transition-all duration-300 border-b ${
+      className={`fixed top-0 left-0 right-0 z-40 pointer-events-none transition-all duration-300 border-b ${
         scrolled
           ? 'bg-paper/95 dark:bg-black/95 backdrop-blur-md border-ink/10 dark:border-white/10 shadow-sm'
           : 'bg-transparent border-transparent'
       }`}
     >
       {/* Announcement Bar Ticker */}
-      <div className="bg-black text-white py-1.5 px-4 text-[9px] font-mono tracking-widest flex items-center justify-between border-b border-white/10 select-none">
+      <div className="relative pointer-events-auto bg-black text-white py-1.5 px-8 text-[9px] font-mono tracking-widest flex items-center justify-center border-b border-white/10 select-none">
         <button
+          type="button"
           onClick={prevAnnouncement}
-          className="hover:text-highlighter transition-colors p-1.5 cursor-pointer text-[10px]"
+          className="absolute left-2 top-1/2 -translate-y-1/2 text-white/70 hover:text-highlighter transition-colors p-1 cursor-pointer text-[10px]"
           aria-label="Previous announcement"
         >
           ▲
         </button>
-        <span className="text-center font-bold truncate px-4">{ANNOUNCEMENT_MESSAGES[announcementIdx]}</span>
+        <span className="text-center font-bold truncate max-w-full px-2">{ANNOUNCEMENT_MESSAGES[announcementIdx]}</span>
         <button
+          type="button"
           onClick={nextAnnouncement}
-          className="hover:text-highlighter transition-colors p-1.5 cursor-pointer text-[10px]"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-white/70 hover:text-highlighter transition-colors p-1 cursor-pointer text-[10px]"
           aria-label="Next announcement"
         >
           ▼
@@ -90,8 +92,8 @@ export function SiteHeader() {
 
       <nav
         aria-label="Primary"
-        className={`mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 transition-all duration-500 ease-in-out ${
-          scrolled ? 'py-2' : 'py-6'
+        className={`mx-auto pointer-events-auto flex max-w-6xl items-center justify-between gap-4 px-6 transition-all duration-500 ease-in-out ${
+          scrolled ? 'py-2' : 'py-3.5'
         }`}
       >
         {/* Mobile Left Column: Hamburger Menu Icon */}
@@ -177,7 +179,7 @@ export function SiteHeader() {
 
       {/* Mobile dropdown menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-ink/5 dark:border-white/5 ${
+        className={`md:hidden pointer-events-auto overflow-hidden transition-all duration-300 ease-in-out border-t border-ink/5 dark:border-white/5 ${
           menuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >

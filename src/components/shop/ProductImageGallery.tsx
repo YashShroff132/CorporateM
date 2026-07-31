@@ -2,11 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { ProductImage } from '@/components/ProductImage';
+import { OOOLogo } from '../OOOLogo';
 
 interface GalleryImage {
   id: string;
   label: string;
-  url: string;
+  url?: string;
+  type: 'image' | 'ooo-back';
 }
 
 interface ProductImageGalleryProps {
@@ -27,7 +29,7 @@ export function ProductImageGallery({
   selectedIndex,
 }: ProductImageGalleryProps) {
   const images: GalleryImage[] = [
-    { id: 'front', label: 'Front View', url: frontUrl },
+    { id: 'front', label: 'Front View', url: frontUrl, type: 'image' },
   ];
 
   extraImages.forEach((imgUrl, idx) => {
@@ -36,16 +38,19 @@ export function ProductImageGallery({
         id: `extra-${idx}`,
         label: `Shot ${idx + 1}`,
         url: imgUrl,
+        type: 'image',
       });
     }
   });
 
   if (backUrl && !backUrl.startsWith('data:')) {
-    images.push({ id: 'back', label: 'Back View', url: backUrl });
+    images.push({ id: 'back', label: 'Back View', url: backUrl, type: 'image' });
+  } else {
+    images.push({ id: 'ooo-back', label: 'OOO View', type: 'ooo-back' });
   }
 
   if (fullUrl) {
-    images.push({ id: 'full', label: 'Full View', url: fullUrl });
+    images.push({ id: 'full', label: 'Full View', url: fullUrl, type: 'image' });
   }
 
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -103,7 +108,17 @@ export function ProductImageGallery({
               idx === activeIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
             }`}
           >
-            {img.url.startsWith('data:') ? (
+            {img.type === 'ooo-back' ? (
+              <div className="flex flex-col justify-between p-8 font-mono select-none text-center h-full w-full bg-ink text-paper dark:bg-paper dark:text-ink border border-ink/10 rounded-xl">
+                <div className="flex flex-col items-center justify-center my-auto">
+                  <OOOLogo className="h-12 w-auto mb-3 text-paper dark:text-ink" />
+                  <span className="text-xs uppercase tracking-widest text-highlighter font-bold">OUT OF OFFICE</span>
+                </div>
+                <div className="border-t border-paper/10 dark:border-ink/10 pt-4">
+                  <span className="text-sm font-bold uppercase tracking-wide leading-relaxed block">{slogan}</span>
+                </div>
+              </div>
+            ) : img.url && img.url.startsWith('data:') ? (
               <ProductImage
                 src={frontUrl}
                 alt={slogan}
@@ -113,7 +128,7 @@ export function ProductImageGallery({
               />
             ) : (
               <ProductImage
-                src={img.url}
+                src={img.url!}
                 alt={`${slogan} - ${img.label}`}
                 priority={idx === 0}
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -175,14 +190,18 @@ export function ProductImageGallery({
                     : 'border-ink/10 bg-paper/60 opacity-70 hover:opacity-100 hover:border-ink/30'
                 }`}
               >
-                <div className="h-14 w-12 overflow-hidden rounded border border-ink/10">
-                  <ProductImage
-                    src={img.url}
-                    alt={img.label}
-                    width={48}
-                    height={56}
-                    className="h-full w-full object-cover"
-                  />
+                <div className="h-14 w-12 overflow-hidden rounded border border-ink/10 flex items-center justify-center bg-ink text-paper dark:bg-paper dark:text-ink">
+                  {img.type === 'ooo-back' ? (
+                    <span className="text-[9px] font-mono font-black tracking-tighter text-highlighter uppercase">OOO</span>
+                  ) : (
+                    <ProductImage
+                      src={img.url!}
+                      alt={img.label}
+                      width={48}
+                      height={56}
+                      className="h-full w-full object-cover"
+                    />
+                  )}
                 </div>
               </button>
             );

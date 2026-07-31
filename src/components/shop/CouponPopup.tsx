@@ -44,7 +44,7 @@ export function CouponPopup() {
       {showBadge && !showPopup && (
         <button
           onClick={handleBadgeClick}
-          className="fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-stamp-red text-paper px-2.5 py-4 text-[10px] font-black uppercase tracking-widest rounded-r-lg shadow-lg hover:bg-stamp-red/90 transition-all duration-300 hover:px-3"
+          className="fixed left-0 top-1/2 -translate-y-1/2 z-30 bg-stamp-red text-paper px-2.5 py-4 text-[10px] font-black uppercase tracking-widest rounded-r-lg shadow-lg hover:bg-stamp-red/90 transition-all duration-300 hover:px-3"
           style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
           aria-label="Open 10% discount offer"
         >

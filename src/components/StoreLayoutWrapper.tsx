@@ -15,7 +15,7 @@ export function StoreLayoutWrapper({ children }: { children: React.ReactNode }) 
   return (
     <>
       <SiteHeader />
-      <div className="pt-[72px] md:pt-[76px]">{children}</div>
+      <div className="pt-[92px] md:pt-[100px]">{children}</div>
       <SiteFooter />
     </>
   );

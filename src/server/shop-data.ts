@@ -91,6 +91,22 @@ export const CUSTOM_PRODUCT_PRESETS: Record<string, LayoutPreset> = {
     lineHeightRatio: 1.2,
     align: 'center',
   },
+  'mute-is-my-crown': {
+    id: 'ooo-anton',
+    fontFamily: '"Anton", sans-serif',
+    monospace: false,
+    charWidthRatio: 0.5,
+    lineHeightRatio: 1.1,
+    align: 'center',
+  },
+  'employee-resigns': {
+    id: 'ooo-syne',
+    fontFamily: '"Syne", sans-serif',
+    monospace: false,
+    charWidthRatio: 0.58,
+    lineHeightRatio: 1.15,
+    align: 'center',
+  },
 };
 
 export const EXTRA_PRODUCT_IMAGES: Record<string, string[]> = {
