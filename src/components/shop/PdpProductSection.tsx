@@ -95,12 +95,6 @@ export function PdpProductSection({
           {vm.priceInr !== undefined && (
             <div className="flex items-baseline gap-2.5">
               <span className="text-2xl font-bold text-ink dark:text-white">₹{vm.priceInr}</span>
-              <span className="line-through text-base text-muted font-normal">
-                ₹{Math.ceil(Number(vm.priceInr.replace(/,/g, '')) / 0.6 / 100) * 100 - 1}
-              </span>
-              <span className="bg-stamp-red/10 text-stamp-red px-2 py-0.5 text-xs font-bold rounded dark:bg-stamp-red/20 dark:text-red-400">
-                40% OFF
-              </span>
             </div>
           )}
 

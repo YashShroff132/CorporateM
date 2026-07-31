@@ -78,7 +78,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'An employee who does not give up resigns.',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
-    basePrice: 79900, // ₹799
+    basePrice: 149900, // ₹1,499
     mockupUrl: '/products/employee-resign-full.jpg',
     galleryUrls: ['/products/employee-resign-ad.jpg'],
     seoTitle: 'An Employee Who Does Not Give Up Resigns Tee',
@@ -92,7 +92,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'LIKE A FAMILY HERE* *LAYOFFS EXCLUDED.',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
-    basePrice: 79900, // ₹799
+    basePrice: 149900, // ₹1,499
     mockupUrl: '/products/like-a-family-full.jpg',
     galleryUrls: ['/products/like-a-family-here-ad.png'],
     seoTitle: 'Like a Family Here Layoffs Excluded Tee',
@@ -106,7 +106,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'HYBRID 3 days mandatory',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
-    basePrice: 84900, // ₹849
+    basePrice: 189900, // ₹1,899
     mockupUrl: '/products/hybrid-mandatory-full.jpg',
     galleryUrls: ['/products/hybrid-mandatory-ad.jpg'],
     seoTitle: 'Hybrid 3 Days Mandatory Tee',
@@ -120,7 +120,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'DELEGATOR',
     tier: Tier.VERY_DIRECT,
     collectionSlug: 'heretic',
-    basePrice: 99900, // ₹999
+    basePrice: 499900, // ₹4,999 (Ultra High Price Grail)
     mockupUrl: '/products/delegator-full.jpg',
     galleryUrls: ['/products/delegator-ad-1.png', '/products/delegator-ad-2.png', '/products/delegator-ad-3.png'],
     seoTitle: 'Delegator Ram Graphic Heavyweight Tee',
@@ -134,7 +134,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'WFH over WFO',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
-    basePrice: 74900, // ₹749
+    basePrice: 149900, // ₹1,499
     mockupUrl: '/products/wfh-over-wfo-full.jpg',
     galleryUrls: ['/products/wfh-over-wfo-ad.png'],
     seoTitle: 'WFH Over WFO Graphic Tee',
@@ -148,7 +148,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: '9 AM STANDUPS GIVE TOXIC RELATIONSHIP VIBES',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
-    basePrice: 89900, // ₹899
+    basePrice: 189900, // ₹1,899
     mockupUrl: '/products/9am-standups-full.jpg',
     galleryUrls: ['/products/9am-standups-toxic-ad.png'],
     seoTitle: '9 AM Standups Give Toxic Relationship Vibes Tee',
@@ -162,7 +162,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'CHAI SUTTA BREAK',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
-    basePrice: 79900, // ₹799
+    basePrice: 149900, // ₹1,499
     mockupUrl: '/products/chai-sutta-break-full.jpg',
     galleryUrls: ['/products/chai-sutta-break-ad.jpg'],
     seoTitle: 'Chai Sutta Break Graphic Tee',
@@ -176,7 +176,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'QUICK CALL',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
-    basePrice: 84900, // ₹849
+    basePrice: 189900, // ₹1,899
     mockupUrl: '/products/quick-call-full.jpg',
     galleryUrls: ['/products/quick-call-ad.png'],
     seoTitle: 'Quick Call Exhaustion Graphic Tee',
@@ -190,7 +190,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'BE AWARE OF SNAKE CO-WORKERS',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
-    basePrice: 89900, // ₹899
+    basePrice: 189900, // ₹1,899
     mockupUrl: '/products/snake-coworkers-full.jpg',
     galleryUrls: ['/products/snake-coworkers-ad.jpg'],
     seoTitle: 'Be Aware of Snake Co-Workers Tee',
@@ -204,7 +204,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: "I'm sorry I was late. I had a meeting.* (*I was talking to claude.)",
     tier: Tier.SAFE,
     collectionSlug: 'operator',
-    basePrice: 79900, // ₹799
+    basePrice: 149900, // ₹1,499
     mockupUrl: '/products/sorry-late-claude-full.jpg',
     galleryUrls: ['/products/sorry-late-claude-ad.png'],
     seoTitle: "I'm Sorry I Was Late I Was Talking to Claude Tee",
@@ -219,7 +219,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'MY BOYFRIEND IS DOING WFH',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
-    basePrice: 79900, // ₹799
+    basePrice: 149900, // ₹1,499
     mockupUrl: '/products/boyfriend-wfh-full.jpg',
     galleryUrls: ['/products/girlfriend-wfh-full.png', '/products/boyfriend-wfh-ad.jpg'],
     seoTitle: 'My Boyfriend Is Doing WFH Graphic White Tee',
@@ -233,7 +233,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'GOOD TEAM MANAGER',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
-    basePrice: 89900, // ₹899
+    basePrice: 189900, // ₹1,899
     mockupUrl: '/products/good-team-manager-full.jpg',
     galleryUrls: ['/products/good-team-manager-ad.png'],
     seoTitle: 'Good Team Manager Moth Graphic Tee',
@@ -247,7 +247,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'HAPPY FRIDAY',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
-    basePrice: 79900, // ₹799
+    basePrice: 149900, // ₹1,499
     mockupUrl: '/products/happy-friday-full.jpg',
     galleryUrls: ['/products/happy-friday-ad.jpg', '/products/happy-friday-white-ad.png'],
     seoTitle: 'Happy Friday Bold Graphic Tee',
@@ -261,7 +261,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'MANAGER',
     tier: Tier.VERY_DIRECT,
     collectionSlug: 'heretic',
-    basePrice: 99900, // ₹999
+    basePrice: 249900, // ₹2,499
     mockupUrl: '/products/manager-eyes-full.jpg',
     galleryUrls: ['/products/manager-eyes-ad.jpg'],
     seoTitle: 'Manager Gold Eyes Graphic Heavyweight Tee',
@@ -275,7 +275,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'NOTICE PERIOD ENERGY',
     tier: Tier.DIRECT,
     collectionSlug: 'believer',
-    basePrice: 84900, // ₹849
+    basePrice: 349900, // ₹3,499 (High Price Grail)
     mockupUrl: '/products/notice-period-energy-full.jpg',
     galleryUrls: ['/products/notice-period-energy-ad-1.png', '/products/notice-period-energy-ad-2.png', '/products/notice-period-energy-ad-3.png'],
     seoTitle: 'Notice Period Energy Graphic Tee',
@@ -289,7 +289,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     slogan: 'MUTE IS MY CROWN',
     tier: Tier.SAFE,
     collectionSlug: 'operator',
-    basePrice: 84900, // ₹849
+    basePrice: 149900, // ₹1,499
     mockupUrl: '/products/mute-is-my-crown-full.jpg',
     galleryUrls: ['/products/mute-is-my-crown-ad.png'],
     seoTitle: 'Mute Is My Crown Queen Card White Tee',

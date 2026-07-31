@@ -5,11 +5,6 @@ import type { ShopProductView } from '@/services/shop';
 import { ProductImage } from '@/components/ProductImage';
 import { OOOLogo } from '../OOOLogo';
 
-/** Round a raw MRP to a clean ₹X99 price point (e.g. ₹1499, ₹1999, ₹2499). */
-function cleanMrp(salePrice: number): number {
-  const raw = salePrice / 0.6;
-  return Math.ceil(raw / 100) * 100 - 1;
-}
 
 const COLLECTION_TITLES: Record<string, string> = {
   operator: 'Intern',
@@ -220,9 +215,6 @@ export function ProductCardItem({ product }: ProductCardItemProps) {
         <div className="flex items-baseline gap-1.5 mt-1 font-mono">
           <span className="text-sm font-extrabold text-stamp-red">
             ₹{product.priceInr}
-          </span>
-          <span className="line-through text-[11px] text-muted font-normal">
-            ₹{cleanMrp(product.priceInr)}
           </span>
         </div>
       </div>
