@@ -141,6 +141,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'Work from home preference bold back print tee.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 28),
+      ...sizeSpread('White', 'Oversized', 25),
     ],
   },
   {
@@ -155,6 +156,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'Morning standup culture called out in bold glitch typography on heavyweight black cotton.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 22),
+      ...sizeSpread('White', 'Oversized', 20),
     ],
   },
   {
@@ -169,6 +171,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'The sacred office ritual — chai, sutta, and pretending the deadline is tomorrow.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 25),
+      ...sizeSpread('White', 'Oversized', 20),
     ],
   },
   {
@@ -183,6 +186,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'The meeting that should have been an email — repeated until insanity.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 18),
+      ...sizeSpread('White', 'Oversized', 20),
     ],
   },
   {
@@ -197,6 +201,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'Heavyweight black cotton graphic tee with snake back print.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 25),
+      ...sizeSpread('White', 'Oversized', 20),
     ],
   },
   {
@@ -211,6 +216,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'AI meeting excuse typography heavyweight black tee.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 30),
+      ...sizeSpread('White', 'Oversized', 25),
     ],
   },
   // ---- NEW PRODUCTS ----
@@ -226,6 +232,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'Chili pepper graphic white tee — because your boyfriend working from home hits different.',
     variants: [
       ...sizeSpread('White', 'Oversized', 25),
+      ...sizeSpread('Black', 'Oversized', 25),
     ],
   },
   {
@@ -240,6 +247,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'Unread emails & pending approvals — the moth of management on heavyweight black cotton.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 20),
+      ...sizeSpread('White', 'Oversized', 20),
     ],
   },
   {
@@ -254,6 +262,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'The only day that matters — bold Friday typography on heavyweight black cotton.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 25),
+      ...sizeSpread('White', 'Oversized', 25),
     ],
   },
   {
@@ -268,6 +277,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'Gold eyes watching — the manager sees everything, on heavyweight black cotton.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 15),
+      ...sizeSpread('White', 'Oversized', 15),
     ],
   },
   {
@@ -282,6 +292,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'Girl on couch vibes — notice period energy in bold red on heavyweight black cotton.',
     variants: [
       ...sizeSpread('Black', 'Oversized', 22),
+      ...sizeSpread('White', 'Oversized', 20),
     ],
   },
   {
@@ -296,6 +307,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     seoDescription: 'Queen of hearts playing card — mute is my crown, on premium white cotton.',
     variants: [
       ...sizeSpread('White', 'Oversized', 25),
+      ...sizeSpread('Black', 'Oversized', 25),
     ],
   },
 ];
