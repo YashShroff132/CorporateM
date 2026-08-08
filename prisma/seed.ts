@@ -80,7 +80,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 199900, // ₹1,999
     mockupUrl: '/products/employee-resign-full.jpg',
-    galleryUrls: ['/products/employee-resign-ad.jpg', '/products/employee-resigns-ad-2.png'],
+    galleryUrls: ['/products/employee-resign-ad.jpg', '/products/employee-resigns-ad-2.png', '/products/employee-resigns-mannequin.png', '/products/employee-resigns-flatlay.png'],
     seoTitle: 'An Employee Who Does Not Give Up Resigns Tee',
     seoDescription: 'Heavyweight oversized cotton tee — the corporate anthem for anyone who has ever rage-quit in style.',
     variants: [
@@ -94,7 +94,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 199900, // ₹1,999
     mockupUrl: '/products/like-a-family-full.jpg',
-    galleryUrls: ['/products/like-a-family-here-ad.png', '/products/like-a-family-here-ad-2.png'],
+    galleryUrls: ['/products/like-a-family-here-ad.png', '/products/like-a-family-here-ad-2.png', '/products/like-a-family-here-mannequin.png'],
     seoTitle: 'Like a Family Here Layoffs Excluded Tee',
     seoDescription: 'Corporate culture satire graphic tee — because every town hall promises family until Q3 cuts.',
     variants: [
@@ -108,7 +108,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 249900, // ₹2,499
     mockupUrl: '/products/hybrid-mandatory-full.jpg',
-    galleryUrls: ['/products/hybrid-mandatory-ad.jpg', '/products/hybrid-mandatory-ad-2.png'],
+    galleryUrls: ['/products/hybrid-mandatory-ad.jpg', '/products/hybrid-mandatory-ad-2.png', '/products/hybrid-mandatory-subway.png'],
     seoTitle: 'Hybrid 3 Days Mandatory Tee',
     seoDescription: 'Bold typographic back print about office mandates.',
     variants: [
@@ -122,7 +122,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'heretic',
     basePrice: 699900, // ₹6,999 (Ultra Luxury Gold Ram Grail)
     mockupUrl: '/products/delegator-full.jpg',
-    galleryUrls: ['/products/delegator-ad-1.png', '/products/delegator-ad-2.png', '/products/delegator-ad-3.png', '/products/delegator-ad-4.png', '/products/delegator-ad-5.png', '/products/delegator-ad-6.png'],
+    galleryUrls: ['/products/delegator-ad-1.png', '/products/delegator-ad-2.png', '/products/delegator-ad-3.png', '/products/delegator-ad-4.png', '/products/delegator-ad-5.png', '/products/delegator-ad-6.png', '/products/delegator-mannequin.png'],
     seoTitle: 'Delegator Ram Graphic Heavyweight Tee',
     seoDescription: 'Gold ram graphic back print — for every manager who delegates like a GOAT.',
     variants: [
@@ -151,7 +151,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 249900, // ₹2,499
     mockupUrl: '/products/9am-standups-full.jpg',
-    galleryUrls: ['/products/9am-standups-toxic-ad.png', '/products/9am-standups-toxic-ad-2.png'],
+    galleryUrls: ['/products/9am-standups-toxic-ad.png', '/products/9am-standups-toxic-ad-2.png', '/products/9am-standups-toxic-mannequin.png'],
     seoTitle: '9 AM Standups Give Toxic Relationship Vibes Tee',
     seoDescription: 'Morning standup culture called out in bold glitch typography on heavyweight black cotton.',
     variants: [
@@ -166,7 +166,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 199900, // ₹1,999
     mockupUrl: '/products/chai-sutta-break-full.jpg',
-    galleryUrls: ['/products/chai-sutta-break-ad.jpg', '/products/chai-sutta-break-ad-2.png'],
+    galleryUrls: ['/products/chai-sutta-break-ad.jpg', '/products/chai-sutta-break-ad-2.png', '/products/chai-sutta-break-mannequin.png', '/products/chai-sutta-break-table.png'],
     seoTitle: 'Chai Sutta Break Graphic Tee',
     seoDescription: 'The sacred office ritual — chai, sutta, and pretending the deadline is tomorrow.',
     variants: [
@@ -181,7 +181,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 249900, // ₹2,499
     mockupUrl: '/products/quick-call-full.jpg',
-    galleryUrls: ['/products/quick-call-ad.png', '/products/quick-call-ad-2.png'],
+    galleryUrls: ['/products/quick-call-ad.png', '/products/quick-call-ad-2.png', '/products/quick-call-mannequin.png'],
     seoTitle: 'Quick Call Exhaustion Graphic Tee',
     seoDescription: 'The meeting that should have been an email — repeated until insanity.',
     variants: [
@@ -196,7 +196,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 249900, // ₹2,499
     mockupUrl: '/products/snake-coworkers-full.jpg',
-    galleryUrls: ['/products/snake-coworkers-ad.jpg', '/products/snake-coworkers-ad-2.png'],
+    galleryUrls: ['/products/snake-coworkers-ad.jpg', '/products/snake-coworkers-ad-2.png', '/products/snake-coworkers-chalk.png'],
     seoTitle: 'Be Aware of Snake Co-Workers Tee',
     seoDescription: 'Heavyweight black cotton graphic tee with snake back print.',
     variants: [
@@ -227,7 +227,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 199900, // ₹1,999
     mockupUrl: '/products/boyfriend-wfh-full.jpg',
-    galleryUrls: ['/products/girlfriend-wfh-full.png', '/products/boyfriend-wfh-ad.jpg', '/products/boyfriend-wfh-ad-2.png'],
+    galleryUrls: ['/products/girlfriend-wfh-full.png', '/products/boyfriend-wfh-ad.jpg', '/products/boyfriend-wfh-ad-2.png', '/products/boyfriend-wfh-mannequin.png', '/products/boyfriend-wfh-escalator.png'],
     seoTitle: 'My Boyfriend Is Doing WFH Graphic White Tee',
     seoDescription: 'Chili pepper graphic white tee — because your boyfriend working from home hits different.',
     variants: [
@@ -242,7 +242,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 249900, // ₹2,499
     mockupUrl: '/products/good-team-manager-full.jpg',
-    galleryUrls: ['/products/good-team-manager-ad.png', '/products/good-team-manager-ad-2.png'],
+    galleryUrls: ['/products/good-team-manager-ad.png', '/products/good-team-manager-ad-2.png', '/products/good-team-manager-mannequin.png'],
     seoTitle: 'Good Team Manager Moth Graphic Tee',
     seoDescription: 'Unread emails & pending approvals — the moth of management on heavyweight black cotton.',
     variants: [
@@ -257,7 +257,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 199900, // ₹1,999
     mockupUrl: '/products/happy-friday-full.jpg',
-    galleryUrls: ['/products/happy-friday-ad.jpg', '/products/happy-friday-white-ad.png', '/products/happy-friday-ad-2.png', '/products/happy-friday-ad-3.png'],
+    galleryUrls: ['/products/happy-friday-ad.jpg', '/products/happy-friday-white-ad.png', '/products/happy-friday-ad-2.png', '/products/happy-friday-ad-3.png', '/products/happy-friday-mannequin.png', '/products/happy-friday-street.png'],
     seoTitle: 'Happy Friday Bold Graphic Tee',
     seoDescription: 'The only day that matters — bold Friday typography on heavyweight black cotton.',
     variants: [
@@ -272,7 +272,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'heretic',
     basePrice: 329900, // ₹3,299
     mockupUrl: '/products/manager-eyes-full.jpg',
-    galleryUrls: ['/products/manager-eyes-ad.jpg', '/products/manager-eyes-ad-2.png'],
+    galleryUrls: ['/products/manager-eyes-ad.jpg', '/products/manager-eyes-ad-2.png', '/products/manager-eyes-mannequin.png', '/products/manager-eyes-chains.png'],
     seoTitle: 'Manager Gold Eyes Graphic Heavyweight Tee',
     seoDescription: 'Gold eyes watching — the manager sees everything, on heavyweight black cotton.',
     variants: [
@@ -287,7 +287,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'believer',
     basePrice: 449900, // ₹4,499 (High Price Grail)
     mockupUrl: '/products/notice-period-energy-full.jpg',
-    galleryUrls: ['/products/notice-period-energy-ad-1.png', '/products/notice-period-energy-ad-2.png', '/products/notice-period-energy-ad-3.png', '/products/notice-period-energy-ad-4.png', '/products/notice-period-energy-ad-5.png', '/products/notice-period-energy-ad-6.png'],
+    galleryUrls: ['/products/notice-period-energy-ad-1.png', '/products/notice-period-energy-ad-2.png', '/products/notice-period-energy-ad-3.png', '/products/notice-period-energy-ad-4.png', '/products/notice-period-energy-ad-5.png', '/products/notice-period-energy-ad-6.png', '/products/notice-period-energy-mannequin.png'],
     seoTitle: 'Notice Period Energy Graphic Tee',
     seoDescription: 'Girl on couch vibes — notice period energy in bold red on heavyweight black cotton.',
     variants: [
@@ -302,7 +302,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     collectionSlug: 'operator',
     basePrice: 199900, // ₹1,999
     mockupUrl: '/products/mute-is-my-crown-full.jpg',
-    galleryUrls: ['/products/mute-is-my-crown-ad.png', '/products/mute-is-my-crown-ad-2.png'],
+    galleryUrls: ['/products/mute-is-my-crown-ad.png', '/products/mute-is-my-crown-ad-2.png', '/products/mute-is-my-crown-mannequin.png'],
     seoTitle: 'Mute Is My Crown Queen Card White Tee',
     seoDescription: 'Queen of hearts playing card — mute is my crown, on premium white cotton.',
     variants: [
