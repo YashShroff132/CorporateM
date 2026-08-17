@@ -47,9 +47,6 @@ export function SubmitStoryModal({ products, submitStoryAction }: SubmitStoryMod
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-in fade-in duration-200">
           <div className="relative w-full max-w-lg border-2 border-ink dark:border-white/30 bg-paper dark:bg-black p-6 sm:p-8 shadow-2xl rounded-2xl max-h-[90vh] overflow-y-auto">
-            {/* Top Accent Strip */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-stamp-red via-highlighter to-ink" />
-
             {/* Close Button */}
             <button
               type="button"

@@ -71,61 +71,61 @@ export function CorporateConfessionsWall({
           return (
             <article
               key={story.id}
-              className="relative flex flex-col justify-between p-5 rounded-2xl border-2 border-ink/15 dark:border-white/20 bg-paper dark:bg-black/60 shadow-sm hover:shadow-md hover:border-ink/40 dark:hover:border-white/40 transition-all duration-200 group overflow-hidden"
+              className="relative flex flex-col justify-between p-5 rounded-2xl border-2 border-ink/20 dark:border-white/25 bg-paper dark:bg-black/90 text-ink dark:text-white shadow-md hover:shadow-lg hover:border-ink/50 dark:hover:border-white/50 transition-all duration-200 group overflow-hidden"
             >
               {/* Top Card Header */}
               <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between gap-2 border-b border-ink/10 dark:border-white/10 pb-3">
+                <div className="flex items-center justify-between gap-2 border-b border-ink/15 dark:border-white/15 pb-3">
                   <div className="flex flex-col">
-                    <span className="font-bold text-sm text-ink dark:text-white group-hover:text-stamp-red transition-colors">
+                    <span className="font-extrabold text-sm text-ink dark:text-white group-hover:text-stamp-red transition-colors">
                       {story.authorName}
                     </span>
                     {story.jobRole && (
-                      <span className="text-[10px] font-mono text-muted uppercase tracking-wider">
+                      <span className="text-[10px] font-mono text-ink/60 dark:text-white/60 font-semibold uppercase tracking-wider">
                         {story.jobRole}
                       </span>
                     )}
                   </div>
 
                   {story.verifiedBuyer ? (
-                    <span className="inline-flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-1 bg-emerald-700 text-white dark:bg-emerald-400 dark:text-black px-2.5 py-1 rounded text-[10px] font-mono font-extrabold uppercase tracking-wider shadow-xs">
                       <span>🏷️ Verified Survivor</span>
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-1 bg-amber-700 text-white dark:bg-amber-400 dark:text-black px-2.5 py-1 rounded text-[10px] font-mono font-extrabold uppercase tracking-wider shadow-xs">
                       <span>💬 Confession</span>
                     </span>
                   )}
                 </div>
 
                 {/* Story Body Quote */}
-                <p className="text-xs sm:text-sm text-ink/80 dark:text-white/80 leading-relaxed font-sans italic">
+                <p className="text-xs sm:text-sm text-ink/90 dark:text-white/90 leading-relaxed font-sans italic font-medium">
                   &ldquo;{story.storyText}&rdquo;
                 </p>
               </div>
 
               {/* Card Footer: Product Link & Upvote Button */}
-              <div className="flex items-center justify-between gap-2 mt-5 pt-3 border-t border-ink/10 dark:border-white/10 font-mono text-xs">
+              <div className="flex items-center justify-between gap-2 mt-5 pt-3 border-t border-ink/15 dark:border-white/15 font-mono text-xs">
                 {linkedProduct ? (
                   <Link
                     href={`/product/${linkedProduct.slug}`}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-ink dark:text-white hover:text-stamp-red dark:hover:text-highlighter transition-colors truncate max-w-[65%]"
+                    className="inline-flex items-center gap-1 text-[11px] font-extrabold text-ink dark:text-white hover:text-stamp-red dark:hover:text-highlighter transition-colors truncate max-w-[65%]"
                   >
                     <span>👕</span>
                     <span className="truncate">{linkedProduct.slogan}</span>
                   </Link>
                 ) : (
-                  <span className="text-[10px] text-muted uppercase">Out of Office Club</span>
+                  <span className="text-[10px] text-ink/60 dark:text-white/60 font-bold uppercase">Out of Office Club</span>
                 )}
 
                 <button
                   type="button"
                   onClick={() => handleUpvote(story.id)}
                   disabled={isLiked}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all duration-150 cursor-pointer ${
                     isLiked
-                      ? 'bg-stamp-red text-paper scale-105 shadow-sm'
-                      : 'bg-ink/5 dark:bg-white/10 text-ink dark:text-white hover:bg-ink/10 dark:hover:bg-white/20'
+                      ? 'bg-stamp-red text-white scale-105 shadow-sm'
+                      : 'bg-ink/10 dark:bg-white/15 text-ink dark:text-white hover:bg-ink/20 dark:hover:bg-white/25 border border-ink/10 dark:border-white/10'
                   }`}
                 >
                   <span>Relate 💀</span>

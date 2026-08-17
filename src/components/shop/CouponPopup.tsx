@@ -61,9 +61,6 @@ export function CouponPopup() {
             aria-labelledby="coupon-title"
             className="relative w-full max-w-sm border-2 border-ink dark:border-white/30 bg-paper dark:bg-black p-7 shadow-2xl rounded-2xl overflow-hidden"
           >
-            {/* Top Accent Strip */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-stamp-red via-highlighter to-ink" />
-
             {/* Close Corner Button */}
             <button
               onClick={handleClose}

@@ -307,9 +307,9 @@ export function CheckoutClient({
         <div className="flex flex-col gap-2 bg-ink/5 p-3 rounded-lg border border-ink/10">
           <span className="text-xs font-bold uppercase tracking-wider text-ink/70">Promo / Coupon Code</span>
           {appliedCoupon ? (
-            <div className="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/30 p-2.5 rounded text-xs font-mono text-emerald-600 dark:text-emerald-400">
+            <div className="flex items-center justify-between bg-emerald-600/15 dark:bg-emerald-400/20 border border-emerald-600/40 dark:border-emerald-400/40 p-2.5 rounded text-xs font-mono text-emerald-900 dark:text-emerald-200 font-bold">
               <div className="flex items-center gap-2">
-                <span className="font-bold bg-emerald-500 text-white px-1.5 py-0.5 rounded text-[10px]">
+                <span className="font-extrabold bg-emerald-700 dark:bg-emerald-400 text-white dark:text-black px-1.5 py-0.5 rounded text-[10px]">
                   {appliedCoupon.code}
                 </span>
                 <span>Applied ({appliedCoupon.discountType === 'PERCENT' ? `${appliedCoupon.discountValue}% OFF` : inr(appliedCoupon.discountPaise)})</span>
@@ -328,7 +328,7 @@ export function CheckoutClient({
                 type="text"
                 value={couponInput}
                 onChange={(e) => setCouponInput(e.target.value)}
-                placeholder="Try OOO10"
+                placeholder="Enter promo code"
                 className="flex-1 border border-ink/20 dark:border-white/20 bg-paper px-3 py-1.5 text-xs rounded uppercase font-mono tracking-wider focus:outline-none focus:ring-1 focus:ring-ink"
               />
               <button

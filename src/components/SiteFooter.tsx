@@ -12,7 +12,7 @@ import { NewsletterSignup } from './NewsletterSignup';
 const SHOP_LINKS: ReadonlyArray<{ href: string; label: string }> = [
   { href: '/', label: 'Home' },
   { href: '/shop#catalog', label: 'Shop' },
-  { href: '/collections', label: 'Drops' },
+  { href: '/collections', label: 'Confessions' },
 ];
 
 const LEGAL_LINKS: ReadonlyArray<{ href: string; label: string }> = [
