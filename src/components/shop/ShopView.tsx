@@ -14,7 +14,9 @@ import { CollapsibleFilters } from './CollapsibleFilters';
 import { ShopLayout } from './ShopLayout';
 import { CouponPopup } from './CouponPopup';
 import { DanglingLogo } from '@/components/DanglingLogo';
+import { CorporateConfessionsWall } from '@/components/homepage/CorporateConfessionsWall';
 import type { Page, ShopProductView, ShopQuery } from '@/services/shop';
+import type { ToxicStoryItem } from '@/server/stories-data';
 
 export interface ShopViewProps {
   heading: string;
@@ -28,6 +30,10 @@ export interface ShopViewProps {
   colors: string[];
   sizes: string[];
   hideTier?: boolean;
+  stories?: readonly ToxicStoryItem[];
+  products?: readonly ShopProductView[];
+  submitStoryAction?: (formData: FormData) => Promise<{ success: boolean; message?: string }>;
+  upvoteStoryAction?: (formData: FormData) => Promise<void>;
 }
 
 export function ShopView({
@@ -40,6 +46,10 @@ export function ShopView({
   colors,
   sizes,
   hideTier = false,
+  stories,
+  products,
+  submitStoryAction,
+  upvoteStoryAction,
 }: ShopViewProps) {
   const isHomepage = basePath === '/' || basePath === '/shop';
 
@@ -102,6 +112,16 @@ export function ShopView({
             </>
           }
         />
+
+        {/* Corporate Confessions Wall (Toxic Boss Stories) */}
+        {stories && stories.length > 0 && products && submitStoryAction && upvoteStoryAction && (
+          <CorporateConfessionsWall
+            stories={stories}
+            products={products}
+            submitStoryAction={submitStoryAction}
+            upvoteStoryAction={upvoteStoryAction}
+          />
+        )}
       </div>
     </div>
   );

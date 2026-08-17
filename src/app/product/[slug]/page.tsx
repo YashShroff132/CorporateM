@@ -44,7 +44,7 @@ const DIMENSION_LABELS: Record<VariantDimension, string> = {
 };
 
 /** Read a single string value for a dimension from the raw search params. */
-function readSelection(raw: RawSearchParams): VariantSelection {
+function readSelection(raw: RawSearchParams, fallbackFit = 'Oversized'): VariantSelection {
   const selection: VariantSelection = {};
   for (const dim of VARIANT_DIMENSIONS) {
     const value = raw[dim];
@@ -52,6 +52,9 @@ function readSelection(raw: RawSearchParams): VariantSelection {
     if (typeof chosen === 'string' && chosen.length > 0) {
       selection[dim] = chosen;
     }
+  }
+  if (!selection.fit) {
+    selection.fit = fallbackFit;
   }
   return selection;
 }
@@ -151,7 +154,8 @@ export default async function ProductPage({
   }
 
   const raw = await searchParams;
-  const selection = readSelection(raw);
+  const fallbackFit = detail.variants[0]?.fit ?? 'Oversized';
+  const selection = readSelection(raw, fallbackFit);
 
   const vm = buildPdpViewModel(
     {

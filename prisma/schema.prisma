@@ -286,6 +286,23 @@ model Coupon {
   createdAt     DateTime  @default(now())
 }
 
+model ToxicBossStory {
+  id            String   @id @default(cuid())
+  orderId       String?  // Optional linked Order ID for verified buyer badge
+  authorName    String   // e.g. "Anonymous Dev" or "Utkarsh S."
+  jobRole       String?  // e.g. "Senior Frontend Eng" or "Product Manager"
+  sloganSlug    String?  // Product slug linked to the story, e.g. "9am-standups"
+  storyText     String   // The toxic boss confession / story
+  verifiedBuyer Boolean  @default(false)
+  likesCount    Int      @default(0)
+  status        String   @default("PUBLISHED") // "PUBLISHED" | "PENDING" | "REJECTED"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([orderId])
+}
+
 // ---------------------------------------------------------------------------
 // AI design pipeline
 // ---------------------------------------------------------------------------

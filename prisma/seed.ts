@@ -495,18 +495,68 @@ async function main(): Promise<void> {
     create: { code: 'OOO10', discountType: 'PERCENT', discountValue: 10, minSubtotal: 0, active: true },
   });
 
-  const [collections, products, variants, slogans, templates] = await Promise.all([
+  // Seed Toxic Boss Stories / Corporate Confessions
+  const sampleStories = [
+    {
+      authorName: 'Rohan M.',
+      jobRole: 'Product Manager',
+      sloganSlug: '9am-standups',
+      storyText: 'My manager called a emergency 9:00 AM Monday standup just to ask if everyone enjoyed their weekend, then complained that nobody looked enthusiastic enough on video.',
+      verifiedBuyer: true,
+      likesCount: 142,
+      status: 'PUBLISHED',
+    },
+    {
+      authorName: 'Anonymous Dev',
+      jobRole: 'Senior Frontend Eng',
+      sloganSlug: 'mute-is-my-crown',
+      storyText: 'In a 45-person town hall, my director asked a question, I accidentally unmuted and sighed loudly into the mic before hitting mute. Got 12 Slack DMs in 10 seconds.',
+      verifiedBuyer: true,
+      likesCount: 219,
+      status: 'PUBLISHED',
+    },
+    {
+      authorName: 'Priya K.',
+      jobRole: 'Growth Marketer',
+      sloganSlug: 'notice-period-energy',
+      storyText: 'The moment I put in my 90-day notice, my boss assigned me 3 new legacy project migrations. Now I wear my Notice Period Energy tee to every status call.',
+      verifiedBuyer: true,
+      likesCount: 188,
+      status: 'PUBLISHED',
+    },
+    {
+      authorName: 'Tanmay S.',
+      jobRole: 'UI/UX Designer',
+      sloganSlug: 'boyfriend-wfh',
+      storyText: 'My boss asked why my Slack status said "Away for 8 minutes". I was grabbing a glass of water. Had to explain hydration policy in a 1-on-1.',
+      verifiedBuyer: false,
+      likesCount: 95,
+      status: 'PUBLISHED',
+    },
+  ];
+
+  for (const story of sampleStories) {
+    const existing = await prisma.toxicBossStory.findFirst({
+      where: { authorName: story.authorName, storyText: story.storyText },
+    });
+    if (!existing) {
+      await prisma.toxicBossStory.create({ data: story });
+    }
+  }
+
+  const [collections, products, variants, slogans, templates, storiesCount] = await Promise.all([
     prisma.collection.count(),
     prisma.product.count(),
     prisma.variant.count(),
     prisma.sloganBankEntry.count(),
     prisma.blankTemplate.count(),
+    prisma.toxicBossStory.count(),
   ]);
 
   // eslint-disable-next-line no-console
   console.log(
     `Seed complete: ${collections} collections, ${products} products, ` +
-      `${variants} variants, ${slogans} slogans, ${templates} blank templates.`,
+      `${variants} variants, ${slogans} slogans, ${templates} blank templates, ${storiesCount} stories.`,
   );
 }
 

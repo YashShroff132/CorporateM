@@ -9,6 +9,7 @@ import {
   type RawSearchParams,
 } from '@/server/search-params';
 import { encodeShopQuery, getShopPage, parseShopQuery } from '@/services/shop';
+import { loadPublishedStories, submitStoryAction, upvoteStoryAction } from '@/server/stories-data';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,6 +42,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const query = parseShopQuery(toURLSearchParams(raw));
 
   const products = await getPublishedShopProducts();
+  const stories = await loadPublishedStories();
   const page = getShopPage(products, query);
   const { colors, sizes } = facetValues(products);
 
@@ -53,6 +55,10 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       page={page}
       colors={colors}
       sizes={sizes}
+      stories={stories}
+      products={products}
+      submitStoryAction={submitStoryAction}
+      upvoteStoryAction={upvoteStoryAction}
     />
   );
 }
