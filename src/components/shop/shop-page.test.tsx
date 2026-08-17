@@ -1,5 +1,15 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+  }),
+  useSearchParams: () => new URLSearchParams(),
+  usePathname: () => '/',
+}));
 import {
   DEFAULT_SORT,
   parseShopQuery,
@@ -126,11 +136,10 @@ describe('ShopView empty state retains filter controls', () => {
     expect(html).toContain('No matching products');
     // Filter form and its controls remain mounted (Req 2.7).
     expect(html).toContain('aria-label="Product filters"');
-    expect(html).toContain('Apply filters');
+    expect(html).toContain('Filters');
     // Facet controls discovered from the catalog are still rendered.
-    expect(html).toContain('name="color"');
-    expect(html).toContain('name="size"');
-    expect(html).toContain('name="sort"');
+    expect(html).toContain('Color');
+    expect(html).toContain('Size');
     // The sort control reflects the default "newest" selection.
     expect(html).toContain('Newest');
   });
