@@ -281,6 +281,76 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
       mockupUrl: '/products/boyfriend-wfh-full.jpg',
       galleryUrls: ['/products/boyfriend-wfh-ad-1.png'],
     },
+    {
+      id: 'prod-6',
+      slug: 'as-per-my-last-email',
+      slogan: 'AS PER MY LAST EMAIL',
+      tier: 'SAFE',
+      collectionSlug: 'operator',
+      colors: ['Black', 'White'],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      priceInr: 1999,
+      createdAt: new Date('2026-01-01'),
+      unitsSold: 0,
+      mockupUrl: '/blank-black-tee.png',
+      galleryUrls: [],
+    },
+    {
+      id: 'prod-7',
+      slug: 'synergy-overdose',
+      slogan: 'SYNERGY OVERDOSE',
+      tier: 'DIRECT',
+      collectionSlug: 'believer',
+      colors: ['Black', 'White'],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      priceInr: 1999,
+      createdAt: new Date('2026-01-01'),
+      unitsSold: 0,
+      mockupUrl: '/blank-black-tee.png',
+      galleryUrls: [],
+    },
+    {
+      id: 'prod-8',
+      slug: 'out-of-office-permanent',
+      slogan: 'PERMANENTLY OUT OF OFFICE',
+      tier: 'SAFE',
+      collectionSlug: 'operator',
+      colors: ['Black', 'White'],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      priceInr: 1999,
+      createdAt: new Date('2026-01-01'),
+      unitsSold: 0,
+      mockupUrl: '/blank-black-tee.png',
+      galleryUrls: [],
+    },
+    {
+      id: 'prod-9',
+      slug: 'pls-revert-back',
+      slogan: 'KINDLY REVERT BACK NEVER',
+      tier: 'DIRECT',
+      collectionSlug: 'believer',
+      colors: ['Black', 'White'],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      priceInr: 1999,
+      createdAt: new Date('2026-01-01'),
+      unitsSold: 0,
+      mockupUrl: '/blank-black-tee.png',
+      galleryUrls: [],
+    },
+    {
+      id: 'prod-10',
+      slug: 'quick-sync-trap',
+      slogan: 'GOT A MINUTE FOR A QUICK SYNC?',
+      tier: 'VERY_DIRECT',
+      collectionSlug: 'heretic',
+      colors: ['Black', 'White'],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      priceInr: 2199,
+      createdAt: new Date('2026-01-01'),
+      unitsSold: 0,
+      mockupUrl: '/blank-black-tee.png',
+      galleryUrls: [],
+    },
   ];
 }
 
@@ -352,66 +422,107 @@ export async function getProductBySlug(
         collection: true,
       },
     });
-    if (row === null) return null;
+    if (row) {
+      const isWhite = row.variants.some((v) => v.color.toLowerCase().includes('white'));
+      const presets = presetsForCollection(row.collection.slug, row.tier);
+      const preset = CUSTOM_PRODUCT_PRESETS[row.slug] || presets[0] || SAFE_CLASSIC_PRESET;
+      const layoutResult = fitText(row.slogan, { width: 380, height: 350 }, preset);
+      const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [row.slogan], width: 300, height: 100, preset };
+      const garmentColor = isWhite ? 'White' : 'Black';
+      const mockupBgUrl = isWhite ? '/blank-white-tee.png' : '/blank-black-tee.png';
+      const mockupBackBgUrl = isWhite ? '/blank-white-tee.png' : '/blank-black-tee.png';
+      const mockupUrl = row.mockupUrl || svgToDataUrl(
+        composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
+      );
+      const mockupBackUrl = row.mockupBackUrl || svgToDataUrl(
+        composeBackSvg({ garment: 'Classic Tee', color: garmentColor })
+      );
 
-    const isWhite = row.variants.some((v) => v.color.toLowerCase().includes('white'));
-    const presets = presetsForCollection(row.collection.slug, row.tier);
-    const preset = CUSTOM_PRODUCT_PRESETS[row.slug] || presets[0] || SAFE_CLASSIC_PRESET;
-    const layoutResult = fitText(row.slogan, { width: 380, height: 350 }, preset);
-    const layout = layoutResult.ok ? layoutResult.value : { fontSize: 32, lines: [row.slogan], width: 300, height: 100, preset };
-    const garmentColor = isWhite ? 'White' : 'Black';
-    const mockupBgUrl = isWhite ? '/blank-white-tee.png' : '/blank-black-tee.png';
-    const mockupBackBgUrl = isWhite ? '/blank-white-tee.png' : '/blank-black-tee.png';
-    const mockupUrl = row.mockupUrl || svgToDataUrl(
-      composePreviewSvg(layout, { garment: 'Classic Tee', color: garmentColor })
-    );
-    const mockupBackUrl = row.mockupBackUrl || svgToDataUrl(
-      composeBackSvg({ garment: 'Classic Tee', color: garmentColor })
-    );
+      const product: Product = {
+        id: row.id,
+        slug: row.slug,
+        slogan: row.slogan,
+        tier: row.tier,
+        collectionId: row.collectionId,
+        status: row.status,
+        basePrice: row.basePrice,
+        aiGenerated: row.aiGenerated,
+        fulfillmentMode: row.fulfillmentMode,
+        seoTitle: row.seoTitle ?? undefined,
+        seoDescription: row.seoDescription ?? undefined,
+        mockupUrl,
+        mockupBackUrl,
+        mockupBgUrl,
+        mockupBackBgUrl,
+        galleryUrls: EXTRA_PRODUCT_IMAGES[row.slug] || [],
+        createdAt: row.createdAt,
+      };
 
-    const product: Product = {
-      id: row.id,
-      slug: row.slug,
-      slogan: row.slogan,
-      tier: row.tier,
-      collectionId: row.collectionId,
-      status: row.status,
-      basePrice: row.basePrice,
-      aiGenerated: row.aiGenerated,
-      fulfillmentMode: row.fulfillmentMode,
-      seoTitle: row.seoTitle ?? undefined,
-      seoDescription: row.seoDescription ?? undefined,
-      mockupUrl,
-      mockupBackUrl,
-      mockupBgUrl,
-      mockupBackBgUrl,
-      galleryUrls: EXTRA_PRODUCT_IMAGES[row.slug] || [],
-      createdAt: row.createdAt,
-    };
+      const variants: Variant[] = row.variants.map((v) => ({
+        id: v.id,
+        productId: v.productId,
+        sku: v.sku,
+        color: v.color,
+        size: v.size,
+        fit: v.fit,
+        priceOverride: v.priceOverride ?? undefined,
+        stock: v.stock,
+        podVariantId: v.podVariantId ?? undefined,
+      }));
 
-    const variants: Variant[] = row.variants.map((v) => ({
-      id: v.id,
-      productId: v.productId,
-      sku: v.sku,
-      color: v.color,
-      size: v.size,
-      fit: v.fit,
-      priceOverride: v.priceOverride ?? undefined,
-      stock: v.stock,
-      podVariantId: v.podVariantId ?? undefined,
-    }));
+      const collection: Collection = {
+        id: row.collection.id,
+        slug: row.collection.slug,
+        title: row.collection.title,
+        heroImage: row.collection.heroImage ?? undefined,
+        sortOrder: row.collection.sortOrder,
+        createdAt: row.collection.createdAt,
+      };
 
-    const collection: Collection = {
-      id: row.collection.id,
-      slug: row.collection.slug,
-      title: row.collection.title,
-      heroImage: row.collection.heroImage ?? undefined,
-      sortOrder: row.collection.sortOrder,
-      createdAt: row.collection.createdAt,
-    };
-
-    return { product, variants, collection };
+      return { product, variants, collection };
+    }
   } catch {
-    return null;
+    // Fall back to static product detail if DB fails
   }
+
+  const fallbackItem = FALLBACK_PRODUCTS.find((p) => p.slug === slug) || FALLBACK_PRODUCTS[0];
+  if (!fallbackItem) return null;
+
+  const mockVariants: Variant[] = [
+    { id: 'var-1', productId: fallbackItem.id, sku: `${fallbackItem.slug}-blk-s`, color: 'Black', size: 'S', fit: 'Oversized', stock: 10 },
+    { id: 'var-2', productId: fallbackItem.id, sku: `${fallbackItem.slug}-blk-m`, color: 'Black', size: 'M', fit: 'Oversized', stock: 10 },
+    { id: 'var-3', productId: fallbackItem.id, sku: `${fallbackItem.slug}-blk-l`, color: 'Black', size: 'L', fit: 'Oversized', stock: 10 },
+    { id: 'var-4', productId: fallbackItem.id, sku: `${fallbackItem.slug}-blk-xl`, color: 'Black', size: 'XL', fit: 'Oversized', stock: 10 },
+    { id: 'var-5', productId: fallbackItem.id, sku: `${fallbackItem.slug}-wht-s`, color: 'White', size: 'S', fit: 'Oversized', stock: 10 },
+    { id: 'var-6', productId: fallbackItem.id, sku: `${fallbackItem.slug}-wht-m`, color: 'White', size: 'M', fit: 'Oversized', stock: 10 },
+    { id: 'var-7', productId: fallbackItem.id, sku: `${fallbackItem.slug}-wht-l`, color: 'White', size: 'L', fit: 'Oversized', stock: 10 },
+    { id: 'var-8', productId: fallbackItem.id, sku: `${fallbackItem.slug}-wht-xl`, color: 'White', size: 'XL', fit: 'Oversized', stock: 10 },
+  ];
+
+  return {
+    product: {
+      id: fallbackItem.id,
+      slug: fallbackItem.slug,
+      slogan: fallbackItem.slogan,
+      tier: fallbackItem.tier as any,
+      collectionId: 'col-1',
+      status: 'PUBLISHED',
+      basePrice: fallbackItem.priceInr * 100,
+      aiGenerated: false,
+      fulfillmentMode: 'SELF',
+      seoTitle: fallbackItem.slogan,
+      seoDescription: `${fallbackItem.slogan}. Shop this tee from Out of Office.`,
+      mockupUrl: fallbackItem.mockupUrl,
+      galleryUrls: fallbackItem.galleryUrls,
+      createdAt: fallbackItem.createdAt,
+    },
+    variants: mockVariants,
+    collection: {
+      id: 'col-1',
+      slug: fallbackItem.collectionSlug,
+      title: 'Out of Office Collection',
+      sortOrder: 0,
+      createdAt: new Date('2026-01-01'),
+    },
+  };
 }
