@@ -209,8 +209,10 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
     // Connection failure fallback below
   }
 
-  // Fallback products so previews and offline environments always render the full catalog
-  return [
+  return FALLBACK_PRODUCTS;
+}
+
+export const FALLBACK_PRODUCTS: ShopProductView[] = [
     {
       id: 'prod-1',
       slug: 'notice-period-energy',
@@ -352,7 +354,6 @@ export async function getPublishedShopProducts(): Promise<ShopProductView[]> {
       galleryUrls: [],
     },
   ];
-}
 
 /**
  * Load active collections for collection landing routes and navigation.

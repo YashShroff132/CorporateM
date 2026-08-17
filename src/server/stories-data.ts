@@ -94,7 +94,11 @@ export async function submitStoryAction(formData: FormData): Promise<{ success: 
       },
     });
 
-    revalidatePath('/');
+    try {
+      revalidatePath('/');
+    } catch {
+      // Ignore when running outside Next.js request context
+    }
     return { success: true, message: verifiedBuyer ? 'Story published with Verified Survivor badge! 🏷️' : 'Story published successfully!' };
   } catch (err) {
     console.error('Failed to save story:', err);
