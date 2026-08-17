@@ -488,6 +488,13 @@ async function main(): Promise<void> {
     });
   }
 
+  // Seed standard welcome coupon OOO10 (10% OFF)
+  await prisma.coupon.upsert({
+    where: { code: 'OOO10' },
+    update: { discountType: 'PERCENT', discountValue: 10, minSubtotal: 0, active: true },
+    create: { code: 'OOO10', discountType: 'PERCENT', discountValue: 10, minSubtotal: 0, active: true },
+  });
+
   const [collections, products, variants, slogans, templates] = await Promise.all([
     prisma.collection.count(),
     prisma.product.count(),

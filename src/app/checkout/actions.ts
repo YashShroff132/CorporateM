@@ -97,8 +97,9 @@ export async function submitCheckoutAction(formData: FormData): Promise<void> {
   }
 
   // Re-price the cart server-side (Req 5.5, 7.6).
+  const couponCode = s(formData, 'coupon_code');
   const sessionId = await readCartSessionId();
-  const checkout = await priceGuestCheckout(sessionId);
+  const checkout = await priceGuestCheckout(sessionId, couponCode);
   if (!checkout.hasItems) {
     redirect('/cart');
   }

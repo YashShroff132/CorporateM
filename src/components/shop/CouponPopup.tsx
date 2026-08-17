@@ -16,7 +16,7 @@ export function CouponPopup() {
       // First visit — show popup after a short delay
       const timer = setTimeout(() => {
         setShowPopup(true);
-      }, 2500);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -35,7 +35,7 @@ export function CouponPopup() {
   const handleCopy = () => {
     navigator.clipboard.writeText('OOO10');
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   return (
@@ -44,73 +44,87 @@ export function CouponPopup() {
       {showBadge && !showPopup && (
         <button
           onClick={handleBadgeClick}
-          className="fixed left-0 top-1/2 -translate-y-1/2 z-30 bg-stamp-red text-paper px-2.5 py-4 text-[10px] font-black uppercase tracking-widest rounded-r-lg shadow-lg hover:bg-stamp-red/90 transition-all duration-300 hover:px-3"
+          className="fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-stamp-red text-paper px-3 py-4 text-[11px] font-black uppercase tracking-widest rounded-r-xl shadow-xl hover:bg-stamp-red/90 transition-all duration-300 hover:px-4 cursor-pointer"
           style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
           aria-label="Open 10% discount offer"
         >
-          10% Off
+          🎁 10% OFF
         </button>
       )}
 
       {/* ── Full-Screen Coupon Modal ── */}
       {showPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-md animate-in fade-in duration-300">
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="coupon-title"
-            className="relative w-full max-w-sm border border-ink bg-paper p-8 shadow-2xl rounded-lg"
+            className="relative w-full max-w-sm border-2 border-ink dark:border-white/30 bg-paper dark:bg-black p-7 shadow-2xl rounded-2xl overflow-hidden"
           >
+            {/* Top Accent Strip */}
+            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-stamp-red via-highlighter to-ink" />
+
             {/* Close Corner Button */}
             <button
               onClick={handleClose}
-              className="absolute right-3 top-3 text-ink/40 hover:text-ink text-lg font-mono leading-none transition-colors"
+              className="absolute right-4 top-4 h-7 w-7 flex items-center justify-center rounded-full bg-ink/5 dark:bg-white/10 text-ink/70 dark:text-white/70 hover:text-ink dark:hover:text-white hover:bg-ink/10 transition-colors"
               aria-label="Close dialog"
             >
-              &times;
+              ✕
             </button>
 
             {/* Header */}
-            <div className="text-center mb-5">
-              <span className="text-[9px] font-mono uppercase tracking-[0.25em] text-muted block mb-2">
-                Auto-Reply Activated
+            <div className="text-center mt-2 mb-4">
+              <span className="inline-block px-3 py-1 bg-highlighter/30 text-ink text-[10px] font-mono font-bold uppercase tracking-widest rounded-full mb-3">
+                🔥 Exclusive Offer
               </span>
               <h2
                 id="coupon-title"
-                className="text-3xl font-black uppercase tracking-tight text-ink leading-none"
+                className="text-3xl font-black uppercase tracking-tight text-ink dark:text-white leading-none"
               >
-                You&apos;re Now<br />Out of Office
+                You&apos;re Now<br />
+                <span className="text-stamp-red dark:text-highlighter">Out of Office</span>
               </h2>
             </div>
 
             {/* Promo Message */}
-            <p className="text-sm text-ink/70 text-center mb-6 leading-relaxed">
-              Your auto-reply is set. Here&apos;s <strong className="text-ink">10% off</strong> your first order. Apply at checkout before you clock back in.
+            <p className="text-xs text-ink/80 dark:text-white/80 text-center mb-5 leading-relaxed">
+              Your auto-reply is set! Take <strong className="text-ink dark:text-white font-black text-sm">10% OFF</strong> your first order. Apply code at checkout before you clock back in.
             </p>
 
             {/* Code Box */}
-            <div className="flex items-center justify-between border-2 border-dashed border-ink/30 bg-ink/5 p-3.5 rounded-md mb-5">
-              <span className="font-mono font-black text-base tracking-widest text-ink select-all">
-                OOO10
-              </span>
+            <div className="flex items-center justify-between border-2 border-dashed border-ink/40 dark:border-white/40 bg-ink/5 dark:bg-white/5 p-3.5 rounded-xl mb-5">
+              <div className="flex flex-col">
+                <span className="text-[9px] font-mono text-muted uppercase tracking-wider">Coupon Code</span>
+                <span className="font-mono font-black text-lg tracking-widest text-ink dark:text-white select-all">
+                  OOO10
+                </span>
+              </div>
               <button
+                type="button"
                 onClick={handleCopy}
-                className="bg-ink text-paper px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider hover:bg-ink/80 transition-colors rounded"
+                className={`px-4 py-2 text-xs font-black uppercase tracking-wider transition-all duration-200 rounded-lg cursor-pointer ${
+                  copied
+                    ? 'bg-emerald-600 text-white shadow-sm scale-105'
+                    : 'bg-ink dark:bg-white text-paper dark:text-black hover:opacity-90'
+                }`}
               >
-                {copied ? 'Copied!' : 'Copy'}
+                {copied ? '✓ Copied!' : 'Copy Code'}
               </button>
             </div>
 
             {/* CTA */}
             <button
+              type="button"
               onClick={handleClose}
-              className="w-full bg-highlighter hover:bg-highlighter/90 text-ink py-3 text-xs font-black uppercase tracking-wider transition-colors rounded border border-ink/10"
+              className="w-full bg-highlighter hover:bg-highlighter/90 text-ink py-3.5 text-xs font-black uppercase tracking-wider transition-all duration-200 rounded-xl shadow-md hover:shadow-lg active:scale-[0.99] border border-ink/10 flex items-center justify-center gap-2 cursor-pointer"
             >
-              Start Shopping
+              <span>Start Shopping</span>
+              <span className="text-base leading-none">→</span>
             </button>
 
-            <p className="text-[8px] text-muted text-center mt-3 font-mono tracking-wide">
-              Valid on your first order. Cannot be combined with other offers.
+            <p className="text-[9px] text-muted text-center mt-3 font-mono tracking-wide">
+              Valid on your first order. Automatic 10% discount at checkout.
             </p>
           </div>
         </div>

@@ -28,9 +28,10 @@ export function AddToCartButton({
       onClick={() => {
         if (enabled) trackAddToCart(eventProps ?? {});
       }}
-      className="bg-highlighter px-4 py-3 text-sm font-black uppercase tracking-wide text-ink disabled:cursor-not-allowed disabled:opacity-50"
+      className="w-full bg-highlighter hover:bg-highlighter/90 text-ink px-6 py-4 text-sm font-black uppercase tracking-wider rounded-lg shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.99] border border-ink/10 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
     >
-      {outOfStock ? 'Out of stock' : 'Add to cart'}
+      <span>{outOfStock ? 'Out of stock' : 'Add to cart'}</span>
+      {!outOfStock && <span className="text-base leading-none">→</span>}
     </button>
   );
 }

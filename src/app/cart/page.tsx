@@ -153,9 +153,10 @@ export default async function CartPage() {
 
       <Link
         href="/checkout"
-        className="w-fit bg-highlighter px-6 py-3 text-sm font-black uppercase tracking-wide text-ink"
+        className="w-full sm:w-fit bg-highlighter hover:bg-highlighter/90 text-ink px-8 py-4 text-sm font-black uppercase tracking-wider rounded-lg shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.99] border border-ink/10 flex items-center justify-center gap-2"
       >
-        Proceed to checkout
+        <span>Proceed to checkout</span>
+        <span className="text-base leading-none">→</span>
       </Link>
     </main>
   );

@@ -21,8 +21,10 @@ import {
 } from '@/services/cart';
 import {
   priceOrder,
+  applyCoupon,
   type OrderTotals,
   type PricedOrderLine,
+  type Coupon,
 } from '@/services/checkout';
 import { computeShippingCharge } from '@/services/shipping';
 import { applyTeamPackDiscount, type TeamPackConfig } from '@/services/growth';
@@ -30,6 +32,7 @@ import { makePaise, type Paise } from '@/lib/money';
 import { config } from '@/services/config';
 import { isErr } from '@/lib/result';
 import { loadGuestCart, type EnrichedCartLine } from './cart-data';
+import { getPrisma } from '@/lib/prisma';
 
 /** A priced checkout line carrying the display fields plus paise amounts. */
 export interface CheckoutLine {
@@ -99,6 +102,7 @@ function readTeamPackConfig(): TeamPackConfig | null {
  */
 export async function priceGuestCheckout(
   sessionId: string | undefined,
+  couponCode?: string,
 ): Promise<PricedCheckout> {
   if (sessionId === undefined) return EMPTY_CHECKOUT;
 
@@ -182,6 +186,46 @@ export async function priceGuestCheckout(
         discount: teamResult.value.discount,
         total: teamResult.value.total,
       };
+    }
+  }
+
+  // Apply Coupon Code discount if provided
+  if (couponCode && couponCode.trim().length > 0) {
+    const cleanCode = couponCode.trim().toUpperCase();
+    let coupon: Coupon | null = null;
+    try {
+      const prisma = getPrisma();
+      const dbCoupon = await prisma.coupon.findUnique({ where: { code: cleanCode } });
+      if (dbCoupon) {
+        coupon = {
+          code: dbCoupon.code,
+          discountType: dbCoupon.discountType as 'FLAT' | 'PERCENT',
+          discountValue: dbCoupon.discountValue,
+          minSubtotal: (dbCoupon.minSubtotal ?? 0) as Paise,
+          active: dbCoupon.active,
+          expiresAt: dbCoupon.expiresAt,
+        };
+      }
+    } catch {
+      // Fall back if DB query fails
+    }
+
+    if (!coupon && cleanCode === 'OOO10') {
+      coupon = {
+        code: 'OOO10',
+        discountType: 'PERCENT',
+        discountValue: 10,
+        minSubtotal: 0 as Paise,
+        active: true,
+        expiresAt: null,
+      };
+    }
+
+    if (coupon) {
+      const couponResult = applyCoupon(totals, coupon);
+      if (couponResult.ok) {
+        totals = couponResult.value;
+      }
     }
   }
 

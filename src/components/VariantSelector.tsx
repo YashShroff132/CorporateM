@@ -34,7 +34,7 @@ export function VariantSelector({
   return (
     <div className="flex flex-col gap-4">
       {variantDimensions
-        .filter((dim) => options[dim].length > 0)
+        .filter((dim) => dim !== 'fit' && options[dim].length > 0)
         .map((dim) => (
           <fieldset key={dim} className="flex flex-col gap-1.5">
             <legend className="text-xs font-bold uppercase tracking-widest text-ink/50 mb-1">
