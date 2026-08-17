@@ -13,7 +13,7 @@
  */
 
 import type { ShopProductView } from '@/services/shop';
-import type { Collection, Product, Variant } from '@/services/catalog';
+import type { Collection, Product, Variant, Tier } from '@/services/catalog';
 import { fitText, presetsForCollection, SAFE_CLASSIC_PRESET } from '@/services/mockup';
 import type { LayoutPreset } from '@/services/mockup';
 import { composePreviewSvg, composeBackSvg, svgToDataUrl } from './mockup-data';
@@ -505,7 +505,7 @@ export async function getProductBySlug(
       id: fallbackItem.id,
       slug: fallbackItem.slug,
       slogan: fallbackItem.slogan,
-      tier: fallbackItem.tier as any,
+      tier: fallbackItem.tier as Tier,
       collectionId: 'col-1',
       status: 'PUBLISHED',
       basePrice: fallbackItem.priceInr * 100,
