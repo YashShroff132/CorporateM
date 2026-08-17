@@ -10,7 +10,7 @@ interface CheckoutClientProps {
   checkout: PricedCheckout;
   error?: string;
   invalidFields: string[];
-  retainedValues: (key: string) => string;
+  retainedValues: Record<string, string>;
   submitCheckoutAction: (formData: FormData) => Promise<void>;
 }
 
@@ -23,9 +23,10 @@ export function CheckoutClient({
   checkout,
   error,
   invalidFields,
-  retainedValues: val,
+  retainedValues,
   submitCheckoutAction,
 }: CheckoutClientProps) {
+  const val = (k: string) => retainedValues[k] ?? '';
   const [shippingUpgrade, setShippingUpgrade] = useState<'standard' | 'priority'>('standard');
   const [couponInput, setCouponInput] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<{

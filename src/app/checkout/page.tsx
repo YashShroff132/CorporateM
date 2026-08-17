@@ -60,7 +60,16 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
 
   const error = one(raw, 'error');
   const invalidFields = one(raw, 'fields').split(',').filter(Boolean);
-  const val = (k: string): string => one(raw, k);
+  const retainedValues: Record<string, string> = {
+    name: one(raw, 'name'),
+    email: one(raw, 'email'),
+    phone: one(raw, 'phone'),
+    line1: one(raw, 'line1'),
+    line2: one(raw, 'line2'),
+    city: one(raw, 'city'),
+    state: one(raw, 'state'),
+    pincode: one(raw, 'pincode'),
+  };
 
   const { totals } = checkout;
 
@@ -91,7 +100,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
         checkout={checkout}
         error={error}
         invalidFields={invalidFields}
-        retainedValues={val}
+        retainedValues={retainedValues}
         submitCheckoutAction={submitCheckoutAction}
       />
     </main>
